@@ -15,6 +15,10 @@ const becaSchema = new mongoose.Schema(
       type: [String],
       required: true,
     },
+    documentos: {
+      type: [String],
+      required: true,
+    },
     fecha_inicio: {
       type: Date,
       required: true,
