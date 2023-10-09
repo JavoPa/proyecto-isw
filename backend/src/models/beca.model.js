@@ -15,6 +15,10 @@ const becaSchema = new mongoose.Schema(
       type: [String],
       required: true,
     },
+    documentos: {
+      type: [String],
+      required: true,
+    },
     fecha_inicio: {
       type: Date,
       required: true,
@@ -36,8 +40,8 @@ const becaSchema = new mongoose.Schema(
   },
 );
 
-/** Modelo de datos 'User' */
+/** Modelo de datos 'Beca' */
 const Beca = mongoose.model("Beca", becaSchema);
 
-// Exporta el modelo de datos 'User'
+// Exporta el modelo de datos 'Beca'
 module.exports = Beca;
