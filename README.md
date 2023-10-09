@@ -1,4 +1,4 @@
-# Oroyecto ingeniería de software
+# Proyecto ingeniería de software
 
 ## Descripción
 
