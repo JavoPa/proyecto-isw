@@ -17,8 +17,8 @@ async function createRoles() {
     if (count > 0) return;
 
     await Promise.all([
-      new Role({ name: "user" }).save(),
-      new Role({ name: "admin" }).save(),
+      new Role({ name: "Postulante" }).save(),
+      new Role({ name: "Encargado" }).save(),
     ]);
     console.log("* => Roles creados exitosamente");
   } catch (error) {
@@ -37,18 +37,22 @@ async function createUsers() {
     const count = await User.estimatedDocumentCount();
     if (count > 0) return;
 
-    const admin = await Role.findOne({ name: "admin" });
-    const user = await Role.findOne({ name: "user" });
+    const admin = await Role.findOne({ name: "Encargado" });
+    const user = await Role.findOne({ name: "Postulante" });
 
     await Promise.all([
       new User({
-        username: "user",
+        nombres: "user",
+        apellidos: "apellido",
+        rut: 123456789,
         email: "user@email.com",
         password: await User.encryptPassword("user123"),
         roles: user._id,
       }).save(),
       new User({
-        username: "admin",
+        nombres: "admin",
+        apellidos: null,
+        rut: null,
         email: "admin@email.com",
         password: await User.encryptPassword("admin123"),
         roles: admin._id,
