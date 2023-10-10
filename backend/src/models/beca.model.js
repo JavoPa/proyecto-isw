@@ -32,7 +32,7 @@ const becaSchema = new mongoose.Schema(
       required: true,
     },
     tipo_pago: {
-      type: Date,
+      type: String,
     },
   },
   {
