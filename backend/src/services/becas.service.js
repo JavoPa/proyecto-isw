@@ -1,5 +1,5 @@
 "use strict";
-const Becas = require("../models/becas.model.js");
+const Becas = require("../models/beca.model");
 const { handleError } = require("../utils/errorHandler");
 
 1/**
