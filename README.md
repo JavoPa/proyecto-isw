@@ -29,5 +29,7 @@ git commit -m "Comentario" #preparar para subir los cambios con un comentario
 
 git push --set-upstream origin Branch #finalmente subir los cambios en la Branch correspondiente
 
+git pull origin branch  #Esto trae los cambios mas recientes de la rama main y los fusionara con la rama branch
+
 ## [Ver el backend](./backend/Backend.md)
 ## [Ver el frontend](./frontend/Frontend.md)
