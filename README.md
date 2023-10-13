@@ -6,28 +6,49 @@
 
 *Aviso:
 Trabajar cada uno en su branch (rama) nombrada con su respectivo requisito.
-Al hacer cambios en la base del backend deben subirla a su rama y luego solicitar un pull request y realizar el merge si no hay conflictos.
+Al hacer cambios en la base del backend deben subirla a su rama y luego, cuando corroboren que su funcionalidad este lista, solicitar un pull request al main y realizar el merge si no hay conflictos.
 
-Comandos:
+### Como comenzar:
 
-git clone https://github.com/JavoPa/proyecto-isw.git
+`git clone https://github.com/JavoPa/proyecto-isw.git`
 
-cd #entrar en una carpeta
+`cd proyecto-isw/backend` (ubicarse en la carpeta del proyecto y dentro del backend)
 
-ls #ver directorios
+`git checkout -b BRANCH` (cambiar BRANCH por el nombre de su rama)
 
-git checkout -b Branch #crear una rama llamada Branch e ir a ella
+`npm install` (asegurarse de ejecutar este comando en la carpeta del backend)
 
-git checkout Branch #ir a la rama Branch
+Crear archivo `.env` con las variables de entorno, en la carpeta `/config`. Sigue la estructura del archivo `.env.example`
 
+Correr el servidor `npm start`
 
-git add . #cargar (.) todos los cambios o (/directorio) un archivo especifico
+[Mas info](./backend/Backend.md)
 
-git status #ver los cambios hechos
+### Comandos:
 
-git commit -m "Comentario" #preparar para subir los cambios con un comentario
+`cd` #entrar en una carpeta
 
-git push --set-upstream origin Branch #finalmente subir los cambios en la Branch correspondiente
+`ls` #ver directorios
+
+`git checkout -b Branch` #crear una rama llamada Branch e ir a ella
+
+`git checkout Branch` #ir a la rama Branch
+
+`git add carpeta/` #cargar un archivo nuevo o cargar cambios del archivo
+
+`git add .` #cargar todos los cambios y/o todos los archivos nuevos
+
+`git status` #ver los cambios hechos
+
+`git commit -m` "Comentario" #preparar para subir los cambios con un comentario
+
+`git push --set-upstream origin Branch` #finalmente subir los cambios en la Branch correspondiente
+
+`git fetch`
+
+`git pull` #Efectuar estos dos ultimos comandos para actualizar tu repo local en base al repo de la nube
+
+*Hagan commit con cada funcionalidad o modificacion importante a su branch poniendo un comentario descriptivo
 
 git pull origin branch  #Esto trae los cambios mas recientes de la rama main y los fusionara con la rama branch
 
