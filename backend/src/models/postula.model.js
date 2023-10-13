@@ -14,6 +14,10 @@ const postulaSchema = new mongoose.Schema(
       type: String,
       default: 'Enviado',
     },
+    motivos: {
+      type: String,
+      default: 'Pendiente de revision',
+    },
     beca: [
       {
         type: mongoose.Schema.Types.ObjectId,

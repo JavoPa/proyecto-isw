@@ -32,7 +32,6 @@ router.delete(
   usuarioController.deleteUser,
 );
 //Ruta para ver el estado de postulacion de un postulante
-//router.get("/postulacion/:id", usuarioConDtroller.getPostulacion);
 router.get('/estado/', usuarioController.getEstado);
 
 // Exporta el enrutador

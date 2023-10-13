@@ -11,7 +11,7 @@ const { handleError } = require("../utils/errorHandler");
 async function getEstado(id) {
   try {
     const estado = await Postula.findOne({ postulante: id })
-      .select("estado fecha_recepcion -_id")
+      .select("estado fecha_recepcion motivos -_id")
       .populate("")
       .exec();
     if (!estado) return [null, "No hay postulacion"];
