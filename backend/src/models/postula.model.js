@@ -33,7 +33,7 @@ const postulaSchema = new mongoose.Schema(
 );
 
 /** Modelo de datos 'Postula' */
-const User = mongoose.model("Postula", postulaSchema);
+const Postula = mongoose.model("Postula", postulaSchema);
 
 // Exporta el modelo de datos 'Postula'
 module.exports = Postula;

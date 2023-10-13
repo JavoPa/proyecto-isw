@@ -39,6 +39,12 @@ const userBodySchema = Joi.object({
     "string.base": "La contraseña debe ser de tipo string.",
     "string.min": "La contraseña debe tener al menos 5 caracteres.",
   }),
+  rut: Joi.number().integer().required().min(5).messages({
+    "string.empty": "El rut no puede estar vacío.",
+    "any.required": "El rut es obligatorio.",
+    "string.base": "El rut debe ser tipo int.",
+    "string.min": "El rut debe contener al menos 5 numeros",
+  }),
 }).messages({
   "object.unknown": "No se permiten propiedades adicionales.",
 });
