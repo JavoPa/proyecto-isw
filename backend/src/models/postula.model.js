@@ -6,10 +6,16 @@ const bcrypt = require("bcryptjs");
 // Crea el esquema de la coleccion 'postula'
 const postulaSchema = new mongoose.Schema(
   {
-    fecha_recepcion: {
-      type: Date,
-      required: true,
+    fecha_recepcion: { 
+      type: Date, 
+      default: Date.now 
     },
+    documentosPDF: [
+      {
+        nombre: String,        // Nombre del archivo PDF
+        contenido: Buffer,      // Contenido del archivo PDF en formato binario
+      }
+    ],
     estado: {
       type: String,
       default: 'Enviado',
