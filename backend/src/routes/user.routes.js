@@ -20,7 +20,7 @@ router.use(authenticationMiddleware);
 // Define las rutas para los usuarios
 router.get("/", usuarioController.getUsers);
 router.post("/", authorizationMiddleware.isAdmin, usuarioController.createUser);
-router.get("/:id", usuarioController.getUserById);
+router.get("/id/:id", usuarioController.getUserById);
 router.put(
   "/:id",
   authorizationMiddleware.isAdmin,
@@ -31,6 +31,8 @@ router.delete(
   authorizationMiddleware.isAdmin,
   usuarioController.deleteUser,
 );
+//Ruta para ver el estado de postulacion de un postulante
+router.get('/estado/', usuarioController.getEstado);
 
 // Exporta el enrutador
 module.exports = router;
