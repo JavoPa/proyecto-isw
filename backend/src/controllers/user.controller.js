@@ -5,6 +5,7 @@ const UserService = require("../services/user.service");
 const { userBodySchema, userIdSchema } = require("../schema/user.schema");
 const { handleError } = require("../utils/errorHandler");
 const PostulacionService = require("../services/postulacion.service");
+const {apelaBodySchema} = require("../schema/postula.schema");
 
 /**
  * Obtiene todos los usuarios
@@ -142,6 +143,31 @@ async function getEstado(req, res) {
   }
 }
 
+async function createApelacion(req, res) {
+  try {
+    const { originalname, buffer } = req.file;
+    const body = {
+      nombre: originalname,
+      contenido: buffer,
+    };
+    
+    const { error: bodyError } = apelaBodySchema.validate(body);
+    if (bodyError) return respondError(req, res, 400, bodyError.message);
+
+    const [newApelacion, apelacionError] = await PostulacionService.createApelacion(body, req._id);
+
+    if (apelacionError) return respondError(req, res, 400, apelacionError);
+    if (!newApelacion) {
+      return respondError(req, res, 400, "No se creo la apelacion");
+    }
+
+    respondSuccess(req, res, 201, newApelacion);
+  } catch (error) {
+    handleError(error, "user.controller -> createApelacion");
+    respondError(req, res, 500, "No se creo la apelacion");
+  }
+}
+
 module.exports = {
   getUsers,
   createUser,
@@ -149,4 +175,5 @@ module.exports = {
   updateUser,
   deleteUser,
   getEstado,
+  createApelacion,
 };

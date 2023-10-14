@@ -22,6 +22,35 @@ async function getEstado(id) {
   }
 }
 
+/**
+ * Crea una apelacion modificando el estado de postula y actualizando los documentos
+ * @param {Object} user Objeto de usuario
+ * @returns {Promise} Promesa con el objeto de usuario creado
+ */
+async function createApelacion(archivos, id) {
+  try {
+    const { nombre , contenido } = archivos;
+
+    const postulacionFound = await Postula.findOne({ postulante: id })
+    if (!postulacionFound) return [null, "El usuario no tiene postulacion"];
+    
+    // Agrega el archivo PDF a la matriz documentosPDF
+    postulacionFound.documentosPDF.push({
+      nombre: nombre,
+      contenido: contenido,
+    });
+    postulacionFound.estado = "Apelacion";
+    postulacionFound.motivos = "Apelacion solicitada";
+    postulacionFound.fecha_recepcion = Date.now();
+    await postulacionFound.save();
+
+    return ["Apelacion enviada", null];
+  } catch (error) {
+    handleError(error, "postulacion.service -> createApelacion");
+  }
+}
+
 module.exports = {
   getEstado,
+  createApelacion,
 };
