@@ -8,6 +8,9 @@ const userRoutes = require("./user.routes.js");
 /** Enrutador de becas  */
 const becasRoutes = require("./becas.routes.js")
 
+/** Enrutador de requisitos  */
+const requisitosRoutes = require("./requisitos.routes.js")
+
 /** Enrutador de autenticación */
 const authRoutes = require("./auth.routes.js");
 
@@ -21,6 +24,8 @@ const router = express.Router();
 router.use("/users", authenticationMiddleware, userRoutes);
 // Define las rutas para las becas /api/becas
 router.use("/becas", authenticationMiddleware, becasRoutes);
+// Define las rutas para los requisitos /api/requisitos
+router.use("/requisitos", authenticationMiddleware, requisitosRoutes);
 // Define las rutas para la autenticación /api/auth
 router.use("/auth", authRoutes);
 
