@@ -1,6 +1,7 @@
 "use strict";
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const BecaService = require("../services/becas.service");
+const RequisitoService = require("../services/requisitos.service")
 const { handleError } = require("../utils/errorHandler");
 
 /**
@@ -8,18 +9,33 @@ const { handleError } = require("../utils/errorHandler");
  * @param {Object} res
  */
 async function getBecas(req, res) {
-    try {
-      const [becas, errorbecas] = await BecaService.getBecas();
-      if (errorbecas) return respondError(req, res, 404, errorbecas);
-  
-      becas.length === 0
-        ? respondSuccess(req, res, 204)
-        : respondSuccess(req, res, 200, becas);
-    } catch (error) {
-      handleError(error, "becas.controller -> getBecas");
-      respondError(req, res, 400, error.message);
-    }
+  try {
+    const [becas, errorbecas] = await BecaService.getBecas();
+    if (errorbecas) return respondError(req, res, 404, errorbecas);
+    
+    const becasConDescripciones = await Promise.all(
+      becas.map(async (beca) => {
+        const requisitosConDescripciones = await Promise.all(
+          beca.requisitos.map(async (codigoRequisito) => {
+            const [requisito, errorRequisito] = await RequisitoService.getReqByCod(codigoRequisito);
+            return requisito ? requisito.descripcion : null;
+          })
+        );
+        return {
+          ...beca.toObject(),
+          requisitos: requisitosConDescripciones,
+        };
+      })
+    );
+    
+    becas.length === 0
+      ? respondSuccess(req, res, 204)
+      : respondSuccess(req, res, 200, becasConDescripciones);
+  } catch (error) {
+    handleError(error, "becas.controller -> getBecas");
+    respondError(req, res, 400, error.message);
   }
+}
 
 /**
  * @param {Object} req 
