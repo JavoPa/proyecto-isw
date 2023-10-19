@@ -18,9 +18,9 @@ const router = express.Router();
 router.use(authenticationMiddleware);
 
 // Define las rutas para los usuarios
-router.get("/", usuarioController.getUsers);
+router.get("/", authorizationMiddleware.isAdmin, usuarioController.getUsers);
 router.post("/", authorizationMiddleware.isAdmin, usuarioController.createUser);
-router.get("/id/:id", usuarioController.getUserById);
+router.get("/id/:id", authorizationMiddleware.isAdmin, usuarioController.getUserById);
 router.put(
   "/:id",
   authorizationMiddleware.isAdmin,
