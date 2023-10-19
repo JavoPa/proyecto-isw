@@ -3,6 +3,7 @@
 const User = require("../models/user.model.js");
 const Role = require("../models/role.model.js");
 const { handleError } = require("../utils/errorHandler");
+const Postula = require("../models/postula.model.js");
 
 /**
  * Obtiene todos los usuarios de la base de datos
@@ -28,6 +29,7 @@ async function getUsers() {
  */
 async function getPostulantes() {
   try {
+    /*
     const postulantes = [];
     const auxPostulantes = await User.find()
       .select("-password")
@@ -43,11 +45,24 @@ async function getPostulantes() {
       } 
     } 
 
-    /**
-     * Por hacer: la verificación también se puede hacer al revisar que un postulante
-     * tenga una postulación vigente. Puede que así sea una mejor forma de revisar
-     * quien es postulante o no
-     */
+    Por hacer: la verificación también se puede hacer al revisar que un postulante
+    tenga una postulación vigente. Puede que así sea una mejor forma de revisar
+    quien es postulante o no
+
+    return [postulantes, null];
+    */
+    const postulantes = [];
+    const postulaciones = await Postula.find()
+      .select("postulante")
+      .exec();
+
+    for (let i = 0; i < postulaciones.length; i++) {
+    const userAux = await User.findById(postulaciones[i].postulante);
+    postulantes.push(userAux);
+    }
+
+    if (!postulantes) return [null, "No hay postulantes"];
+
     return [postulantes, null];
   } catch (error) {
     handleError(error, "user.service -> getPostulantes");
