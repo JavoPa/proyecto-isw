@@ -50,5 +50,7 @@ Correr el servidor `npm start`
 
 *Hagan commit con cada funcionalidad o modificacion importante a su branch poniendo un comentario descriptivo
 
+git pull origin branch  #Esto trae los cambios mas recientes de la rama main y los fusionara con la rama branch
+
 ## [Ver el backend](./backend/Backend.md)
 ## [Ver el frontend](./frontend/Frontend.md)
