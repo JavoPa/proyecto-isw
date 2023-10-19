@@ -34,9 +34,9 @@ router.delete(
 //Ruta para ver el estado de postulacion de un postulante
 router.get('/estado', usuarioController.getEstado);
 
-// Configura Multer para manejar la subida de archivos
+//Configura Multer para manejar la subida de archivos
 const multer = require('multer');
-const storage = multer.memoryStorage(); // Puedes configurar el almacenamiento según tus necesidades
+const storage = multer.memoryStorage(); //Configurar el almacenamiento
 const upload = multer({ storage: storage });
 //Ruta para apelar un estado de postulacion
 router.post('/apelar', upload.single('archivoPDF'), usuarioController.createApelacion);

@@ -31,15 +31,20 @@ async function createApelacion(archivos, id) {
   try {
     const { nombre , contenido } = archivos;
 
+    //Buscar al postulante
     const postulacionFound = await Postula.findOne({ postulante: id })
     if (!postulacionFound) return [null, "El usuario no tiene postulacion"];
     
-    // Agrega el archivo PDF a la matriz documentosPDF
+    //Verificacion de postulacion previa rechazada
+    if (postulacionFound.estado == "Apelada") return [null, "El usuario ya tiene una apelacion en proceso"];
+    if (postulacionFound.estado != "Rechazada") return [null, "El usuario no presenta una postulacion rechazada"];
+
+    //Agrega el archivo PDF a la matriz documentosPDF
     postulacionFound.documentosPDF.push({
       nombre: nombre,
       contenido: contenido,
     });
-    postulacionFound.estado = "Apelacion";
+    postulacionFound.estado = "Apelada";
     postulacionFound.motivos = "Apelacion solicitada";
     postulacionFound.fecha_recepcion = Date.now();
     await postulacionFound.save();

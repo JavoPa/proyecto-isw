@@ -111,7 +111,7 @@ async function createPostulaciones() {
   try {
     const count = await Postula.estimatedDocumentCount();
     if (count > 0) return;
-    const beca = await Beca.findOne({ nombre: "Beca excelencia academica" }).select("_id").exec();
+    const beca = await Beca.findOne({ nombre: "Beca adulto mayor" }).select("_id").exec();
     if (!beca) return;
     const postulante = await User.findOne({ rut: 39444789 }).select("_id").exec();
     if (!postulante) return;
@@ -119,7 +119,7 @@ async function createPostulaciones() {
     await Promise.all([
       new Postula({
         fecha_recepcion: "2021-01-02",
-        estado: "En revision",
+        estado: "Rechazada",
         beca: beca,
         postulante: postulante,
       }).save()
