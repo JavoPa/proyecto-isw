@@ -33,6 +33,7 @@ router.delete(
 );
 //Ruta para ver el estado de postulacion de un postulante
 router.get('/estado', usuarioController.getEstado);
+router.get('/postulantes', authorizationMiddleware.isAdmin, usuarioController.getPostulantes)
 
 // Configura Multer para manejar la subida de archivos
 const multer = require('multer');

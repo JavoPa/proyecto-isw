@@ -27,6 +27,25 @@ async function getUsers(req, res) {
 }
 
 /**
+ * Obtiene todos los postulantes
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
+async function getPostulantes(req, res) {
+  try {
+    const [postulantes, errorPostulantes] = await UserService.getPostulantes();
+    if (errorPostulantes) return respondError(req, res, 404, errorPostulantes);
+    
+    postulantes.length === 0
+      ? respondSuccess(req, res, 204)
+      : respondSuccess(req, res, 200, postulantes);
+  } catch (error) {
+    handleError(error, "user.controller -> getPostulantes");
+    respondError(req, res, 400, error.message);
+  }
+}
+
+/**
  * Crea un nuevo usuario
  * @param {Object} req - Objeto de petición
  * @param {Object} res - Objeto de respuesta
@@ -170,6 +189,7 @@ async function createApelacion(req, res) {
 
 module.exports = {
   getUsers,
+  getPostulantes,
   createUser,
   getUserById,
   updateUser,
