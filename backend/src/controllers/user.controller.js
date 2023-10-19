@@ -144,7 +144,6 @@ async function getEstado(req, res) {
 
 async function createApelacion(req, res) {
   try {
-    if (!req.file) return respondError(req, res, 400, "No se recibió el archivo");
     const body = {
       nombre: req.file.originalname,
       contenido: req.file.buffer,
