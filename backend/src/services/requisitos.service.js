@@ -87,7 +87,7 @@ async function ActualizarRequisito(codigo, requisitoData) {
  */
 async function BorrarRequisito(codigo) {
     try {
-      return await Requisito.findOneAndDelete(codigo);
+      return await Requisito.findOneAndDelete({codigo: codigo});
     } catch (error) {
       handleError(error, "becas.service -> BorrarBeca");
     }

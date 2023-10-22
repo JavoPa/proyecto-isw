@@ -79,12 +79,8 @@ async function getReq(req, res) {
       respondError(req, res, 500, "No se pudo actualizar el requisito");
     }
   }
-  
-  /**
-   * @param {Object} req
-   * @param {Object} res
-   */
-  /**
+
+/**
  * @param {Object} req 
  * @param {Object} res
  */
