@@ -33,8 +33,9 @@ async function getDocuments(id) {
     const documents = await Postula.findById(id)
       .select("documentosPDF")
       .exec();
-
+    console.log(documents.documentosPDF.length);
     if (!documents) return [null, "No hay documentos"];
+    if (documents.documentosPDF.length === 0) return [null, "No hay documentos en esta postulación"];
 
     return [documents, null];
   } catch (error) {
@@ -48,28 +49,6 @@ async function getDocuments(id) {
  */
 async function getPostulantes() {
   try {
-    /*
-    const postulantes = [];
-    const auxPostulantes = await User.find()
-      .select("-password")
-      .populate("roles")
-      .exec();
-    if (!auxPostulantes) return [null, "No hay postulantes"];
-
-    for (let i = 0; i < auxPostulantes.length; i++) {
-      for (let k = 0; k < auxPostulantes[i].roles.length; k++) {
-        if (auxPostulantes[i].roles[k].name === "user") {
-          postulantes.push(auxPostulantes[i]);
-        }
-      } 
-    } 
-
-    Por hacer: la verificación también se puede hacer al revisar que un postulante
-    tenga una postulación vigente. Puede que así sea una mejor forma de revisar
-    quien es postulante o no
-
-    return [postulantes, null];
-    */
     const postulantes = [];
     const postulaciones = await Postula.find()
       .select("postulante")

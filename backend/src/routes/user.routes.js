@@ -35,7 +35,7 @@ router.delete(
   usuarioController.deleteUser,
 );
 //Ruta para ver el estado de postulacion de un postulante
-router.get('/estado/:id', usuarioController.getEstado);
+router.get('/estado/', usuarioController.getEstado);
 
 // Rutas para obtener (solo) postulantes y documentos de postulante segun id
 router.get('/postulantes', authorizationMiddleware.isAdmin, usuarioController.getPostulantes);
