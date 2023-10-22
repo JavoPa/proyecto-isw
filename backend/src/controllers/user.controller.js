@@ -46,6 +46,27 @@ async function getPostulantes(req, res) {
 }
 
 /**
+ * Obtiene los documentos de una postulacion por su id
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
+async function getDocuments(req, res) {
+  try {
+    const { params } = req;
+    const { error: paramsError } = userIdSchema.validate(params);
+    if (paramsError) return respondError(req, res, 400, paramsError.message);
+
+    const [documents, errorDocuments] = await UserService.getDocuments(params.id);
+
+    if (errorDocuments) return respondError(req, res, 404, errorDocuments);
+
+    respondSuccess(req, res, 200, documents);
+  } catch (error) {
+    handleError(error, "user.controller -> getDocuments");
+    respondError(req, res, 500, "No se pudo obtener los documentos");
+  }
+}
+/**
  * Crea un nuevo usuario
  * @param {Object} req - Objeto de petición
  * @param {Object} res - Objeto de respuesta
@@ -190,6 +211,7 @@ async function createApelacion(req, res) {
 module.exports = {
   getUsers,
   getPostulantes,
+  getDocuments,
   createUser,
   getUserById,
   updateUser,

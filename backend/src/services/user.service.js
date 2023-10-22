@@ -24,6 +24,25 @@ async function getUsers() {
 }
 
 /**
+ * Obtiene los documentos de una postulacion segun su id
+ * @param {string} Id del usuario
+ * @returns {Promise} Promesa con el objeto de documento
+ */
+async function getDocuments(id) {
+  try {
+    const documents = await Postula.findById(id)
+      .select("documentosPDF")
+      .exec();
+
+    if (!documents) return [null, "No hay documentos"];
+
+    return [documents, null];
+  } catch (error) {
+    handleError(error, "postulacion.service -> getEstado");
+  }
+}
+
+/**
  * Obtiene solo a los postulantes (quienes no tengan el rol de administrador)
  * @returns {Promise} Promesa con el objeto de los postulantes
  */
@@ -57,7 +76,7 @@ async function getPostulantes() {
       .exec();
 
     for (let i = 0; i < postulaciones.length; i++) {
-    const userAux = await User.findById(postulaciones[i].postulante);
+      const userAux = await User.findById(postulaciones[i].postulante);
     postulantes.push(userAux);
     }
 
@@ -179,6 +198,7 @@ async function deleteUser(id) {
 module.exports = {
   getUsers,
   getPostulantes,
+  getDocuments,
   createUser,
   getUserById,
   updateUser,
