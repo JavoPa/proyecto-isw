@@ -7,7 +7,10 @@ const { handleError } = require("../utils/errorHandler");
  */
 async function getBecas() {
     try {
-      const becas = await Becas.find();
+      const becas = await Becas.find()
+       .select("_id nombre")
+       .populate()
+       .exec();
       if (!becas) return [null, "No hay Becas"];
       return [becas, null];
     } catch (error) {
