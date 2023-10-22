@@ -59,7 +59,7 @@ async function createBeca(req, res) {
       const { body } = req;
       const [newBeca, BecaError] = await BecaService.createBeca(body);
   
-      if (BecaError) return respondError(req, res, 400, BecaErrorError);
+      if (BecaError) return respondError(req, res, 400, BecaError);
       if (!newBeca) {
         return respondError(req, res, 400, "No se creo la Beca");
       }
@@ -67,7 +67,7 @@ async function createBeca(req, res) {
       respondSuccess(req, res, 201, newBeca);
     } catch (error) {
       handleError(error, "beca.controller -> createBeca");
-      respondError(req, res, 500, "No se la beca");
+      respondError(req, res, 500, "No se creo la beca");
     }
   }
 

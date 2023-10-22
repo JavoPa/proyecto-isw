@@ -41,8 +41,13 @@ async function createBeca(bec) {
     try {
       const { nombre, requisitos, documentos, fecha_inicio , fecha_fin , monto, tipo_pago } = bec;  
       const becaFound = await Becas.findOne({ nombre: bec.nombre });
+      const fecha_actual = Date.now();
+      const fechafin = new Date(bec.fecha_fin);
+      const fechainicio = new Date(bec.fecha_inicio);
       if (becaFound) return [null, "La beca ya existe"];
-
+      if (fecha_actual > fechainicio && fecha_actual < fechafin){
+        return [null, "No se pueden crear becas en periodo de postulacion"];
+      }
       const newbeca = new Becas({
         nombre,
         requisitos,
@@ -68,8 +73,13 @@ async function updateBeca(id, bec) {
     try {
       const becFound = await Becas.findById(id);
       if (!becFound) return [null, "la beca no existe"];
-  
-      const { nombre, requisitos, documentos, fecha_inicio, fecha_fin, monto, tipo_pago } = bec;  
+      const { nombre, requisitos, documentos, fecha_inicio, fecha_fin, monto, tipo_pago } = bec;
+      const fecha_actual = Date.now();
+      const fechafin = new Date(bec.fecha_fin);
+      const fechainicio = new Date(bec.fecha_inicio);
+      if (fecha_actual > fechainicio && fecha_actual < fechafin){
+        return [null, "No se pueden modificar becas en periodo de postulacion"];
+      }
       const becUpdated = await Becas.findByIdAndUpdate(
         id,
         {
