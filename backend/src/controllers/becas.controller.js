@@ -28,11 +28,22 @@ async function getBecas(req, res) {
 async function getBecasid(req, res) {
     try {
       const { params } = req;
-      const [bec, errorBeca] = await BecaService.getBecasid(params.id);
-  
+      const [beca, errorBeca] = await BecaService.getBecasid(params.id);
       if (errorBeca) return respondError(req, res, 404, errorBeca);
-  
-      respondSuccess(req, res, 200, bec);
+
+      const requisitosNombres = await Promise.all(
+        beca.requisitos.map(async (codigo) => {
+          const [requisito, errorRequisito] = await RequisitoService.getReqByCod(codigo);
+          return requisito ? requisito.descripcion : null;
+        })
+      ); 
+      const becaResponse = {
+        ...beca.toObject(),
+        requisitos: requisitosNombres,
+      };
+      
+      respondSuccess(req, res, 200, becaResponse);
+
     } catch (error) {
       handleError(error, "becas.controller -> getBecasid");
       respondError(req, res, 500, "No se pudo obtener la beca");
