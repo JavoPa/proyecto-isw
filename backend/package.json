@@ -11,7 +11,7 @@
     "backend",
     "http"
   ],
-  "author": "Camilo saez",
+  "author": "Javier Placencia",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",

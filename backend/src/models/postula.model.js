@@ -1,7 +1,6 @@
 "use strict";
 // Importa el modulo 'mongoose' para crear la conexion a la base de datos
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
 
 // Crea el esquema de la coleccion 'postula'
 const postulaSchema = new mongoose.Schema(
@@ -24,18 +23,14 @@ const postulaSchema = new mongoose.Schema(
       type: String,
       default: 'Pendiente de revision',
     },
-    beca: [
-      {
+    beca: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Beca",
-      },
-    ],
-    postulante: [
-      {
+    },
+    postulante:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
-    ],
   },
   {
     versionKey: false,

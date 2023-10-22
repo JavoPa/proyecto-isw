@@ -14,6 +14,9 @@ const authenticationMiddleware = require("../middlewares/authentication.middlewa
 /** Instancia del enrutador */
 const router = express.Router();
 
+/** Middlewares de subida de archivos */
+const archivoMiddleware = require("../middlewares/archivo.middleware.js");
+
 // Define el middleware de autenticación para todas las rutas
 router.use(authenticationMiddleware);
 
@@ -38,12 +41,8 @@ router.get('/estado/:id', usuarioController.getEstado);
 router.get('/postulantes', authorizationMiddleware.isAdmin, usuarioController.getPostulantes);
 router.get("/documentos/:id", authorizationMiddleware.isAdmin, usuarioController.getDocuments);
 
-// Configura Multer para manejar la subida de archivos
-const multer = require('multer');
-const storage = multer.memoryStorage(); // Puedes configurar el almacenamiento según tus necesidades
-const upload = multer({ storage: storage });
 //Ruta para apelar un estado de postulacion
-router.post('/apelar', upload.single('archivoPDF'), usuarioController.createApelacion);
+router.post('/apelar', archivoMiddleware.subir, usuarioController.createApelacion);
 
 
 // Exporta el enrutador
