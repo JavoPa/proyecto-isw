@@ -1,6 +1,7 @@
 "use strict";
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const BecaService = require("../services/becas.service");
+const becaSchema = require("../schema/becas.schema");
 const RequisitoService = require("../services/requisitos.service")
 const { handleError } = require("../utils/errorHandler");
 
@@ -57,8 +58,10 @@ async function getBecasid(req, res) {
 async function createBeca(req, res) {
     try {  
       const { body } = req;
-      const [newBeca, BecaError] = await BecaService.createBeca(body);
-  
+      const { error: bodyError } = becaSchema.validate(body);
+      if (bodyError) return respondError(req, res, 400, bodyError.message);
+      
+      const [newBeca, BecaError] = await BecaService.createBeca(body);  
       if (BecaError) return respondError(req, res, 400, BecaError);
       if (!newBeca) {
         return respondError(req, res, 400, "No se creo la Beca");
