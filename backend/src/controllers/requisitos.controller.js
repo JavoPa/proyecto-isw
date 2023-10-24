@@ -1,6 +1,7 @@
 "use strict";
 const { respondSuccess, respondError, respondSuccess2 } = require("../utils/resHandler");
 const { handleError } = require("../utils/errorHandler");
+const requisitoSchema = require("../schema/requisitos.schema");
 const RequisitoService = require('../services/requisitos.service');
 
 /**
@@ -48,8 +49,10 @@ async function getReq(req, res) {
   async function CrearRequisito(req, res) {
     try {
       const { body } = req;
+      const { error: bodyError } = requisitoSchema.validate(body);
+      if (bodyError) return respondError(req, res, 400, bodyError.message);
+
       const [newRequisito, requisitoError] = await RequisitoService.CrearRequisito(body);
-  
       if (requisitoError) return respondError(req, res, 400, requisitoError);
       if (!newRequisito) {
         return respondError(req, res, 400, "No se creó el requisito");
