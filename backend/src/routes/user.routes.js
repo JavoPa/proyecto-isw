@@ -40,6 +40,7 @@ router.get('/estado/', usuarioController.getEstado);
 // Rutas para obtener (solo) postulantes y documentos de postulante segun id
 router.get('/postulantes', authorizationMiddleware.isAdmin, usuarioController.getPostulantes);
 router.get("/documentos/:id", authorizationMiddleware.isAdmin, usuarioController.getDocuments);
+router.put("/:id/puntaje", authorizationMiddleware.isAdmin, usuarioController.updatePuntaje);
 
 //Ruta para apelar un estado de postulacion
 router.post('/apelar', archivoMiddleware.subir, usuarioController.createApelacion);

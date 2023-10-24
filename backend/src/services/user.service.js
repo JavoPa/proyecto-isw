@@ -33,7 +33,7 @@ async function getDocuments(id) {
     const documents = await Postula.findById(id)
       .select("documentosPDF")
       .exec();
-    console.log(documents.documentosPDF.length);
+    //console.log(documents.documentosPDF.length);
     if (!documents) return [null, "No hay documentos"];
     if (documents.documentosPDF.length === 0) return [null, "No hay documentos en esta postulación"];
 
@@ -64,6 +64,31 @@ async function getPostulantes() {
     return [postulantes, null];
   } catch (error) {
     handleError(error, "user.service -> getPostulantes");
+  }
+}
+
+/**
+ * Actualiza el puntaje de una postulacion por su id
+ * @param {string} id de la postulacion
+ * @param {Object} puntaje puntaje a asignar
+ * @returns {Promise} Promesa con el objeto de usuario actualizado
+ */
+async function updatePuntaje(id, postulacion) {
+  try {
+    const postulacionFound = await Postula.findById(id);
+    if (!postulacionFound) return [null, "La postulacion no existe"];
+
+    const postulacionUpdated = await Postula.findByIdAndUpdate(
+      id,
+      {
+        puntaje: postulacion.puntaje
+      },
+      { new: true },
+    );
+
+    return [postulacionUpdated, null];
+  } catch (error) {
+    handleError(error, "user.service -> updatePuntaje");
   }
 }
 
@@ -178,6 +203,7 @@ module.exports = {
   getUsers,
   getPostulantes,
   getDocuments,
+  updatePuntaje,
   createUser,
   getUserById,
   updateUser,

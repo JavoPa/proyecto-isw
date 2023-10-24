@@ -31,6 +31,10 @@ const postulaSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
+    puntaje: {
+      type: Number,
+      default: 0
+    }
   },
   {
     versionKey: false,

@@ -122,6 +122,7 @@ async function createPostulaciones() {
         estado: "Enviada",
         beca: beca,
         postulante: postulante,
+        puntaje: 0
       }).save()
     ]);
     console.log("* => Postulaciones creadas exitosamente");
