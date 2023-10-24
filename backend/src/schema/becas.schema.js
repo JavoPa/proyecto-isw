@@ -26,8 +26,9 @@ const becaSchema = Joi.object({
     "date.format": "La fecha de inicio debe ser de tipo Date YYYY-MM-DD.",
     "any.required": "La fecha de inicio es obligatoria.",
   }),
-  fecha_fin: Joi.date().required().messages({
+  fecha_fin: Joi.date().iso().required().messages({
     "date.base": "La fecha de fin debe ser de tipo Date.",
+    "date.format": "La fecha de inicio debe ser de tipo Date YYYY-MM-DD.",
     "any.required": "La fecha de fin es obligatoria.",
   }),
   monto: Joi.number().integer().positive().required().messages({
