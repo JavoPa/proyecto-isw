@@ -119,7 +119,7 @@ async function createPostulaciones() {
     await Promise.all([
       new Postula({
         fecha_recepcion: "2021-01-02",
-        estado: "En revision",
+        estado: "Enviada",
         beca: beca,
         postulante: postulante,
       }).save()
