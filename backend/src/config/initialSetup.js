@@ -62,8 +62,7 @@ async function createUsers() {
         nombres: "Ricardo",
         apellidos: "Gonzalez",
         rut: 39444789,
-        email: "ricardo@email.com",
-        password: await User.encryptPassword("user123"),
+        
         roles: user._id,
       }).save(),
     ]);

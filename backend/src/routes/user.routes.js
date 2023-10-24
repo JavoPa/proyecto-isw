@@ -34,6 +34,13 @@ router.delete(
   authorizationMiddleware.isAdmin,
   usuarioController.deleteUser,
 );
+
+//Ruta para ver las becas y sus requisitos
+router.get('/becas', usuarioController.getBecasPostulacion);
+
+//Ruta para postular a una beca
+router.post('/postular', archivoMiddleware.subir, usuarioController.createPostulacion);
+
 //Ruta para ver el estado de postulacion de un postulante
 router.get('/estado', usuarioController.getEstado);
 
