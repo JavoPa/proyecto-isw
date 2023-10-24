@@ -23,6 +23,8 @@ router.use("/users", authenticationMiddleware, userRoutes);
 router.use("/becas", authenticationMiddleware, becasRoutes);
 // Define las rutas para la autenticación /api/auth
 router.use("/auth", authRoutes);
+// Define las rutas para la postulación /api/postulacion
+router.use("/postulacion", authenticationMiddleware, postulacionRoutes);
 
 // Exporta el enrutador
 module.exports = router;
