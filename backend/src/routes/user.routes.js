@@ -37,10 +37,11 @@ router.delete(
 //Ruta para ver el estado de postulacion de un postulante
 router.get('/estado/', usuarioController.getEstado);
 
-// Rutas para obtener (solo) postulantes y documentos de postulante segun id
+// Rutas para requerimiento de seleccion
 router.get('/postulantes', authorizationMiddleware.isAdmin, usuarioController.getPostulantes);
 router.get("/documentos/:id", authorizationMiddleware.isAdmin, usuarioController.getDocuments);
 router.put("/:id/puntaje", authorizationMiddleware.isAdmin, usuarioController.updatePuntaje);
+router.get("/informe", authorizationMiddleware.isAdmin, usuarioController.getInforme)
 
 //Ruta para apelar un estado de postulacion
 router.post('/apelar', archivoMiddleware.subir, usuarioController.createApelacion);

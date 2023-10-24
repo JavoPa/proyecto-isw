@@ -70,7 +70,7 @@ async function getPostulantes() {
 /**
  * Actualiza el puntaje de una postulacion por su id
  * @param {string} id de la postulacion
- * @param {Object} puntaje puntaje a asignar
+ * @param {Object} postulacion objeto de postulacion con puntaje a asignar
  * @returns {Promise} Promesa con el objeto de usuario actualizado
  */
 async function updatePuntaje(id, postulacion) {

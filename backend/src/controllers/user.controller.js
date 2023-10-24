@@ -6,6 +6,7 @@ const { userBodySchema, userIdSchema } = require("../schema/user.schema");
 const { handleError } = require("../utils/errorHandler");
 const PostulacionService = require("../services/postulacion.service");
 const { postulaPuntajeSchema } = require("../schema/postula.schema");
+const PDF = require("pdfkit-construct");
 
 /**
  * Obtiene todos los usuarios
@@ -41,6 +42,80 @@ async function getPostulantes(req, res) {
       : respondSuccess(req, res, 200, postulantes);
   } catch (error) {
     handleError(error, "user.controller -> getPostulantes");
+    respondError(req, res, 400, error.message);
+  }
+}
+
+/**
+ * Obtiene un informe con la informacion relevante de cada postulacion
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
+async function getInforme(req, res) {
+  try {
+    const doc = new PDF({bufferPage: true});
+    const filename = `informe-${Date.now()}.pdf`
+    const [postulacionesData, error] = await PostulacionService.getPostulaciones();
+    if (error) {
+      console.error("Hubo un error obteniendo las postulaciones:", error);
+      return res.status(500).send(error);
+    }
+
+    const postulacionesDataAux = postulacionesData.map(item => ({
+      nombreBeca: item.beca.nombre,
+      nombrePostulante: item.postulante.nombres,
+      apellidosPostulante: item.postulante.apellidos,
+      puntaje: item.puntaje
+    }));
+
+    //console.log(postulacionesDataAux);
+
+    const stream = res.writeHead(200, {
+      'Content-Type': 'application/pdf',
+      'Content-dispostion': `attachment;filename=${filename}`
+    });
+
+    doc.on('data', (data) => {stream.write(data)});
+    doc.on('end', () => {stream.end()});
+    
+    let datos = [];
+    for (let i = 0; i < postulacionesDataAux.length; i++) {
+      datos[i] = {
+        postulante: `${postulacionesDataAux[i].nombrePostulante} ${postulacionesDataAux[i].apellidosPostulante}`,
+        beca: `${postulacionesDataAux[i].nombreBeca}`,
+        puntaje: postulacionesDataAux[i].puntaje
+      }
+    }
+    
+    doc.setDocumentHeader({
+      height: '12'
+    }, () => {
+      doc.fontSize(14).text("Informe de Becas", {
+        //width: "fill_body",
+        align: "justify"
+      });
+    });
+
+    //doc.text("Hola mundo");
+    doc.addTable([
+      {key: 'postulante', label: 'Postulante', align: 'center'},
+      {key: 'beca', label: 'Beca', align: 'center'},
+      {key: 'puntaje', label: 'Puntaje', align: 'center'},
+    ], datos, {
+      border: null,
+      width: "fill_body",
+      striped: true,
+      stripedColors: ["#f6f6f6", "#d6c4dd"],
+      cellsPadding: 10,
+      marginLeft: 20,
+      marginRight: 20,
+      headAlign: 'center'
+    });
+    doc.render();
+    doc.end();
+
+  } catch (error) {
+    handleError(error, "user.controller -> getInforme");
     respondError(req, res, 400, error.message);
   }
 }
@@ -229,6 +304,7 @@ async function createApelacion(req, res) {
 module.exports = {
   getUsers,
   getPostulantes,
+  getInforme,
   getDocuments,
   updatePuntaje,
   createUser,

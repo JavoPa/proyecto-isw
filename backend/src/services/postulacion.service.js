@@ -24,6 +24,31 @@ async function getEstado(id) {
 }
 
 /**
+ * Obtiene todas las postulaciones
+ * @returns {Promise} Promesa con el objeto de los postulantes
+ */
+async function getPostulaciones() {
+  try {
+    const postulaciones = await Postula.find()
+      .select("beca postulante puntaje")
+      .populate({
+        path: "beca",
+        select: "nombre"
+      })
+      .populate({
+        path: "postulante",
+        select: "nombres apellidos"
+      });
+
+    if (!postulaciones) return [null, "No hay postulaciones"];
+
+    return [postulaciones, null];
+  } catch (error) {
+    handleError(error, "postulacion.service -> getPostulaciones");
+  }
+}
+
+/**
  * Crea una apelacion modificando el estado de postula y actualizando los documentos
  * @param {Object} user Objeto de usuario
  * @returns {Promise} Promesa con el objeto de usuario creado
@@ -71,5 +96,6 @@ async function createApelacion(archivos, id) {
 
 module.exports = {
   getEstado,
+  getPostulaciones,
   createApelacion,
 };
