@@ -13,6 +13,7 @@ const postulaSchema = new mongoose.Schema(
       {
         nombre: String,        // Nombre del archivo PDF
         contenido: Buffer,      // Contenido del archivo PDF en formato binario
+        required: true,
       }
     ],
     estado: {
@@ -26,10 +27,12 @@ const postulaSchema = new mongoose.Schema(
     beca: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Beca",
+        required: true,
     },
     postulante:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
+        required: true,
       },
   },
   {
