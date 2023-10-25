@@ -17,6 +17,7 @@ const postulaSchema = new mongoose.Schema(
     ],
     estado: {
       type: String,
+      enum: ['Enviada', 'Rechazada', 'Apelada', 'Aprobada'],
       default: 'Enviado',
     },
     motivos: {
