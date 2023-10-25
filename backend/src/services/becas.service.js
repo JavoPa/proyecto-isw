@@ -24,7 +24,7 @@ async function getBecas() {
  */
 async function getBecasid(id) {
   try {
-    const becas = await Becas.findById({ _id: id }) 
+    const becas = await Becas.findById({ _id: id })
     if (!becas) return [null, "La beca no existe"];
 
     return [becas, null];
@@ -48,15 +48,19 @@ async function createBeca(bec) {
       if (fecha_actual > fechainicio && fecha_actual < fechafin){
         return [null, "No se pueden crear becas en periodo de postulacion"];
       }
+      if (bec.nombre.includes('  ')) {
+        return [null, "El nombre de la beca no puede contener dos espacios en blanco consecutivos"];
+      }
+
       const newbeca = new Becas({
-        nombre,
-        requisitos,
-        documentos,
-        fecha_inicio,
-        fecha_fin,
-        monto,
-        tipo_pago,
-      });
+            nombre,
+            requisitos,
+            documentos,
+            fecha_inicio,
+            fecha_fin,
+            monto,
+            tipo_pago,
+        });
       await newbeca.save();
       return [newbeca, null];
     } catch (error) {
@@ -87,7 +91,9 @@ async function updateBeca(id, bec) {
       if (fecha_actual > fechainicio && fecha_actual < fechafin){
         return [null, "No puedes estar entre el periodo de postulacion"];
       }
-
+      if (bec.nombre.includes('  ')) {
+        return [null, "El nombre de la beca no puede contener dos espacios en blanco consecutivos"];
+      }
       const becUpdated = await Becas.findByIdAndUpdate(
         id,
         {
