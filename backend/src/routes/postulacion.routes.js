@@ -23,7 +23,7 @@ router.use(authenticationMiddleware);
 router.get('/becas', postulacionController.getBecasPostulacion);
 
 //Ruta para postular a una beca
-router.post('/postular', archivoMiddleware.subir, postulacionController.createPostulacion);
+//router.post('/postular', archivoMiddleware.subir, postulacionController.createPostulacion);
 
 // Exporta el enrutador
 module.exports = router;
