@@ -70,10 +70,10 @@ async function getPostulantes() {
 /**
  * Actualiza el puntaje de una postulacion por su id
  * @param {string} id de la postulacion
- * @param {Object} postulacion objeto de postulacion con puntaje a asignar
+ * @param {Object} body objeto de body con puntaje a asignar
  * @returns {Promise} Promesa con el objeto de usuario actualizado
  */
-async function updatePuntaje(id, postulacion) {
+async function updatePuntaje(id, body) {
   try {
     const postulacionFound = await Postula.findById(id);
     if (!postulacionFound) return [null, "La postulacion no existe"];
@@ -81,7 +81,7 @@ async function updatePuntaje(id, postulacion) {
     const postulacionUpdated = await Postula.findByIdAndUpdate(
       id,
       {
-        puntaje: postulacion.puntaje
+        puntaje: body.puntaje
       },
       { new: true },
     );
@@ -89,6 +89,31 @@ async function updatePuntaje(id, postulacion) {
     return [postulacionUpdated, null];
   } catch (error) {
     handleError(error, "user.service -> updatePuntaje");
+  }
+}
+
+/**
+ * Actualiza el puntaje de una postulacion por su id
+ * @param {string} id de la postulacion
+ * @param {Object} body objeto de body con estado a asignar
+ * @returns {Promise} Promesa con el objeto de usuario actualizado
+ */
+async function updateEstado(id, body) {
+  try {
+    const postulacionFound = await Postula.findById(id);
+    if (!postulacionFound) return [null, "La postulacion no existe"];
+
+    const postulacionUpdated = await Postula.findByIdAndUpdate(
+      id,
+      {
+        estado: body.estado
+      },
+      { new: true },
+    );
+
+    return [postulacionUpdated, null];
+  } catch (error) {
+    handleError(error, "user.service -> updateEstado");
   }
 }
 
@@ -204,6 +229,7 @@ module.exports = {
   getPostulantes,
   getDocuments,
   updatePuntaje,
+  updateEstado,
   createUser,
   getUserById,
   updateUser,

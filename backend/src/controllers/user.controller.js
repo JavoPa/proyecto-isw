@@ -5,7 +5,7 @@ const UserService = require("../services/user.service");
 const { userBodySchema, userIdSchema } = require("../schema/user.schema");
 const { handleError } = require("../utils/errorHandler");
 const PostulacionService = require("../services/postulacion.service");
-const { postulaPuntajeSchema } = require("../schema/postula.schema");
+const { postulaPuntajeSchema, postulaEstadoSchema } = require("../schema/postula.schema");
 const PDF = require("pdfkit-construct");
 
 /**
@@ -165,6 +165,28 @@ async function updatePuntaje(req, res) {
 }
 
 /**
+ * Actualiza el estado de una postulacion por su id
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
+async function updateEstado(req, res) {
+  try {
+    const { params, body } = req;
+    const { error: bodyError } = postulaEstadoSchema.validate(body);
+    if (bodyError) return respondError(req, res, 400, bodyError.message);
+
+    const [postulacion, postulaError] = await UserService.updateEstado(params.id, body);
+    if (postulaError) return respondError(req, res, 400, postulaError);
+    
+
+    respondSuccess(req, res, 200, postulacion);
+  } catch (error) {
+    handleError(error, "user.controller -> updatePuntaje");
+    respondError(req, res, 500, "No se pudo actualizar el puntaje");
+  }
+}
+
+/**
  * Crea un nuevo usuario
  * @param {Object} req - Objeto de petición
  * @param {Object} res - Objeto de respuesta
@@ -307,6 +329,7 @@ module.exports = {
   getInforme,
   getDocuments,
   updatePuntaje,
+  updateEstado,
   createUser,
   getUserById,
   updateUser,

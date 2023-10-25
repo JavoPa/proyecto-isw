@@ -41,6 +41,7 @@ router.get('/estado/', usuarioController.getEstado);
 router.get('/postulantes', authorizationMiddleware.isAdmin, usuarioController.getPostulantes);
 router.get("/documentos/:id", authorizationMiddleware.isAdmin, usuarioController.getDocuments);
 router.put("/:id/puntaje", authorizationMiddleware.isAdmin, usuarioController.updatePuntaje);
+router.put("/:id/estado", authorizationMiddleware.isAdmin, usuarioController.updateEstado);
 router.get("/informe", authorizationMiddleware.isAdmin, usuarioController.getInforme)
 
 //Ruta para apelar un estado de postulacion

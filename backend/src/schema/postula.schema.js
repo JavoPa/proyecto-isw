@@ -12,5 +12,15 @@ const postulaPuntajeSchema = Joi.object({
         //"string.pattern.base": "El puntaje proporcionado no es un numero",
       }),
   });
-  
-module.exports = { postulaPuntajeSchema };
+
+  const postulaEstadoSchema = Joi.object({
+    estado: Joi.string()
+      .valid('Enviada', 'Rechazada', 'Apelada', 'Aprobada')
+      .required()
+      //.pattern(/^[0-9]+$/)
+      .messages({
+        "string.base": "El estado debe ser de tipo string.",
+        //"string.pattern.base": "El puntaje proporcionado no es un numero",
+      }),
+  });
+module.exports = { postulaPuntajeSchema, postulaEstadoSchema };
