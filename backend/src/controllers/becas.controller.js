@@ -81,10 +81,12 @@ async function createBeca(req, res) {
 async function updateBeca(req, res) {
     try {
       const { params, body } = req;
+      const { error: bodyError } = becaSchema.validate(body);
+      if (bodyError) return respondError(req, res, 400, bodyError.message);
+
       const [bec, becaError] = await BecaService.updateBeca(params.id, body);
-  
       if (becaError) return respondError(req, res, 400, becaError);
-  
+      
       respondSuccess(req, res, 200, bec);
     } catch (error) {
       handleError(error, "becas.controller -> updateBeca");
