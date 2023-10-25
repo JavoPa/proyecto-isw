@@ -72,8 +72,10 @@ async function getReq(req, res) {
   async function ActualizarRequisitoCodigo(req, res) {
     try {
       const { params, body } = req;
+      const { error: bodyError } = requisitoSchema.validate(body);
+      if (bodyError) return respondError(req, res, 400, bodyError.message);
+      
       const [updatedRequisito, requisitoError] = await RequisitoService.ActualizarRequisito(params.codigo, body);
-  
       if (requisitoError) return respondError(req, res, 400, requisitoError);
   
       respondSuccess(req, res, 200, updatedRequisito);
