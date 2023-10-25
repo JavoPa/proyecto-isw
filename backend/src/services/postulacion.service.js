@@ -3,8 +3,7 @@
 const Postula = require("../models/postula.model.js");
 const Beca = require("../models/beca.model.js");
 const { handleError } = require("../utils/errorHandler");
-const becas = require("./becas.service.js");
-const getBecas = becas.getBecas;
+
 
 
 /**
@@ -13,9 +12,9 @@ const getBecas = becas.getBecas;
  */
 async function getBecasPostulacion() {
   try {
-    const becas = await Beca.find().select("nombre -_id");
+    const becas = await Beca.find().select("nombre requisitos -_id");
     if (!becas) return [null, "No hay Becas"];
-    return [becas, null];
+    return [[becas], null];
   } catch (error) {
     handleError(error, "becas.service -> getBecas");
   }
@@ -40,7 +39,6 @@ async function getEstado(id) {
   }
 }
 
-getBecas();
 
 /**
  * Crea una postulacion subiendo la información del usuario 
