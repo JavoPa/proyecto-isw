@@ -13,6 +13,16 @@ const {
 
 const { handleError } = require("../utils/errorHandler");
 
+async function register(user) {
+  try {
+    const newUser = new User(user);
+    const savedUser = await newUser.save();
+    return savedUser;
+  } catch (error) {
+    handleError(error, "auth.service -> registerUser");
+  }
+}
+
 /**
  * Inicia sesión con un usuario.
  * @async
@@ -105,6 +115,7 @@ async function refresh(cookies) {
 }
 
 module.exports = {
+  register,
   login,
   refresh,
 };

@@ -62,8 +62,7 @@ async function createUsers() {
         nombres: "Ricardo",
         apellidos: "Gonzalez",
         rut: 39444789,
-        email: "ricardo@email.com",
-        password: await User.encryptPassword("user123"),
+        
         roles: user._id,
       }).save(),
       new User({
@@ -72,6 +71,14 @@ async function createUsers() {
         rut: 92837465,
         email: "fernanda@email.com",
         password: await User.encryptPassword("user123"),
+        roles: user._id,
+      }).save(),
+      new User({
+        nombres: "Juan",
+        apellidos: "Perez",
+        rut: 12345678,
+        email: "juan@email.com",
+        password: await User.encryptPassword("juan123"),
         roles: user._id,
       }).save(),
     ]);
