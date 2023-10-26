@@ -3,7 +3,7 @@
 const Postula = require("../models/postula.model.js");
 const Beca = require("../models/beca.model.js");
 const { handleError } = require("../utils/errorHandler");
-
+//const mongoose = require('mongoose');
 
 
 /**
@@ -47,45 +47,37 @@ async function getEstado(id) {
  * @param {Object} archivos Archivos requeridos para la beca
  * @returns {Promise} Promesa con el objeto de usuario creado
  */
-async function crearPostulacion(user, beca, archivos) {
+async function createPostulacion(user, beca, archivos) {
   try {
     const { nombre, contenido } = archivos;
 
     // Verificar si el usuario ya tiene una postulación para esta beca
-    const postulacionExistente = await Postula.findOne({ postulante: user._id, beca: beca._id });
-    if (postulacionExistente) return [null, "Ya existe una postulación para esta beca"];
-
-    // Verificar si la beca está disponible
-    if (beca.estado !== "Disponible") return [null, "La beca no está disponible"];
-
-    // Verificar si el usuario ya tiene una beca activa
-    const becasActivas = await Postula.find({ postulante: user._id, estado: "Aprobada" });
-    if (becasActivas.length > 0) return [null, "Ya tiene una beca activa"];
-
-    // Verificar si el usuario ya ha sido rechazado para una beca en el último año
-    const fechaLimite = new Date();
-    fechaLimite.setFullYear(fechaLimite.getFullYear() - 1);
-    const postulacionesRechazadas = await Postula.find({
-      postulante: user._id,
-      estado: "Rechazada",
-      fecha_recepcion: { $gte: fechaLimite },
-    });
-    if (postulacionesRechazadas.length > 0) return [null, "Ha sido rechazado para una beca en el último año"];
+    const postulacionExistente = await Postula.findOne({ postulante: user._id});
+    if (postulacionExistente) return [null, "Ya existe una postulación para este usuario"];
 
     // Verificar si el usuario ha subido los archivos requeridos
     if (!nombre || !contenido) return [null, "Debe subir los archivos requeridos"];
+    
+    // Check if the file type is pdf, png or jpg
+    const allowedTypes = ["application/pdf", "image/png", "image/jpeg"];
+    if (!allowedTypes.includes(contenido.mimetype)) {
+      return [null, "El archivo debe ser pdf, png o jpg"];
+    }
 
     // Verificar si el usuario está dentro del plazo para postular
     const fechaActual = new Date();
     if (fechaActual > beca.fecha_fin) return [null, "El plazo para postular ha vencido"];
+    if (fechaActual < beca.fecha_inicio) return [null, "El plazo para postular aún no comienza"];
 
     // Crear la postulación
     const postulacion = new Postula({
-      postulante: user._id,
-      beca: beca._id,
+      postulante: user,
+      beca: beca,
+      //postulante: mongoose.Types.ObjectId(user._id), 
+      //beca: mongoose.Types.ObjectId(beca._id),
       documentosPDF: [{ nombre, contenido }],
-      estado: "En revisión",
-      motivos: "Postulación creada",
+      estado: "Enviada",
+      motivos: `Postulación ${beca.nombre}`,
       fecha_recepcion: fechaActual,
     });
     await postulacion.save();
@@ -95,53 +87,6 @@ async function crearPostulacion(user, beca, archivos) {
     handleError(error, "postulacion.service -> crearPostulacion");
   }
 }
-
-/**
- * Renueva una beca o postula nuevamente con los datos personales registrados
- * @param {Object} user Objeto de usuario
- * @param {Object} beca Objeto de beca
- * @returns {Promise} Promesa con el objeto de usuario creado
- */
-async function renovarPostulacion(user, beca) {
-  try {
-    // Verificar si el usuario ya tiene una postulación para esta beca
-    const postulacionExistente = await Postula.findOne({ postulante: user._id, beca: beca._id });
-    if (!postulacionExistente) return [null, "No existe una postulación para esta beca"];
-
-    // Verificar si la beca está disponible
-    if (beca.estado !== "Disponible") return [null, "La beca no está disponible"];
-
-    // Verificar si el usuario ya tiene una beca activa
-    const becasActivas = await Postula.find({ postulante: user._id, estado: "Aprobada" });
-    if (becasActivas.length > 0) return [null, "Ya tiene una beca activa"];
-
-    // Verificar si el usuario ha sido rechazado para una beca en el último año
-    const fechaLimite = new Date();
-    fechaLimite.setFullYear(fechaLimite.getFullYear() - 1);
-    const postulacionesRechazadas = await Postula.find({
-      postulante: user._id,
-      estado: "Rechazada",
-      fecha_recepcion: { $gte: fechaLimite },
-    });
-    if (postulacionesRechazadas.length > 0) return [null, "Ha sido rechazado para una beca en el último año"];
-
-    // Verificar si el usuario está dentro del plazo para postular
-    const fechaActual = new Date();
-    if (fechaActual > beca.fecha_fin) return [null, "El plazo para postular ha vencido"];
-
-    // Actualizar la postulación
-    postulacionExistente.estado = "En revisión";
-    postulacionExistente.motivos = "Postulación renovada";
-    postulacionExistente.fecha_recepcion = fechaActual;
-    await postulacionExistente.save();
-
-    return [postulacionExistente, null];
-  } catch (error) {
-    handleError(error, "postulacion.service -> renovarPostulacion");
-  }
-}
-
-
 
 
 /**
@@ -192,7 +137,7 @@ async function createApelacion(archivos, id) {
 
 module.exports = {
   getBecasPostulacion,
-  crearPostulacion,
+  createPostulacion,
   getEstado,
   createApelacion,
 };
