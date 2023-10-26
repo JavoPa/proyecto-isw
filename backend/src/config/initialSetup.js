@@ -18,8 +18,8 @@ async function createRoles() {
     if (count > 0) return;
 
     await Promise.all([
-      new Role({ name: "user" }).save(),
-      new Role({ name: "admin" }).save(),
+      new Role({ name: "postulante" }).save(),
+      new Role({ name: "encargado" }).save(),
     ]);
     console.log("* => Roles creados exitosamente");
   } catch (error) {
@@ -38,8 +38,8 @@ async function createUsers() {
     const count = await User.estimatedDocumentCount();
     if (count > 0) return;
 
-    const admin = await Role.findOne({ name: "admin" });
-    const user = await Role.findOne({ name: "user" });
+    const admin = await Role.findOne({ name: "encargado" });
+    const user = await Role.findOne({ name: "postulante" });
 
     await Promise.all([
       new User({
@@ -63,6 +63,14 @@ async function createUsers() {
         apellidos: "Gonzalez",
         rut: 39444789,
         email: "ricardo@email.com",
+        password: await User.encryptPassword("user123"),
+        roles: user._id,
+      }).save(),
+      new User({
+        nombres: "Fernanda",
+        apellidos: "Mendez",
+        rut: 92837465,
+        email: "fernanda@email.com",
         password: await User.encryptPassword("user123"),
         roles: user._id,
       }).save(),
@@ -115,6 +123,8 @@ async function createPostulaciones() {
     if (!beca) return;
     const postulante = await User.findOne({ rut: 39444789 }).select("_id").exec();
     if (!postulante) return;
+    const postulante2 = await User.findOne({ rut: 92837465 }).select("_id").exec();
+    if (!postulante2) return;
 
     await Promise.all([
       new Postula({
@@ -122,6 +132,14 @@ async function createPostulaciones() {
         estado: "Enviada",
         beca: beca,
         postulante: postulante,
+      }).save()
+    ]);
+    await Promise.all([
+      new Postula({
+        fecha_recepcion: "2021-01-03",
+        estado: "Rechazada",
+        beca: beca,
+        postulante: postulante2,
       }).save()
     ]);
     console.log("* => Postulaciones creadas exitosamente");
