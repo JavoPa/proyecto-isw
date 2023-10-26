@@ -16,8 +16,22 @@ async function getBecasPostulacion(req, res) {
         handleError(error, "postulacion.controller -> getBecasPostulacion");
         respondError(req, res, 400, error.message);
     }
+}
+
+async function createPostulacion(req, res) {
+    try {
+        const { user, beca, archivos } = req.body;
+        const [postulacion, errorPostulacion] = await postulacionService.createPostulacion(user, beca, archivos);
+        if (errorPostulacion) return respondError(req, res, 404, errorPostulacion);
+    
+        respondSuccess(req, res, 201, postulacion);
+    } catch (error) {
+        handleError(error, "postulacion.controller -> createPostulacion");
+        respondError(req, res, 400, error.message);
     }
+}
 
 module.exports = {
     getBecasPostulacion,
+    createPostulacion,
 };

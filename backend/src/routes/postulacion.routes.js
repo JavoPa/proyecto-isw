@@ -14,6 +14,9 @@ const authenticationMiddleware = require("../middlewares/authentication.middlewa
 /** Instancia del enrutador */
 const router = express.Router();
 
+/** Middlewares de subida de archivos */
+const archivoMiddleware = require("../middlewares/archivo.middleware.js");
+
 // Define el middleware de autenticación para todas las rutas
 router.use(authenticationMiddleware);
 
@@ -23,7 +26,7 @@ router.use(authenticationMiddleware);
 router.get('/becas', postulacionController.getBecasPostulacion);
 
 //Ruta para postular a una beca
-//router.post('/postular', archivoMiddleware.subir, postulacionController.createPostulacion);
+router.post('/postulacion', archivoMiddleware.subir, postulacionController.createPostulacion);
 
 // Exporta el enrutador
 module.exports = router;
