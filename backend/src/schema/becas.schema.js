@@ -21,15 +21,19 @@ const becaSchema = Joi.object({
     "any.required": "Los documentos son obligatorios.",
     "string.base": "Cada documento debe ser de tipo string.",
   }),
-  fecha_inicio: Joi.date().iso().required().messages({
-    "date.base": "La fecha de inicio debe ser de tipo Date.",
-    "date.format": "La fecha de inicio debe ser de tipo Date YYYY-MM-DD.",
-    "any.required": "La fecha de inicio es obligatoria.",
+  fecha_inicio: Joi.string()
+  .regex(/^\d{2}-\d{2}-\d{4}$/)
+  .required()
+  .messages({
+    "string.pattern.base": "La fecha debe tener el formato DD-MM-YYYY.",
+    "any.required": "La fecha es obligatoria.",
   }),
-  fecha_fin: Joi.date().iso().required().messages({
-    "date.base": "La fecha de fin debe ser de tipo Date.",
-    "date.format": "La fecha de fin debe ser de tipo Date YYYY-MM-DD.",
-    "any.required": "La fecha de fin es obligatoria.",
+  fecha_fin: Joi.string()
+  .regex(/^\d{2}-\d{2}-\d{4}$/)
+  .required()
+  .messages({
+    "string.pattern.base": "La fecha debe tener el formato DD-MM-YYYY.",
+    "any.required": "La fecha es obligatoria.",
   }),
   monto: Joi.number().integer().positive().required().messages({
     "number.base": "El monto debe ser de tipo número.",

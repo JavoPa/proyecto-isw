@@ -3,6 +3,7 @@
 const Postula = require("../models/postula.model.js");
 const Beca = require("../models/beca.model.js");
 const { handleError } = require("../utils/errorHandler");
+const moment = require("moment");
 //const mongoose = require('mongoose');
 
 
@@ -28,7 +29,20 @@ async function getBecasPostulacion() {
 async function getEstado(id) {
   try {
     const estado = await Postula.findOne({ postulante: id })
-      .select("estado fecha_recepcion motivos -_id")
+      .select({
+        fecha_recepcion: 1,
+        fecha_de_recepcion: {
+          $dateToString: {
+            format: "%d-%m-%Y",
+            date: "$fecha_recepcion",
+          },
+        },
+        estado: 1,
+        motivos: 1,
+        beca: 1,
+        documentosPDF: 1,
+        _id: 0,
+      })
       .populate("")
       .exec();
     if (!estado) return [null, "No hay postulacion"];
@@ -126,7 +140,7 @@ async function createApelacion(archivos, id) {
     });
     postulacionFound.estado = "Apelada";
     postulacionFound.motivos = "Apelacion solicitada";
-    postulacionFound.fecha_recepcion = Date.now();
+    postulacionFound.fecha_recepcion = fecha_actual;
     await postulacionFound.save();
 
     return ["Apelacion enviada", null];

@@ -24,11 +24,9 @@ const userSchema = new mongoose.Schema(
     },
     direccion: {
       type: String,
-      required: true,
     },
     telefono: {
       type: Number,
-      required: true,
     },
     email: {
       type: String,
@@ -37,19 +35,15 @@ const userSchema = new mongoose.Schema(
     },
     fecha_nacimiento: {
       type: Date,
-      required: true,
     },
     sexo: {
       type: String,
-      required: true,
     },
     discapacidad: {
       type: Boolean,
-      required: true,
     },
     cuenta_bancaria: {
       type: String,
-      required: true,
     },
     roles: [
       {

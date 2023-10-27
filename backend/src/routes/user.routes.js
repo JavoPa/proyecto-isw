@@ -35,12 +35,5 @@ router.delete(
   usuarioController.deleteUser,
 );
 
-//Ruta para ver el estado de postulacion de un postulante
-router.get('/estado', usuarioController.getEstado);
-
-//Ruta para apelar un estado de postulacion
-router.post('/apelar', archivoMiddleware.subir, usuarioController.createApelacion);
-
-
 // Exporta el enrutador
 module.exports = router;
