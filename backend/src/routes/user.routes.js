@@ -34,8 +34,6 @@ router.delete(
   authorizationMiddleware.isAdmin,
   usuarioController.deleteUser,
 );
-//Ruta para ver el estado de postulacion de un postulante
-router.get('/estado/', usuarioController.getEstado);
 
 // Rutas para requerimiento de seleccion
 router.get('/postulantes', authorizationMiddleware.isAdmin, usuarioController.getPostulantes);
@@ -43,10 +41,6 @@ router.get("/documentos/:id", authorizationMiddleware.isAdmin, usuarioController
 router.put("/:id/puntaje", authorizationMiddleware.isAdmin, usuarioController.updatePuntaje);
 router.put("/:id/estado", authorizationMiddleware.isAdmin, usuarioController.updateEstado);
 router.get("/informe", authorizationMiddleware.isAdmin, usuarioController.getInforme)
-
-//Ruta para apelar un estado de postulacion
-router.post('/apelar', archivoMiddleware.subir, usuarioController.createApelacion);
-
 
 // Exporta el enrutador
 module.exports = router;

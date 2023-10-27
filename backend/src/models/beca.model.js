@@ -10,13 +10,12 @@ const becaSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    requisitos: {
-      type: [String],
-      required: true,
-    },
+    requisitos: [{
+      type: Number,
+      ref: 'Requisito' // Referencia al modelo de "Requisito"
+    }],
     documentos: {
       type: [String],
-      required: true,
     },
     fecha_inicio: {
       type: Date,

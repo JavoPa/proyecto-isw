@@ -1,25 +1,26 @@
 "use strict";
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const BecaService = require("../services/becas.service");
+const becaSchema = require("../schema/becas.schema");
+const RequisitoService = require("../services/requisitos.service")
 const { handleError } = require("../utils/errorHandler");
-
+const moment = require("moment");
 /**
  * @param {Object} req 
  * @param {Object} res
  */
 async function getBecas(req, res) {
-    try {
-      const [becas, errorbecas] = await BecaService.getBecas();
-      if (errorbecas) return respondError(req, res, 404, errorbecas);
-  
-      becas.length === 0
-        ? respondSuccess(req, res, 204)
-        : respondSuccess(req, res, 200, becas);
-    } catch (error) {
-      handleError(error, "becas.controller -> getBecas");
-      respondError(req, res, 400, error.message);
-    }
+  try {
+    const [becas, errorbecas] = await BecaService.getBecas();
+    if (errorbecas) return respondError(req, res, 404, errorbecas); 
+    becas.length === 0
+      ? respondSuccess(req, res, 204)
+      : respondSuccess(req, res, 200, becas);
+  } catch (error) {
+    handleError(error, "becas.controller -> getBecas");
+    respondError(req, res, 400, error.message);
   }
+}
 
 /**
  * @param {Object} req 
@@ -28,11 +29,22 @@ async function getBecas(req, res) {
 async function getBecasid(req, res) {
     try {
       const { params } = req;
-      const [bec, errorBeca] = await BecaService.getBecasid(params.id);
-  
+      const [beca, errorBeca] = await BecaService.getBecasid(params.id);
       if (errorBeca) return respondError(req, res, 404, errorBeca);
-  
-      respondSuccess(req, res, 200, bec);
+
+      const requisitosNombres = await Promise.all(
+        beca.requisitos.map(async (codigo) => {
+          const [requisito, errorRequisito] = await RequisitoService.getReqByCod(codigo);
+          return requisito ? requisito.descripcion : null;
+        })
+      ); 
+      const becaResponse = {
+        ...beca.toObject(),
+        requisitos: requisitosNombres,
+      };
+      
+      respondSuccess(req, res, 200, becaResponse);
+
     } catch (error) {
       handleError(error, "becas.controller -> getBecasid");
       respondError(req, res, 500, "No se pudo obtener la beca");
@@ -46,9 +58,15 @@ async function getBecasid(req, res) {
 async function createBeca(req, res) {
     try {  
       const { body } = req;
-      const [newBeca, BecaError] = await BecaService.createBeca(body);
-  
-      if (BecaError) return respondError(req, res, 400, BecaErrorError);
+      const { error: bodyError } = becaSchema.validate(body);
+      if (bodyError) return respondError(req, res, 400, bodyError.message);
+
+      //convertir fecha a formato date de mongo
+      body.fecha_inicio = moment(body.fecha_inicio, "DD-MM-YYYY").toDate();
+      body.fecha_fin = moment(body.fecha_fin, "DD-MM-YYYY").toDate();
+      
+      const [newBeca, BecaError] = await BecaService.createBeca(body);  
+      if (BecaError) return respondError(req, res, 400, BecaError);
       if (!newBeca) {
         return respondError(req, res, 400, "No se creo la Beca");
       }
@@ -56,7 +74,7 @@ async function createBeca(req, res) {
       respondSuccess(req, res, 201, newBeca);
     } catch (error) {
       handleError(error, "beca.controller -> createBeca");
-      respondError(req, res, 500, "No se la beca");
+      respondError(req, res, 500, "No se creo la beca");
     }
   }
 
@@ -67,10 +85,12 @@ async function createBeca(req, res) {
 async function updateBeca(req, res) {
     try {
       const { params, body } = req;
+      const { error: bodyError } = becaSchema.validate(body);
+      if (bodyError) return respondError(req, res, 400, bodyError.message);
+
       const [bec, becaError] = await BecaService.updateBeca(params.id, body);
-  
       if (becaError) return respondError(req, res, 400, becaError);
-  
+      
       respondSuccess(req, res, 200, bec);
     } catch (error) {
       handleError(error, "becas.controller -> updateBeca");

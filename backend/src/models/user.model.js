@@ -31,6 +31,7 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       unique: true,
+      required: true,
     },
     fecha_nacimiento: {
       type: Date,

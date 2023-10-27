@@ -4,6 +4,7 @@ const Role = require("../models/role.model.js");
 const User = require("../models/user.model.js");
 const Postula = require("../models/postula.model.js");
 const Beca = require("../models/beca.model.js");
+const moment = require("moment");
 /**
  * Crea los roles por defecto en la base de datos.
  * @async
@@ -18,8 +19,8 @@ async function createRoles() {
     if (count > 0) return;
 
     await Promise.all([
-      new Role({ name: "user" }).save(),
-      new Role({ name: "admin" }).save(),
+      new Role({ name: "postulante" }).save(),
+      new Role({ name: "encargado" }).save(),
     ]);
     console.log("* => Roles creados exitosamente");
   } catch (error) {
@@ -38,8 +39,8 @@ async function createUsers() {
     const count = await User.estimatedDocumentCount();
     if (count > 0) return;
 
-    const admin = await Role.findOne({ name: "admin" });
-    const user = await Role.findOne({ name: "user" });
+    const admin = await Role.findOne({ name: "encargado" });
+    const user = await Role.findOne({ name: "postulante" });
 
     await Promise.all([
       new User({
@@ -73,7 +74,23 @@ async function createUsers() {
         email: "sebastian@email.com",
         password: await User.encryptPassword("user123"),
         roles: user._id
-      }).save()
+      }).save(),
+      new User({
+        nombres: "Fernanda",
+        apellidos: "Mendez",
+        rut: 92837465,
+        email: "fernanda@email.com",
+        password: await User.encryptPassword("user123"),
+        roles: user._id,
+      }).save(),
+      new User({
+        nombres: "Juan",
+        apellidos: "Perez",
+        rut: 23985023,
+        email: "juan@email.com",
+        password: await User.encryptPassword("juan123"),
+        roles: user._id,
+      }).save(),
     ]);
     console.log("* => Users creados exitosamente");
   } catch (error) {
@@ -94,13 +111,13 @@ async function createBecas() {
 
     await Promise.all([
       new Beca({
-        nombre: "Beca excelencia academica universidad",
-        requisitos: ["Ser estudiante regular y tener nota promedio mayor o igual a 6"],
+        nombre: "Beca excelencia academica colegio",
+        requisitos: [1,2],
         documentos: ["Fotocopia de cedula de identidad", "Certificado de alumno regular", "Certificado de notas"],
-        fecha_inicio: "2021-01-01",
-        fecha_fin: "2021-01-31",
-        monto: 100000,
-        tipo_pago: "2 pagos al año, cada semestre",
+        fecha_inicio: moment("01-01-2023", "DD-MM-YYYY").toDate(),
+        fecha_fin: moment("14-01-2023", "DD-MM-YYYY").toDate(),
+        monto: 50000,
+        tipo_pago: "2 pagos al año (cada semestre)",
       }).save()
     ]);
     console.log("* => Becas creadas exitosamente");
@@ -119,12 +136,13 @@ async function createPostulaciones() {
   try {
     const count = await Postula.estimatedDocumentCount();
     if (count > 0) return;
-
-    const beca = await Beca.findOne({ nombre: "Beca excelencia academica universidad" }).select("_id").exec();
+    const beca = await Beca.findOne({ nombre: "Beca excelencia academica colegio" }).select("_id").exec();
     if (!beca) return;
 
     const postulante = await User.findOne({ rut: 39444789 }).select("_id").exec();
     if (!postulante) return;
+    const postulante2 = await User.findOne({ rut: 92837465 }).select("_id").exec();
+    if (!postulante2) return;
 
     const beca1 = await Beca.findOne({ nombre: "Beca excelencia academica universidad" }).select("_id").exec();
     if (!beca1) return;
@@ -134,7 +152,7 @@ async function createPostulaciones() {
 
     await Promise.all([
       new Postula({
-        fecha_recepcion: "2021-01-02",
+        fecha_recepcion: moment("02-01-2023", "DD-MM-YYYY").toDate(),
         estado: "Enviada",
         beca: beca,
         postulante: postulante,
@@ -146,6 +164,14 @@ async function createPostulaciones() {
         beca: beca1,
         postulante: postulante1,
         puntaje: 0
+      }).save()
+    ]);
+    await Promise.all([
+      new Postula({
+        fecha_recepcion: moment("03-01-2023", "DD-MM-YYYY").toDate(),
+        estado: "Rechazada",
+        beca: beca,
+        postulante: postulante2,
       }).save()
     ]);
     console.log("* => Postulaciones creadas exitosamente");
