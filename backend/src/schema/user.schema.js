@@ -44,6 +44,7 @@ const userBodySchema = Joi.object({
     "any.required": "El rut es obligatorio.",
     "string.base": "El rut debe ser tipo int.",
     "string.min": "El rut debe contener al menos 5 numeros",
+    
   }),
 }).messages({
   "object.unknown": "No se permiten propiedades adicionales.",

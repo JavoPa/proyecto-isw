@@ -62,8 +62,7 @@ async function createUsers() {
         nombres: "Ricardo",
         apellidos: "Gonzalez",
         rut: 39444789,
-        email: "ricardo@email.com",
-        password: await User.encryptPassword("user123"),
+        
         roles: user._id,
       }).save(),
       new User({
@@ -72,6 +71,14 @@ async function createUsers() {
         rut: 92837465,
         email: "fernanda@email.com",
         password: await User.encryptPassword("user123"),
+        roles: user._id,
+      }).save(),
+      new User({
+        nombres: "Juan",
+        apellidos: "Perez",
+        rut: 12345678,
+        email: "juan@email.com",
+        password: await User.encryptPassword("juan123"),
         roles: user._id,
       }).save(),
     ]);
@@ -94,14 +101,14 @@ async function createBecas() {
 
     await Promise.all([
       new Beca({
-        nombre: "Beca excelencia academica",
-        requisitos: ["Ser estudiante regular y tener nota promedio mayor o igual a 6"],
+        nombre: "Beca excelencia academica colegio",
+        requisitos: [1,2],
         documentos: ["Fotocopia de cedula de identidad", "Certificado de alumno regular", "Certificado de notas"],
-        fecha_inicio: "2021-01-01",
-        fecha_fin: "2021-01-31",
-        monto: 100000,
-        tipo_pago: "2 pagos al año, cada semestre",
-      }).save(),
+        fecha_inicio: "2023-11-01",
+        fecha_fin: "2023-11-31",
+        monto: 50000,
+        tipo_pago: "2 pagos al año (cada semestre)",
+      }).save()
     ]);
     console.log("* => Becas creadas exitosamente");
   } catch (error) {
@@ -119,7 +126,7 @@ async function createPostulaciones() {
   try {
     const count = await Postula.estimatedDocumentCount();
     if (count > 0) return;
-    const beca = await Beca.findOne({ nombre: "Beca excelencia academica" }).select("_id").exec();
+    const beca = await Beca.findOne({ nombre: "Beca excelencia academica colegio" }).select("_id").exec();
     if (!beca) return;
     const postulante = await User.findOne({ rut: 39444789 }).select("_id").exec();
     if (!postulante) return;

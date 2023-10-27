@@ -34,6 +34,7 @@ router.delete(
   authorizationMiddleware.isAdmin,
   usuarioController.deleteUser,
 );
+
 //Ruta para ver el estado de postulacion de un postulante
 router.get('/estado', usuarioController.getEstado);
 

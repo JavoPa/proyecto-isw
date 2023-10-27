@@ -7,6 +7,23 @@ const { handleError } = require("../utils/errorHandler");
 const AuthServices = require("../services/auth.service");
 const { authLoginBodySchema } = require("../schema/auth.schema");
 
+async function register(req, res) {
+  try {
+    const { body } = req;
+    const { error: bodyError } = authLoginBodySchema.validate(body);
+    if (bodyError) return respondError(req, res, 400, bodyError.message);
+
+    const [user, errorUser] = await AuthServices.register(body);
+
+    if (errorUser) return respondError(req, res, 400, errorUser);
+
+    respondSuccess(req, res, 201, user);
+  } catch (error) {
+    handleError(error, "auth.controller -> register");
+    respondError(req, res, 400, error.message);
+  }
+}
+
 /**
  * Inicia sesión con un usuario.
  * @async
@@ -80,6 +97,7 @@ async function refresh(req, res) {
 }
 
 module.exports = {
+  register,
   login,
   logout,
   refresh,
