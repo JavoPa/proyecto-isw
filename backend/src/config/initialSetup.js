@@ -68,6 +68,14 @@ async function createUsers() {
         roles: user._id,
       }).save(),
       new User({
+        nombres: "Sebastian",
+        apellidos: "Velastegui",
+        rut: 20484871,
+        email: "sebastian@email.com",
+        password: await User.encryptPassword("user123"),
+        roles: user._id
+      }).save(),
+      new User({
         nombres: "Fernanda",
         apellidos: "Mendez",
         rut: 92837465,
@@ -142,10 +150,17 @@ async function createPostulaciones() {
     const beca = await Beca.findOne({ nombre: "Beca excelencia academica colegio" }).select("_id").exec();
     const beca2 = await Beca.findOne({ nombre: "Beca discapacidad" }).select("_id").exec();
     if (!beca) return;
+
     const postulante = await User.findOne({ rut: 39444789 }).select("_id").exec();
     if (!postulante) return;
     const postulante2 = await User.findOne({ rut: 92837465 }).select("_id").exec();
     if (!postulante2) return;
+
+    const beca1 = await Beca.findOne({ nombre: "Beca excelencia academica universidad" }).select("_id").exec();
+    if (!beca1) return;
+
+    const postulante1 = await User.findOne({ rut: 20484871 }).select("_id").exec();
+    if (!postulante1) return;
 
     await Promise.all([
       new Postula({
@@ -153,6 +168,14 @@ async function createPostulaciones() {
         estado: "Enviada",
         beca: beca,
         postulante: postulante,
+        puntaje: 0
+      }).save(),
+      new Postula({
+        fecha_recepcion: "2021-01-02",
+        estado: "Enviada",
+        beca: beca1,
+        postulante: postulante1,
+        puntaje: 0
       }).save()
     ]);
     await Promise.all([
