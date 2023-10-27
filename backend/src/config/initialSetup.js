@@ -103,6 +103,17 @@ async function createBecas() {
 
     await Promise.all([
       new Beca({
+        nombre: "Beca discapacidad",
+        requisitos: [1],
+        documentos: ["Fotocopia de cedula de identidad"],
+        fecha_inicio: moment("20-10-2023", "DD-MM-YYYY").toDate(),
+        fecha_fin: moment("26-10-2023", "DD-MM-YYYY").toDate(),
+        monto: 50000,
+        tipo_pago: "1 pago al año",
+      }).save()
+    ]);
+    await Promise.all([
+      new Beca({
         nombre: "Beca excelencia academica colegio",
         requisitos: [1,2],
         documentos: ["Fotocopia de cedula de identidad", "Certificado de alumno regular", "Certificado de notas"],
@@ -129,6 +140,7 @@ async function createPostulaciones() {
     const count = await Postula.estimatedDocumentCount();
     if (count > 0) return;
     const beca = await Beca.findOne({ nombre: "Beca excelencia academica colegio" }).select("_id").exec();
+    const beca2 = await Beca.findOne({ nombre: "Beca discapacidad" }).select("_id").exec();
     if (!beca) return;
     const postulante = await User.findOne({ rut: 39444789 }).select("_id").exec();
     if (!postulante) return;
@@ -147,7 +159,7 @@ async function createPostulaciones() {
       new Postula({
         fecha_recepcion: moment("03-01-2023", "DD-MM-YYYY").toDate(),
         estado: "Rechazada",
-        beca: beca,
+        beca: beca2,
         postulante: postulante2,
       }).save()
     ]);
