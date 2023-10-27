@@ -2,7 +2,7 @@
 const Becas = require("../models/beca.model");
 const { handleError } = require("../utils/errorHandler");
 
-1/**
+/**
  * @returns {Promise}
  */
 async function getBecas() {

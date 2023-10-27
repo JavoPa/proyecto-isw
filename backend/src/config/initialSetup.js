@@ -4,6 +4,7 @@ const Role = require("../models/role.model.js");
 const User = require("../models/user.model.js");
 const Postula = require("../models/postula.model.js");
 const Beca = require("../models/beca.model.js");
+const moment = require("moment");
 /**
  * Crea los roles por defecto en la base de datos.
  * @async
@@ -67,11 +68,27 @@ async function createUsers() {
         roles: user._id,
       }).save(),
       new User({
+        nombres: "Sebastian",
+        apellidos: "Velastegui",
+        rut: 20484871,
+        email: "sebastian@email.com",
+        password: await User.encryptPassword("user123"),
+        roles: user._id
+      }).save(),
+      new User({
         nombres: "Fernanda",
         apellidos: "Mendez",
         rut: 92837465,
         email: "fernanda@email.com",
         password: await User.encryptPassword("user123"),
+        roles: user._id,
+      }).save(),
+      new User({
+        nombres: "Juan",
+        apellidos: "Perez",
+        rut: 23985023,
+        email: "juan@email.com",
+        password: await User.encryptPassword("juan123"),
         roles: user._id,
       }).save(),
     ]);
@@ -94,11 +111,22 @@ async function createBecas() {
 
     await Promise.all([
       new Beca({
+        nombre: "Beca discapacidad",
+        requisitos: [1],
+        documentos: ["Fotocopia de cedula de identidad"],
+        fecha_inicio: moment("20-10-2023", "DD-MM-YYYY").toDate(),
+        fecha_fin: moment("26-10-2023", "DD-MM-YYYY").toDate(),
+        monto: 50000,
+        tipo_pago: "1 pago al año",
+      }).save()
+    ]);
+    await Promise.all([
+      new Beca({
         nombre: "Beca excelencia academica colegio",
         requisitos: [1,2],
         documentos: ["Fotocopia de cedula de identidad", "Certificado de alumno regular", "Certificado de notas"],
-        fecha_inicio: "2023-11-01",
-        fecha_fin: "2023-11-31",
+        fecha_inicio: moment("01-01-2023", "DD-MM-YYYY").toDate(),
+        fecha_fin: moment("14-01-2023", "DD-MM-YYYY").toDate(),
         monto: 50000,
         tipo_pago: "2 pagos al año (cada semestre)",
       }).save()
@@ -120,25 +148,41 @@ async function createPostulaciones() {
     const count = await Postula.estimatedDocumentCount();
     if (count > 0) return;
     const beca = await Beca.findOne({ nombre: "Beca excelencia academica colegio" }).select("_id").exec();
+    const beca2 = await Beca.findOne({ nombre: "Beca discapacidad" }).select("_id").exec();
     if (!beca) return;
+
     const postulante = await User.findOne({ rut: 39444789 }).select("_id").exec();
     if (!postulante) return;
     const postulante2 = await User.findOne({ rut: 92837465 }).select("_id").exec();
     if (!postulante2) return;
 
+    const beca1 = await Beca.findOne({ nombre: "Beca excelencia academica universidad" }).select("_id").exec();
+    if (!beca1) return;
+
+    const postulante1 = await User.findOne({ rut: 20484871 }).select("_id").exec();
+    if (!postulante1) return;
+
     await Promise.all([
       new Postula({
-        fecha_recepcion: "2021-01-02",
+        fecha_recepcion: moment("02-01-2023", "DD-MM-YYYY").toDate(),
         estado: "Enviada",
         beca: beca,
         postulante: postulante,
+        puntaje: 0
+      }).save(),
+      new Postula({
+        fecha_recepcion: "2021-01-02",
+        estado: "Enviada",
+        beca: beca1,
+        postulante: postulante1,
+        puntaje: 0
       }).save()
     ]);
     await Promise.all([
       new Postula({
-        fecha_recepcion: "2021-01-03",
+        fecha_recepcion: moment("03-01-2023", "DD-MM-YYYY").toDate(),
         estado: "Rechazada",
-        beca: beca,
+        beca: beca2,
         postulante: postulante2,
       }).save()
     ]);

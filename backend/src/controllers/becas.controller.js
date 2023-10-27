@@ -4,7 +4,7 @@ const BecaService = require("../services/becas.service");
 const becaSchema = require("../schema/becas.schema");
 const RequisitoService = require("../services/requisitos.service")
 const { handleError } = require("../utils/errorHandler");
-
+const moment = require("moment");
 /**
  * @param {Object} req 
  * @param {Object} res
@@ -60,6 +60,10 @@ async function createBeca(req, res) {
       const { body } = req;
       const { error: bodyError } = becaSchema.validate(body);
       if (bodyError) return respondError(req, res, 400, bodyError.message);
+
+      //convertir fecha a formato date de mongo
+      body.fecha_inicio = moment(body.fecha_inicio, "DD-MM-YYYY").toDate();
+      body.fecha_fin = moment(body.fecha_fin, "DD-MM-YYYY").toDate();
       
       const [newBeca, BecaError] = await BecaService.createBeca(body);  
       if (BecaError) return respondError(req, res, 400, BecaError);

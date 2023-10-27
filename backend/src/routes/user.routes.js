@@ -21,9 +21,9 @@ const archivoMiddleware = require("../middlewares/archivo.middleware.js");
 router.use(authenticationMiddleware);
 
 // Define las rutas para los usuarios
-router.get("/", usuarioController.getUsers);
+router.get("/", authorizationMiddleware.isAdmin, usuarioController.getUsers);
 router.post("/", authorizationMiddleware.isAdmin, usuarioController.createUser);
-router.get("/id/:id", usuarioController.getUserById);
+router.get("/id/:id", authorizationMiddleware.isAdmin, usuarioController.getUserById);
 router.put(
   "/:id",
   authorizationMiddleware.isAdmin,
@@ -34,12 +34,13 @@ router.delete(
   authorizationMiddleware.isAdmin,
   usuarioController.deleteUser,
 );
-//Ruta para ver el estado de postulacion de un postulante
-router.get('/estado', usuarioController.getEstado);
 
-//Ruta para apelar un estado de postulacion
-router.post('/apelar', archivoMiddleware.subir, usuarioController.createApelacion);
-
+// Rutas para requerimiento de seleccion
+router.get('/postulantes', authorizationMiddleware.isAdmin, usuarioController.getPostulantes);
+router.get("/documentos/:id", authorizationMiddleware.isAdmin, usuarioController.getDocuments);
+router.put("/:id/puntaje", authorizationMiddleware.isAdmin, usuarioController.updatePuntaje);
+router.put("/:id/estado", authorizationMiddleware.isAdmin, usuarioController.updateEstado);
+router.get("/informe", authorizationMiddleware.isAdmin, usuarioController.getInforme)
 
 // Exporta el enrutador
 module.exports = router;

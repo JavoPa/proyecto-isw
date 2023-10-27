@@ -11,7 +11,7 @@
     "backend",
     "http"
   ],
-  "author": "Javier Placencia",
+  "author": "Javier Placencia, Matías Jara, José Sáez, Tomás Sepúlveda",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -21,12 +21,14 @@
     "express": "^4.18.2",
     "joi": "^17.10.2",
     "jsonwebtoken": "^9.0.2",
+    "moment": "^2.29.4",
     "mongoose": "^7.5.2",
     "morgan": "^1.10.0",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "pdfkit": "^0.13.0",
+    "pdfkit-construct": "^1.2.3"
   },
   "devDependencies": {
-    "eslint": "^8.50.0",
     "eslint-config-google": "^0.14.0",
     "jsdoc": "^4.0.2",
     "nodemon": "^3.0.1",
