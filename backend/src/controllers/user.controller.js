@@ -4,7 +4,6 @@ const { respondSuccess, respondError } = require("../utils/resHandler");
 const UserService = require("../services/user.service");
 const { userBodySchema, userIdSchema } = require("../schema/user.schema");
 const { handleError } = require("../utils/errorHandler");
-const PostulacionService = require("../services/postulacion.service");
 
 /**
  * Obtiene todos los usuarios
@@ -124,50 +123,10 @@ async function deleteUser(req, res) {
   }
 }
 
-/**
- * Obtiene el estado de postulacion por su id
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- */
-async function getEstado(req, res) {
-  try {
-    const id = req._id;
-    const [estado, errorId] = await PostulacionService.getEstado(id);
-    if (errorId) return respondError(req, res, 404, errorId);
-
-    respondSuccess(req, res, 200, estado);
-  } catch (error) {
-    handleError(error, "user.controller -> getEstado");
-    respondError(req, res, 500, "No se pudo obtener el estado");
-  }
-}
-
-async function createApelacion(req, res) {
-  try {
-    const body = {
-      nombre: req.file.originalname,
-      contenido: req.file.buffer,
-    };
-    const [newApelacion, apelacionError] = await PostulacionService.createApelacion(body, req._id);
-
-    if (apelacionError) return respondError(req, res, 400, apelacionError);
-    if (!newApelacion) {
-      return respondError(req, res, 400, "No se creo la apelacion");
-    }
-
-    respondSuccess(req, res, 201, newApelacion);
-  } catch (error) {
-    handleError(error, "user.controller -> createApelacion");
-    respondError(req, res, 500, "No se creo la apelacion");
-  }
-}
-
 module.exports = {
   getUsers,
   createUser,
   getUserById,
   updateUser,
   deleteUser,
-  getEstado,
-  createApelacion,
 };

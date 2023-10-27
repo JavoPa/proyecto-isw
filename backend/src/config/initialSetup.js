@@ -4,6 +4,7 @@ const Role = require("../models/role.model.js");
 const User = require("../models/user.model.js");
 const Postula = require("../models/postula.model.js");
 const Beca = require("../models/beca.model.js");
+const moment = require("moment");
 /**
  * Crea los roles por defecto en la base de datos.
  * @async
@@ -62,7 +63,8 @@ async function createUsers() {
         nombres: "Ricardo",
         apellidos: "Gonzalez",
         rut: 39444789,
-        
+        email: "ricardo@email.com",
+        password: await User.encryptPassword("user123"),
         roles: user._id,
       }).save(),
       new User({
@@ -76,7 +78,7 @@ async function createUsers() {
       new User({
         nombres: "Juan",
         apellidos: "Perez",
-        rut: 12345678,
+        rut: 23985023,
         email: "juan@email.com",
         password: await User.encryptPassword("juan123"),
         roles: user._id,
@@ -104,8 +106,8 @@ async function createBecas() {
         nombre: "Beca excelencia academica colegio",
         requisitos: [1,2],
         documentos: ["Fotocopia de cedula de identidad", "Certificado de alumno regular", "Certificado de notas"],
-        fecha_inicio: "2023-11-01",
-        fecha_fin: "2023-11-31",
+        fecha_inicio: moment("01-01-2023", "DD-MM-YYYY").toDate(),
+        fecha_fin: moment("14-01-2023", "DD-MM-YYYY").toDate(),
         monto: 50000,
         tipo_pago: "2 pagos al año (cada semestre)",
       }).save()
@@ -135,7 +137,7 @@ async function createPostulaciones() {
 
     await Promise.all([
       new Postula({
-        fecha_recepcion: "2021-01-02",
+        fecha_recepcion: moment("02-01-2023", "DD-MM-YYYY").toDate(),
         estado: "Enviada",
         beca: beca,
         postulante: postulante,
@@ -143,7 +145,7 @@ async function createPostulaciones() {
     ]);
     await Promise.all([
       new Postula({
-        fecha_recepcion: "2021-01-03",
+        fecha_recepcion: moment("03-01-2023", "DD-MM-YYYY").toDate(),
         estado: "Rechazada",
         beca: beca,
         postulante: postulante2,
