@@ -3,6 +3,7 @@
 const User = require("../models/user.model.js");
 const Role = require("../models/role.model.js");
 const { handleError } = require("../utils/errorHandler");
+const Postula = require("../models/postula.model.js");
 
 /**
  * Obtiene todos los usuarios de la base de datos
@@ -19,6 +20,100 @@ async function getUsers() {
     return [users, null];
   } catch (error) {
     handleError(error, "user.service -> getUsers");
+  }
+}
+
+/**
+ * Obtiene los documentos de una postulacion segun su id
+ * @param {string} Id del usuario
+ * @returns {Promise} Promesa con el objeto de documento
+ */
+async function getDocuments(id) {
+  try {
+    const documents = await Postula.findById(id)
+      .select("documentosPDF")
+      .exec();
+    //console.log(documents.documentosPDF.length);
+    if (!documents) return [null, "No hay documentos"];
+    if (documents.documentosPDF.length === 0) return [null, "No hay documentos en esta postulación"];
+
+    return [documents, null];
+  } catch (error) {
+    handleError(error, "postulacion.service -> getEstado");
+  }
+}
+
+/**
+ * Obtiene solo a los postulantes (quienes no tengan el rol de administrador)
+ * @returns {Promise} Promesa con el objeto de los postulantes
+ */
+async function getPostulantes() {
+  try {
+    const postulantes = [];
+    const postulaciones = await Postula.find()
+      .select("postulante")
+      .exec();
+
+    for (let i = 0; i < postulaciones.length; i++) {
+      const userAux = await User.findById(postulaciones[i].postulante);
+    postulantes.push(userAux);
+    }
+
+    if (!postulantes) return [null, "No hay postulantes"];
+
+    return [postulantes, null];
+  } catch (error) {
+    handleError(error, "user.service -> getPostulantes");
+  }
+}
+
+/**
+ * Actualiza el puntaje de una postulacion por su id
+ * @param {string} id de la postulacion
+ * @param {Object} body objeto de body con puntaje a asignar
+ * @returns {Promise} Promesa con el objeto de usuario actualizado
+ */
+async function updatePuntaje(id, body) {
+  try {
+    const postulacionFound = await Postula.findById(id);
+    if (!postulacionFound) return [null, "La postulacion no existe"];
+
+    const postulacionUpdated = await Postula.findByIdAndUpdate(
+      id,
+      {
+        puntaje: body.puntaje
+      },
+      { new: true },
+    );
+
+    return [postulacionUpdated, null];
+  } catch (error) {
+    handleError(error, "user.service -> updatePuntaje");
+  }
+}
+
+/**
+ * Actualiza el puntaje de una postulacion por su id
+ * @param {string} id de la postulacion
+ * @param {Object} body objeto de body con estado a asignar
+ * @returns {Promise} Promesa con el objeto de usuario actualizado
+ */
+async function updateEstado(id, body) {
+  try {
+    const postulacionFound = await Postula.findById(id);
+    if (!postulacionFound) return [null, "La postulacion no existe"];
+
+    const postulacionUpdated = await Postula.findByIdAndUpdate(
+      id,
+      {
+        estado: body.estado
+      },
+      { new: true },
+    );
+
+    return [postulacionUpdated, null];
+  } catch (error) {
+    handleError(error, "user.service -> updateEstado");
   }
 }
 
@@ -131,6 +226,10 @@ async function deleteUser(id) {
 
 module.exports = {
   getUsers,
+  getPostulantes,
+  getDocuments,
+  updatePuntaje,
+  updateEstado,
   createUser,
   getUserById,
   updateUser,
