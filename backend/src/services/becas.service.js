@@ -1,5 +1,6 @@
 "use strict";
 const Becas = require("../models/beca.model");
+const Requisito = require("../models/requisitos.model")
 const { handleError } = require("../utils/errorHandler");
 const moment = require("moment");
 
@@ -62,6 +63,15 @@ async function getBecasid(id) {
  */
 async function createBeca(bec) {
     try {
+      // Verificar si los requisitos existen
+      const requisitosExisten = await Promise.all(bec.requisitos.map(async (codigo) => {
+        const requisito = await Requisito.findOne({ codigo });
+        return requisito ? true : false;
+      }));
+      if (requisitosExisten.includes(false)) {
+        return [null, "Uno o más códigos de requisito no existen"];
+      }
+
       const { nombre, requisitos, documentos, fecha_inicio , fecha_fin , monto, tipo_pago } = bec;  
       const becaFound = await Becas.findOne({ nombre: bec.nombre });
       const fecha_actual = Date.now();
@@ -103,6 +113,14 @@ async function updateBeca(id, bec) {
     try {
       const becFound = await Becas.findById(id);
       if (!becFound) return [null, "la beca no existe"];
+      // Verificar si los requisitos existen
+      const requisitosExisten = await Promise.all(bec.requisitos.map(async (codigo) => {
+        const requisito = await Requisito.findOne({ codigo });
+        return requisito ? true : false;
+      }));
+      if (requisitosExisten.includes(false)) {
+        return [null, "Uno o más códigos de requisito no existen"];
+      }
       const fecha_actual = Date.now();
       /*Verificar que no se este modificando una beca durante el periodo de postulacion*/
       const fechaf = new Date(becFound.fecha_fin);
@@ -120,6 +138,7 @@ async function updateBeca(id, bec) {
       if (bec.nombre.includes('  ')) {
         return [null, "El nombre de la beca no puede contener dos espacios en blanco consecutivos"];
       }
+      /*Verificar que la fecha fin no sea menor que la fecha de inicio*/
       if(fechafin < fechainicio){
         return [null, "La fecha de fin no puede ser menor que la fecha de inicio"];
       }
