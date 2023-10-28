@@ -1,6 +1,7 @@
 "use strict";
 const Becas = require("../models/beca.model");
 const { handleError } = require("../utils/errorHandler");
+const moment = require("moment");
 
 /**
  * @returns {Promise}
@@ -25,6 +26,28 @@ async function getBecas() {
 async function getBecasid(id) {
   try {
     const becas = await Becas.findById({ _id: id })
+      .select({
+        _id:0,
+        nombre:1,
+        requisitos:1, 
+        documentos:1,
+        fecha_de_inicio:{
+          $dateToString: {
+            format: "%d-%m-%Y",
+            date: "$fecha_inicio",
+          },
+        },
+        fecha_de_fin:{
+          $dateToString: {
+            format: "%d-%m-%Y",
+            date: "$fecha_fin",
+          },
+        },
+        monto:1, 
+        tipo_pago:1, 
+      })
+      .populate()
+      .exec();
     if (!becas) return [null, "La beca no existe"];
 
     return [becas, null];
@@ -47,6 +70,9 @@ async function createBeca(bec) {
       if (becaFound) return [null, "La beca ya existe"];
       if (fecha_actual > fechainicio && fecha_actual < fechafin){
         return [null, "No se pueden crear becas en periodo de postulacion"];
+      }
+      if(fechafin < fechainicio){
+        return [null, "La fecha de fin no puede ser menor que la fecha de inicio"];
       }
       if (bec.nombre.includes('  ')) {
         return [null, "El nombre de la beca no puede contener dos espacios en blanco consecutivos"];
@@ -93,6 +119,9 @@ async function updateBeca(id, bec) {
       }
       if (bec.nombre.includes('  ')) {
         return [null, "El nombre de la beca no puede contener dos espacios en blanco consecutivos"];
+      }
+      if(fechafin < fechainicio){
+        return [null, "La fecha de fin no puede ser menor que la fecha de inicio"];
       }
       const becUpdated = await Becas.findByIdAndUpdate(
         id,

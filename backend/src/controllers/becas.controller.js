@@ -88,6 +88,10 @@ async function updateBeca(req, res) {
       const { error: bodyError } = becaSchema.validate(body);
       if (bodyError) return respondError(req, res, 400, bodyError.message);
 
+      //convertir fecha a formato date de mongo
+      body.fecha_inicio = moment(body.fecha_inicio, "DD-MM-YYYY").toDate();
+      body.fecha_fin = moment(body.fecha_fin, "DD-MM-YYYY").toDate();
+      
       const [bec, becaError] = await BecaService.updateBeca(params.id, body);
       if (becaError) return respondError(req, res, 400, becaError);
       
