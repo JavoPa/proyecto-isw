@@ -22,6 +22,7 @@ async function getBecasPostulacion() {
   }
 }
 
+
 /**
  * Obtiene el estado de la postulacion del usuario
  * @param {string} Id del usuario
@@ -73,14 +74,14 @@ async function createPostulacion(archivos, user_id, beca_id) {
     if (!archivos || archivos.length === 0) {
       return respondError(req, res, 400, "No se subieron archivos.");
     }
+    
+    //obtener datos del usuario
+    const user = await User.findById(user_id);
+    if (!user) return [null, "No se encontró el usuario"];
 
     //obtener datos de la beca
     const beca = await Beca.findById(beca_id);
     if (!beca) return [null, "No se encontró la beca"];
-
-    //obtener datos del usuario
-    const user = await User.findById(user_id);
-    if (!user) return [null, "No se encontró el usuario"];
 
     // Verificar si el usuario está dentro del plazo para postular
     const fechaActual = new Date();
@@ -89,13 +90,13 @@ async function createPostulacion(archivos, user_id, beca_id) {
 
     const yearActual = fechaActual.getFullYear();
 
-        // Verificar que el usuario no haya postulado a esta beca
+        // Verificar que el usuario no haya postulado a esta beca en el año actual
         const postulacionExistente = await Postula.findOne({ 
           postulante: user_id,
           fecha_recepcion: { $gte: new Date(`${yearActual}-01-01`), $lt: new Date(`${yearActual+1}-01-01`) }
         });
         if (postulacionExistente) return [null, "Ya existe una postulación para este usuario"];
-    
+
     //crear la postulacion
     const postulacion = new Postula({
       postulante: user,
@@ -115,11 +116,13 @@ async function createPostulacion(archivos, user_id, beca_id) {
     //guardar la postulacion
     await postulacion.save();
 
-    return ["Postulacion enviada", null];
+    return ["Postulacion creada", null];
   } catch (error) {
     handleError(error, "postulacion.service -> createPostulacion");
   }
 }
+
+
 /**
  * Obtiene todas las postulaciones
  * @returns {Promise} Promesa con el objeto de los postulantes
@@ -146,6 +149,7 @@ async function getPostulaciones() {
   }
 }
 
+
 /**
  * Obtiene una postulacion por id
  * @returns {Promise} Promesa con el objeto de la postulacion
@@ -171,6 +175,7 @@ async function getPostulacionById(id) {
     handleError(error, "postulacion.service -> getPostulacionById");
   }
 }
+
 
 /**
  * Crea una apelacion modificando el estado de postula y actualizando los documentos
