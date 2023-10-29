@@ -58,22 +58,18 @@ async function getEstado(id) {
 
 
 /**
- * Crea una postulacion subiendo la información del usuario 
- * @param {Object} user Objeto de usuario
- * @param {Object} beca Objeto de beca
- * @param {Object} archivos Archivos requeridos para la beca
- * @returns {Promise} Promesa con el objeto de usuario creado
+ * Crea una postulacion
+ * @param {Object} archivos Objeto de archivos
+ * @param {string} user_id Id del usuario
+ * @param {string} beca_id Id de la beca
+ * @returns {Promise} Promesa con el objeto de la postulacion creada
  */
-
 async function createPostulacion(archivos, user_id, beca_id) {
   try {
     //verificar que se hayan subido archivos
     if (!archivos || archivos.length === 0) {
       return respondError(req, res, 400, "No se subieron archivos.");
     }
-
-
-    const { nombre , contenido } = archivos;
 
     //obtener datos de la beca
     const beca = await Beca.findById(beca_id);
@@ -97,12 +93,13 @@ async function createPostulacion(archivos, user_id, beca_id) {
         });
         if (postulacionExistente) return [null, "Ya existe una postulación para este usuario"];
     
+    //crear la postulacion
     const postulacion = new Postula({
       postulante: user,
       beca: beca,
       estado: "Enviada",
       motivos: `Postulación ${beca.nombre}`,
-      fecha_recepcion: fechaActual,
+      fecha_recepcion: moment(fechaActual,'DD-MM-YYYY').toDate(),
     });
     // Iterar sobre los archivos y agregarlos a la postulación
     archivos.forEach((archivo) => {
@@ -112,6 +109,7 @@ async function createPostulacion(archivos, user_id, beca_id) {
       });
     });
 
+    //guardar la postulacion
     await postulacion.save();
 
     return ["Postulacion enviada", null];
