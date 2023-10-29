@@ -256,14 +256,18 @@ async function getInformeById(req, res) {
 async function getDocuments(req, res) {
   try {
     const { params } = req;
-    const { error: paramsError } = userIdSchema.validate(params);
-    if (paramsError) return respondError(req, res, 400, paramsError.message);
+    //const { error: paramsError } = userIdSchema.validate(params);
+    //if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const [documents, errorDocuments] = await UserService.getDocuments(params.id);
-
     if (errorDocuments) return respondError(req, res, 404, errorDocuments);
+    if (params.docnum >= documents.documentosPDF.length) return respondError(req, res, 404, "No hay documentos en ese slot");
 
-    respondSuccess(req, res, 200, documents);
+    //console.log(documents.documentosPDF[0].contenido);
+    res.write(documents.documentosPDF[params.docnum].contenido, 'binary');
+    res.end(undefined, 'binary');
+
+    //respondSuccess(req, res, 200, documents);
   } catch (error) {
     handleError(error, "user.controller -> getDocuments");
     respondError(req, res, 500, "No se pudo obtener los documentos");

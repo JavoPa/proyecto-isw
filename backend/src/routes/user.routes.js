@@ -40,7 +40,7 @@ router.get('/postulantes', authorizationMiddleware.isAdmin, usuarioController.ge
 router.get("/postulantes/:id", authorizationMiddleware.isAdmin, usuarioController.getPostulanteById); // Obtiene la informacion de un solo postulante
 router.get("/postulaciones", authorizationMiddleware.isAdmin, usuarioController.getPostulaciones); // Obtiene todas las postulaciones
 router.get("/postulaciones/:id", authorizationMiddleware.isAdmin, usuarioController.getPostulacionById); // Obtiene una postulacion por su id
-router.get("/postulaciones/:id/documentos/", authorizationMiddleware.isAdmin, usuarioController.getDocuments); // Obtiene documentos por id de postulacion
+router.get("/postulaciones/:id/documentos/:docnum", authorizationMiddleware.isAdmin, usuarioController.getDocuments); // Obtiene documentos por id de postulacion
 router.put("/postulaciones/:id/puntaje", authorizationMiddleware.isAdmin, usuarioController.updatePuntaje); // Actualiza puntaje por id de postulacion
 router.put("/postulaciones/:id/estado", authorizationMiddleware.isAdmin, usuarioController.updateEstado); // Actualiza estado por id de postulacion
 router.get("/postulaciones/:id/informe", authorizationMiddleware.isAdmin, usuarioController.getInformeById); // Obtiene informe de postulacion
