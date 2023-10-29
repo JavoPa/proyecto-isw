@@ -14,7 +14,7 @@ const { handleError } = require("../utils/errorHandler.js");
  */
 async function subir(req, res, next) {
   try {
-    upload.single('archivoPDF')(req, res, function (err) {
+    upload.array('archivoPDF',2)(req, res, function (err) {
       if (err) {
         return respondError(
           req,
@@ -23,7 +23,7 @@ async function subir(req, res, next) {
           "Error al subir el archivo",
         );
       }
-      if (!req.file) {
+      if (!req.files) {
         return respondError(
           req,
           res,
