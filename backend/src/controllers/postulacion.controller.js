@@ -18,7 +18,6 @@ async function getBecasPostulacion(req, res) {
 }
 
 async function createPostulacion(req, res) {
-  console.log(req)
   try {
     const body = []
     for (const archivo of req.files) {
