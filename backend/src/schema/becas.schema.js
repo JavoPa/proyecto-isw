@@ -35,8 +35,19 @@ const becaSchema = Joi.object({
     "string.pattern.base": "La fecha debe tener el formato DD-MM-YYYY.",
     "any.required": "La fecha es obligatoria.",
   }),
-  monto: Joi.number().integer().positive().required().messages({
-    "number.base": "El monto debe ser de tipo número.",
+  dirigida: Joi.array().items(Joi.string()).required().messages({
+    "array.base": "Para quienes son debe ser de tipo array.",
+    "any.required": "Para quienes son es obligatorio.",
+    "string.base": "Para quienes son debe ser de tipo string.",
+  }),
+  monto: Joi.alternatives().try(
+    Joi.number().integer().positive().messages({
+      "number.base": "El monto debe ser un número entero positivo.",
+    }),
+    Joi.string().regex(/^(\d+(\.\d{0,2})?%$)/).messages({
+      "string.pattern.base": "El monto debe ser un porcentaje válido en formato numérico (por ejemplo, '25%' o '0.25%').",
+    })
+  ).required().messages({
     "any.required": "El monto es obligatorio.",
   }),
   tipo_pago: Joi.string().required().min(5).messages({
