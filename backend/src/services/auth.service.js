@@ -3,6 +3,12 @@
 /** Modelo de datos 'User' */
 const User = require("../models/user.model.js");
 
+/**roles que puede tener un usuario*/ 
+const ROLES = require("../constants/roles.constants");
+
+/** Modelo de datos 'Role' */
+const Role = require("../models/role.model.js");
+
 /** Modulo 'jsonwebtoken' para crear tokens */
 const jwt = require("jsonwebtoken");
 
@@ -15,9 +21,34 @@ const { handleError } = require("../utils/errorHandler");
 
 async function register(user) {
   try {
-    const newUser = new User(user);
-    const savedUser = await newUser.save();
-    return savedUser;
+    const { nombres, apellidos, rut, password, email } = user;
+
+    const rutExistente = await User.findOne({ rut: rut }).exec();
+    if (rutExistente) return [null, "rut ya está registrado"];
+
+    const emailExistente = await User.findOne({ email: email }).exec();
+    if (emailExistente) return [null, "email ya está registrado"];
+    /*
+    const rutformat = /^[0-9]+-[0-9kK]{1}$/;
+    if (!rutformat.test(rut)) {
+      throw new Error("El formato del rut no es válido.");
+    }
+*/
+    const rol = await Role.findOne({ name: "postulante"}).exec();
+      
+    const newUser = new User({
+      nombres: nombres,
+      apellidos: apellidos,
+      rut: rut,
+      password: await User.encryptPassword(password),
+      email: email,
+      roles: rol,
+    });
+
+    await newUser.save();
+
+    return [newUser, null];
+
   } catch (error) {
     handleError(error, "auth.service -> registerUser");
   }
