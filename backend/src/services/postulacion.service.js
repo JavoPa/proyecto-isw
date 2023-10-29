@@ -30,7 +30,7 @@ async function getEstado(id) {
   try {
     const estado = await Postula.findOne({ postulante: id })
       .select({
-        fecha_recepcion: 1,
+        _id: 0,
         fecha_de_recepcion: {
           $dateToString: {
             format: "%d-%m-%Y",
@@ -41,9 +41,11 @@ async function getEstado(id) {
         motivos: 1,
         beca: 1,
         documentosPDF: 1,
-        _id: 0,
       })
-      .populate("")
+      .populate({
+        path: "beca",
+        select: "-_id nombre",
+      })
       .exec();
     if (!estado) return [null, "No hay postulacion"];
 
