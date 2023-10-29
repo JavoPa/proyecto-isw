@@ -2,6 +2,7 @@
 // Importa el modelo de datos 'User'
 const Postula = require("../models/postula.model.js");
 const Beca = require("../models/beca.model.js");
+const User = require("../models/user.model.js");
 const { handleError } = require("../utils/errorHandler");
 const moment = require("moment");
 //const mongoose = require('mongoose');
@@ -63,48 +64,46 @@ async function getEstado(id) {
  * @param {Object} archivos Archivos requeridos para la beca
  * @returns {Promise} Promesa con el objeto de usuario creado
  */
-async function createPostulacion(user, beca, archivos) {
+
+async function createPostulacion(archivos, user_id, beca_id) {
   try {
-    const { nombre, contenido } = archivos;
+    const { nombre , contenido } = archivos;
 
-    // Verificar si el usuario ya tiene una postulación para esta beca
-    const postulacionExistente = await Postula.findOne({ postulante: user._id});
+    const beca = await Beca.findById(beca_id);
+    if (!beca) return [null, "No se encontró la beca"];
+
+    //obtener datos del usuario
+    const user = await User.findById(user_id);
+    if (!user) return [null, "No se encontró el usuario"];
+
+    // Verificar que el usuario no haya postulado a esta beca
+    const postulacionExistente = await Postula.findOne({ postulante: user_id});
     if (postulacionExistente) return [null, "Ya existe una postulación para este usuario"];
-
-    // Verificar si el usuario ha subido los archivos requeridos
-    if (!nombre || !contenido) return [null, "Debe subir los archivos requeridos"];
-    
-    // Check if the file type is pdf, png or jpg
-    const allowedTypes = ["application/pdf", "image/png", "image/jpeg"];
-    if (!allowedTypes.includes(contenido.mimetype)) {
-      return [null, "El archivo debe ser pdf, png o jpg"];
-    }
 
     // Verificar si el usuario está dentro del plazo para postular
     const fechaActual = new Date();
     if (fechaActual > beca.fecha_fin) return [null, "El plazo para postular ha vencido"];
     if (fechaActual < beca.fecha_inicio) return [null, "El plazo para postular aún no comienza"];
-
-    // Crear la postulación
+    
     const postulacion = new Postula({
       postulante: user,
       beca: beca,
-      //postulante: mongoose.Types.ObjectId(user._id), 
-      //beca: mongoose.Types.ObjectId(beca._id),
-      documentosPDF: [{ nombre, contenido }],
       estado: "Enviada",
       motivos: `Postulación ${beca.nombre}`,
       fecha_recepcion: fechaActual,
     });
+    postulacion.documentosPDF.push({
+      nombre: nombre,
+      contenido: contenido,
+    });
+
     await postulacion.save();
 
-    return [postulacion, null];
+    return ["Postulacion enviada", null];
   } catch (error) {
-    handleError(error, "postulacion.service -> crearPostulacion");
+    handleError(error, "postulacion.service -> createPostulacion");
   }
 }
-
-
 /**
  * Obtiene todas las postulaciones
  * @returns {Promise} Promesa con el objeto de los postulantes

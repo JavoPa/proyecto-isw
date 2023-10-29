@@ -18,18 +18,28 @@ async function getBecasPostulacion(req, res) {
 }
 
 async function createPostulacion(req, res) {
-    try {
-        const { user, beca, archivos } = req.body;
-        const [postulacion, errorPostulacion] = await PostulacionService.createPostulacion(user, beca, archivos);
-        if (errorPostulacion) return respondError(req, res, 404, errorPostulacion);
-    
-        respondSuccess(req, res, 201, postulacion);
-    } catch (error) {
-        handleError(error, "postulacion.controller -> createPostulacion");
-        respondError(req, res, 400, error.message);
-    }
-}
+  try {
+    const body = {
+      nombre: req.file.originalname,
+      contenido: req.file.buffer,
+    };
 
+    // Extract the beca_id from the request
+    const beca_id = req.body.beca_id; // You should make sure that the beca_id is sent in the request body
+
+    const [postulacion, errorPostulacion] = await PostulacionService.createPostulacion(body, req._id, beca_id);
+
+    if (errorPostulacion) return respondError(req, res, 400, errorPostulacion);
+    if (!postulacion) {
+      return respondError(req, res, 400, "No se creó la postulación");
+    }
+
+    respondSuccess(req, res, 201, postulacion);
+  } catch (error) {
+    handleError(error, "postulacion.controller -> createPostulacion");
+    respondError(req, res, 500, "No se creó la postulación");
+  }
+}
 /**
  * Obtiene el estado de postulacion por su id
  * @param {Object} req - Objeto de petición

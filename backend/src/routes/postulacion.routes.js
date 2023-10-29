@@ -3,7 +3,7 @@
 const express = require("express");
 
 //**Controlador de becas */
-const postulacionController = require("../controllers/postulacion.controller");
+const postulacionController = require("../controllers/postulacion.controller.js");
 
 /** Middleware de autenticación */
 const authenticationMiddleware = require("../middlewares/authentication.middleware.js");
