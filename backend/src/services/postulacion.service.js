@@ -117,7 +117,8 @@ async function createPostulacion(archivos, user_id, beca_id) {
 async function getPostulaciones() {
   try {
     const postulaciones = await Postula.find()
-      .select("beca postulante puntaje")
+      //.select("beca postulante puntaje")
+      .select("-documentosPDF")
       .populate({
         path: "beca",
         select: "nombre"
@@ -132,6 +133,32 @@ async function getPostulaciones() {
     return [postulaciones, null];
   } catch (error) {
     handleError(error, "postulacion.service -> getPostulaciones");
+  }
+}
+
+/**
+ * Obtiene una postulacion por id
+ * @returns {Promise} Promesa con el objeto de la postulacion
+ */
+async function getPostulacionById(id) {
+  try {
+    const postulacion = await Postula.findById({_id: id})
+      //.select("beca postulante puntaje")
+      //.select("-documentosPDF")
+      .populate({
+        path: "beca",
+        select: "nombre"
+      })
+      .populate({
+        path: "postulante",
+        select: "nombres apellidos"
+      });
+
+    if (!postulacion) return [null, "La postulacion no existe"];
+
+    return [postulacion, null];
+  } catch (error) {
+    handleError(error, "postulacion.service -> getPostulacionById");
   }
 }
 
@@ -186,5 +213,6 @@ module.exports = {
   createPostulacion,
   getEstado,
   getPostulaciones,
+  getPostulacionById,
   createApelacion,
 };
