@@ -217,7 +217,7 @@ async function getInformeById(req, res) {
 
     const stream = res.writeHead(200, {
       'Content-Type': 'application/pdf',
-      'Content-dispostion': `attachment;filename=${filename}`
+      'Content-disposition': `attachment;filename=${filename}`
     });
 
     doc.on('data', (data) => {stream.write(data)});
@@ -264,8 +264,14 @@ async function getDocuments(req, res) {
     if (params.docnum >= documents.documentosPDF.length) return respondError(req, res, 404, "No hay documentos en ese slot");
 
     //console.log(documents.documentosPDF[0].contenido);
-    res.write(documents.documentosPDF[params.docnum].contenido, 'binary');
-    res.end(undefined, 'binary');
+    
+    const filename = `documento-${params.docnum}-${Date.now()}`;
+    res.writeHead(200, {
+      'Content-Type': 'application/pdf',
+      'Content-disposition': `attachment;filename=${filename}`
+    });
+    //res.write(documents.documentosPDF[params.docnum].contenido, 'binary');
+    res.end(documents.documentosPDF[params.docnum].contenido, 'binary');
 
     //respondSuccess(req, res, 200, documents);
   } catch (error) {
