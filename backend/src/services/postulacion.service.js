@@ -164,13 +164,12 @@ async function getPostulacionById(id) {
 
 /**
  * Crea una apelacion modificando el estado de postula y actualizando los documentos
- * @param {Object} user Objeto de usuario
+ * @param {Object} archivos Archivos requeridos para la beca
+ * @param {Object} id id del usuario
  * @returns {Promise} Promesa con el objeto de usuario creado
  */
 async function createApelacion(archivos, id) {
   try {
-    const { nombre , contenido } = archivos;
-
     //Buscar al postulante
     const postulacionFound = await Postula.findOne({ postulante: id })
     if (!postulacionFound) return [null, "El usuario no tiene postulacion"];
