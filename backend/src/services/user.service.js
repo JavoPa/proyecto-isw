@@ -37,11 +37,13 @@ async function getDocuments(id) {
     if (!documents) return [null, "No hay documentos"];
     if (documents.documentosPDF.length === 0) return [null, "No hay documentos en esta postulación"];
 
+    /*
     for (let i = 0; i < documents.documentosPDF.length; i++) {
       const pdfBuffer = documents.documentosPDF[i].contenido;
       fs.writeFileSync(`documento-${i}.pdf`, pdfBuffer);
     } 
-
+    */
+   
     return [documents, null];
   } catch (error) {
     handleError(error, "user.service -> getDocuments");
