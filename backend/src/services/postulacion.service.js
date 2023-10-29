@@ -29,7 +29,10 @@ async function getBecasPostulacion() {
  */
 async function getEstado(id) {
   try {
+    //Buscar la ultima postulacion del usuario
     const estado = await Postula.findOne({ postulante: id })
+      .sort({ fecha_recepcion: -1 })
+      .limit(1)
       .select({
         _id: 0,
         fecha_de_recepcion: {
@@ -171,15 +174,15 @@ async function getPostulacionById(id) {
 
 /**
  * Crea una apelacion modificando el estado de postula y actualizando los documentos
- * @param {Object} user Objeto de usuario
+ * @param {Object} archivos Archivos requeridos para la beca
+ * @param {Object} id id del usuario
  * @returns {Promise} Promesa con el objeto de usuario creado
  */
 async function createApelacion(archivos, id) {
   try {
     const { nombre , contenido } = archivos;
-
-    //Buscar al postulante
-    const postulacionFound = await Postula.findOne({ postulante: id })
+    //Buscar ultima postulacion del usuario
+    const postulacionFound = await Postula.findOne({ postulante: id }).sort({ fecha_recepcion: -1 }).limit(1).exec()
     if (!postulacionFound) return [null, "El usuario no tiene postulacion"];
 
     //Verificacion de plazos (maximo 2 semanas despues de la fecha de fin de la beca)
