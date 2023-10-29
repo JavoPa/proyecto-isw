@@ -25,7 +25,8 @@ async function createPostulacion(req, res) {
       body.push({
         nombre: archivo.originalname,
         contenido: archivo.buffer,
-      });
+      })
+    ;
     }
     // Extract the beca_id from the request
     const beca_id = req.body.beca_id; // You should make sure that the beca_id is sent in the request body

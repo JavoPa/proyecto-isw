@@ -98,8 +98,8 @@ async function createPostulacion(archivos, user_id, beca_id) {
     // Iterar sobre los archivos y agregarlos a la postulación
     archivos.forEach((archivo) => {
       postulacion.documentosPDF.push({
-        nombre: archivo.originalname,
-        contenido: archivo.buffer,
+        nombre: archivo.nombre,
+        contenido: archivo.contenido,
       });
     });
 
