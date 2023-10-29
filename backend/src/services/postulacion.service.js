@@ -67,11 +67,15 @@ async function getEstado(id) {
 
 async function createPostulacion(archivos, user_id, beca_id) {
   try {
+    //verificar que se hayan subido archivos
     if (!archivos || archivos.length === 0) {
       return respondError(req, res, 400, "No se subieron archivos.");
     }
+
+
     const { nombre , contenido } = archivos;
 
+    //obtener datos de la beca
     const beca = await Beca.findById(beca_id);
     if (!beca) return [null, "No se encontró la beca"];
 
@@ -79,14 +83,19 @@ async function createPostulacion(archivos, user_id, beca_id) {
     const user = await User.findById(user_id);
     if (!user) return [null, "No se encontró el usuario"];
 
-    // Verificar que el usuario no haya postulado a esta beca
-    const postulacionExistente = await Postula.findOne({ postulante: user_id});
-    if (postulacionExistente) return [null, "Ya existe una postulación para este usuario"];
-
     // Verificar si el usuario está dentro del plazo para postular
     const fechaActual = new Date();
     if (fechaActual > beca.fecha_fin) return [null, "El plazo para postular ha vencido"];
     if (fechaActual < beca.fecha_inicio) return [null, "El plazo para postular aún no comienza"];
+
+    const yearActual = fechaActual.getFullYear();
+
+        // Verificar que el usuario no haya postulado a esta beca
+        const postulacionExistente = await Postula.findOne({ 
+          postulante: user_id,
+          fecha_recepcion: { $gte: new Date(`${yearActual}-01-01`), $lt: new Date(`${yearActual+1}-01-01`) }
+        });
+        if (postulacionExistente) return [null, "Ya existe una postulación para este usuario"];
     
     const postulacion = new Postula({
       postulante: user,
