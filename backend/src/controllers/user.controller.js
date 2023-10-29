@@ -7,6 +7,7 @@ const { handleError } = require("../utils/errorHandler");
 const PostulacionService = require("../services/postulacion.service");
 const { postulaPuntajeSchema, postulaEstadoSchema } = require("../schema/postula.schema");
 const PDF = require("pdfkit-construct");
+const moment = require("moment");
 
 /**
  * Obtiene todos los usuarios
@@ -24,6 +25,70 @@ async function getUsers(req, res) {
   } catch (error) {
     handleError(error, "user.controller -> getUsers");
     respondError(req, res, 400, error.message);
+  }
+}
+
+/**
+ * Obtiene una postulacion por su id
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
+async function getPostulacionById(req, res) {
+  try {
+    const { params } = req;
+    const { error: paramsError } = userIdSchema.validate(params);
+    if (paramsError) return respondError(req, res, 400, paramsError.message);
+
+    const [postulacion, errorPostulacion] = await PostulacionService.getPostulacionById(params.id);
+
+    if (errorPostulacion) return respondError(req, res, 404, errorPostulacion);
+
+    respondSuccess(req, res, 200, postulacion);
+  } catch (error) {
+    handleError(error, "user.controller -> getPostulacionById");
+    respondError(req, res, 500, "No se pudo obtener la postulacion");
+  }
+}
+
+/**
+ * Obtiene todas las postulaciones
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
+async function getPostulaciones(req, res) {
+  try {
+    const [postulaciones, errorPostulaciones] = await PostulacionService.getPostulaciones();
+    if (errorPostulaciones) return respondError(req, res, 404, errorPostulaciones);
+
+    postulaciones.length === 0
+      ? respondSuccess(req, res, 204)
+      : respondSuccess(req, res, 200, postulaciones);
+  } catch (error) {
+    handleError(error, "user.controller -> getPostulaciones");
+    respondError(req, res, 400, error.message);
+  }
+}
+
+/**
+ * Obtiene a un solo postulante por su id
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
+async function getPostulanteById(req, res) {
+  try {
+    const { params } = req;
+    const { error: paramsError } = userIdSchema.validate(params);
+    if (paramsError) return respondError(req, res, 400, paramsError.message);
+
+    const [postulante, errorPostulante] = await UserService.getUserById(params.id);
+
+    if (errorPostulante) return respondError(req, res, 404, errorPostulante);
+    if (postulante.roles[0].name !== 'postulante') return respondError(req, res, 400, "Usuario no es postulante");
+
+    respondSuccess(req, res, 200, postulante);
+  } catch (error) {
+    handleError(error, "user.controller -> getPostulanteById");
+    respondError(req, res, 500, "No se pudo obtener al postulante");
   }
 }
 
@@ -112,6 +177,69 @@ async function getInforme(req, res) {
       headAlign: 'center'
     });
     doc.render();
+    doc.end();
+
+  } catch (error) {
+    handleError(error, "user.controller -> getInforme");
+    respondError(req, res, 400, error.message);
+  }
+}
+
+/**
+ * Obtiene un informe con la informacion relevante de la postulacion señalada
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
+async function getInformeById(req, res) {
+  try {
+    const { params } = req;
+    const doc = new PDF({bufferPage: true});
+    const filename = `informe-${Date.now()}-${params.id}.pdf`
+    const [postulacionData, error] = await PostulacionService.getPostulacionById(params.id);
+    //const [postulacionData, error] = await UserService.getPostulacionById(params.id);
+    if (error) {
+      console.error("Hubo un error obteniendo la postulacion:", error);
+      return res.status(500).send(error);
+    }
+
+    console.log(postulacionData);
+    
+    const datos = {
+      nombreBeca: postulacionData.beca.nombre,
+      nombrePostulante: postulacionData.postulante.nombres,
+      apellidosPostulante: postulacionData.postulante.apellidos,
+      puntaje: postulacionData.puntaje,
+      fechaRecepcion: postulacionData.fecha_recepcion,
+      estado: postulacionData.estado,
+      motivos: postulacionData.motivos
+    };
+    
+
+    const stream = res.writeHead(200, {
+      'Content-Type': 'application/pdf',
+      'Content-dispostion': `attachment;filename=${filename}`
+    });
+
+    doc.on('data', (data) => {stream.write(data)});
+    doc.on('end', () => {stream.end()});
+    
+    doc.setDocumentHeader({
+      height: '12'
+    }, () => {
+      doc.fontSize(14).text("Informe de Postulación", {
+        //width: "fill_body",
+        align: "justify"
+      });
+    });
+
+    doc.render();
+    doc.moveDown();
+    doc.text(`Nombre completo del postulante: ${datos.nombrePostulante} ${datos.apellidosPostulante}`);
+    doc.text(`Beca a la que postula: ${datos.nombreBeca}`);
+    doc.text(`Fecha de recepción: ${moment(datos.fechaRecepcion).format("DD-MM-Y")}`);
+    doc.text(`Estado: ${datos.estado}`);
+    doc.text(`Motivos: ${datos.motivos}`);
+    doc.text(`Puntaje: ${datos.puntaje}`);
     doc.end();
 
   } catch (error) {
@@ -287,8 +415,12 @@ async function deleteUser(req, res) {
 
 module.exports = {
   getUsers,
+  getPostulaciones,
+  getPostulacionById,
+  getPostulanteById,
   getPostulantes,
   getInforme,
+  getInformeById,
   getDocuments,
   updatePuntaje,
   updateEstado,
