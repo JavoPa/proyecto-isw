@@ -102,7 +102,7 @@ async function createPostulacion(archivos, user_id, beca_id) {
       beca: beca,
       estado: "Enviada",
       motivos: `Postulación ${beca.nombre}`,
-      fecha_recepcion: moment(fechaActual,'DD-MM-YYYY').toDate(),
+      fecha_recepcion: fechaActual,
     });
     // Iterar sobre los archivos y agregarlos a la postulación
     archivos.forEach((archivo) => {
