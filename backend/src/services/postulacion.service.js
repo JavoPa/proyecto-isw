@@ -67,6 +67,9 @@ async function getEstado(id) {
 
 async function createPostulacion(archivos, user_id, beca_id) {
   try {
+    if (!archivos || archivos.length === 0) {
+      return respondError(req, res, 400, "No se subieron archivos.");
+    }
     const { nombre , contenido } = archivos;
 
     const beca = await Beca.findById(beca_id);
@@ -92,9 +95,12 @@ async function createPostulacion(archivos, user_id, beca_id) {
       motivos: `Postulación ${beca.nombre}`,
       fecha_recepcion: fechaActual,
     });
-    postulacion.documentosPDF.push({
-      nombre: nombre,
-      contenido: contenido,
+    // Iterar sobre los archivos y agregarlos a la postulación
+    archivos.forEach((archivo) => {
+      postulacion.documentosPDF.push({
+        nombre: archivo.originalname,
+        contenido: archivo.buffer,
+      });
     });
 
     await postulacion.save();

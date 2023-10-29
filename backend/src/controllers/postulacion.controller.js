@@ -18,12 +18,15 @@ async function getBecasPostulacion(req, res) {
 }
 
 async function createPostulacion(req, res) {
+  console.log(req)
   try {
-    const body = {
-      nombre: req.file.originalname,
-      contenido: req.file.buffer,
-    };
-
+    const body = []
+    for (const archivo of req.files) {
+      body.push({
+        nombre: archivo.originalname,
+        contenido: archivo.buffer,
+      });
+    }
     // Extract the beca_id from the request
     const beca_id = req.body.beca_id; // You should make sure that the beca_id is sent in the request body
 
