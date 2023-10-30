@@ -47,16 +47,6 @@ async function subirSingle(req, res, next) {
           "No se recibió el archivo",
         );
       }
-      const files = req.files;
-      const invalidFiles = validateFileExtensions(files);
-      if (invalidFiles.length > 0) {
-        return respondError(
-          req,
-          res,
-          400,
-          "Archivos con extensiones no permitidas, solo se permiten archivos con las siguientes extensiones: " + allowedFileTypes.join(', '),
-        );
-      }
       next();
     });
   } catch (error) {
