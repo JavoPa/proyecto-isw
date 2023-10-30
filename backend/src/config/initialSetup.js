@@ -241,7 +241,7 @@ async function createPostulaciones() {
   try {
     const count = await Postula.estimatedDocumentCount();
     if (count > 0) return;
-    const beca = await Beca.findOne({ nombre: "Beca excelencia academica colegio" }).select("_id").exec();
+    const beca = await Beca.findOne({ nombre: "Beca excelencia estudiantil colegio" }).select("_id").exec();
     const beca2 = await Beca.findOne({ nombre: "Beca discapacidad" }).select("_id").exec();
     if (!beca) return;
 
