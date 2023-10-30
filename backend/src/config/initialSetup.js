@@ -121,7 +121,7 @@ async function createBecas() {
         tipo_pago: "2 pagos al año (cada semestre)",
       }).save(),
       new Beca({
-        nombre: "Beca excelencia academica liceo",
+        nombre: "Beca excelencia estudiantil liceo",
         requisitos: [1,2],
         documentos: ["Fotocopia de cedula de identidad (ambos lados)", "Certificado de alumno regular", "Certificado de notas año anterior"],
         fecha_inicio: moment("01-01-2024", "DD-MM-YYYY").toDate(),
@@ -131,7 +131,7 @@ async function createBecas() {
         tipo_pago: "2 pagos al año (cada semestre)",
       }).save(),
       new Beca({
-        nombre: "Beca excelencia estuduantil universidad",
+        nombre: "Beca excelencia estudiantil universidad",
         requisitos: [1,2],
         documentos: ["Fotocopia de cedula de identidad (ambos lados)", "Certificado de alumno regular", "Certificado de notas año anterior"],
         fecha_inicio: moment("01-01-2024", "DD-MM-YYYY").toDate(),
