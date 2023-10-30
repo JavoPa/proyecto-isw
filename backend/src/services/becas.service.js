@@ -44,6 +44,7 @@ async function getBecasid(id) {
             date: "$fecha_fin",
           },
         },
+        dirigida:1,
         monto:1, 
         tipo_pago:1, 
       })
@@ -72,7 +73,7 @@ async function createBeca(bec) {
         return [null, "Uno o más códigos de requisito no existen"];
       }
 
-      const { nombre, requisitos, documentos, fecha_inicio , fecha_fin , monto, tipo_pago } = bec;  
+      const { nombre, requisitos, documentos, fecha_inicio , fecha_fin , dirigida, monto, tipo_pago } = bec;  
       const becaFound = await Becas.findOne({ nombre: bec.nombre });
       const fecha_actual = Date.now();
       const fechafin = new Date(bec.fecha_fin);
@@ -94,6 +95,7 @@ async function createBeca(bec) {
             documentos,
             fecha_inicio,
             fecha_fin,
+            dirigida,
             monto,
             tipo_pago,
         });
@@ -128,7 +130,7 @@ async function updateBeca(id, bec) {
       if (fecha_actual > fechai && fecha_actual < fechaf){
         return [null, "No se pueden modificar becas en periodo de postulacion"];
       }
-      const { nombre, requisitos, documentos, fecha_inicio, fecha_fin, monto, tipo_pago } = bec;
+      const { nombre, requisitos, documentos, fecha_inicio, fecha_fin, dirigida, monto, tipo_pago } = bec;
       /*Verificar que la fecha actual no este entre las fechas de postulacion*/
       const fechafin = new Date(bec.fecha_fin);
       const fechainicio = new Date(bec.fecha_inicio);
@@ -150,6 +152,7 @@ async function updateBeca(id, bec) {
             documentos,
             fecha_inicio,
             fecha_fin,
+            dirigida,
             monto,
             tipo_pago,
         },

@@ -262,6 +262,7 @@ async function getDocuments(req, res) {
     const [documents, errorDocuments] = await UserService.getDocuments(params.id);
     if (errorDocuments) return respondError(req, res, 404, errorDocuments);
     if (params.docnum >= documents.documentosPDF.length) return respondError(req, res, 404, "No hay documentos en ese slot");
+    if (params.docnum < 0) return respondError(req, res, 404, "No existe ese slot: valor negativo")
 
     //console.log(documents.documentosPDF[0].contenido);
     
