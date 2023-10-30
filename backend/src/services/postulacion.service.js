@@ -72,7 +72,7 @@ async function createPostulacion(archivos, user_id, beca_id) {
   try {
     //verificar que se hayan subido archivos
     if (!archivos || archivos.length === 0) {
-      [null, "No se subieron archivos."];
+      return [null, "No se subieron archivos."];
     }
     
     //obtener datos del usuario
