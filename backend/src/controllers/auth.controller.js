@@ -9,14 +9,20 @@ const { authLoginBodySchema } = require("../schema/auth.schema");
 
 async function register(req, res) {
   try {
-    const { body } = req;
-    const { error: bodyError } = authLoginBodySchema.validate(body);
-    if (bodyError) return respondError(req, res, 400, bodyError.message);
+    const body = {
+      nombres: req.body.nombres,
+      apellidos: req.body.apellidos,
+      rut: req.body.rut,
+      password: req.body.password,
+      email: req.body.email,
+    };
 
     const [user, errorUser] = await AuthServices.register(body);
 
     if (errorUser) return respondError(req, res, 400, errorUser);
-
+    if (!user) {
+      return respondError(req, res, 400, "No se creo el usuario");
+    }
     respondSuccess(req, res, 201, user);
   } catch (error) {
     handleError(error, "auth.controller -> register");

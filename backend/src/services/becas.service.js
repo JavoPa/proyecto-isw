@@ -1,6 +1,8 @@
 "use strict";
 const Becas = require("../models/beca.model");
+const Requisito = require("../models/requisitos.model")
 const { handleError } = require("../utils/errorHandler");
+const moment = require("moment");
 
 /**
  * @returns {Promise}
@@ -25,6 +27,29 @@ async function getBecas() {
 async function getBecasid(id) {
   try {
     const becas = await Becas.findById({ _id: id })
+      .select({
+        _id:0,
+        nombre:1,
+        requisitos:1, 
+        documentos:1,
+        fecha_de_inicio:{
+          $dateToString: {
+            format: "%d-%m-%Y",
+            date: "$fecha_inicio",
+          },
+        },
+        fecha_de_fin:{
+          $dateToString: {
+            format: "%d-%m-%Y",
+            date: "$fecha_fin",
+          },
+        },
+        dirigida:1,
+        monto:1, 
+        tipo_pago:1, 
+      })
+      .populate()
+      .exec();
     if (!becas) return [null, "La beca no existe"];
 
     return [becas, null];
@@ -39,7 +64,16 @@ async function getBecasid(id) {
  */
 async function createBeca(bec) {
     try {
-      const { nombre, requisitos, documentos, fecha_inicio , fecha_fin , monto, tipo_pago } = bec;  
+      // Verificar si los requisitos existen
+      const requisitosExisten = await Promise.all(bec.requisitos.map(async (codigo) => {
+        const requisito = await Requisito.findOne({ codigo });
+        return requisito ? true : false;
+      }));
+      if (requisitosExisten.includes(false)) {
+        return [null, "Uno o más códigos de requisito no existen"];
+      }
+
+      const { nombre, requisitos, documentos, fecha_inicio , fecha_fin , dirigida, monto, tipo_pago } = bec;  
       const becaFound = await Becas.findOne({ nombre: bec.nombre });
       const fecha_actual = Date.now();
       const fechafin = new Date(bec.fecha_fin);
@@ -47,6 +81,9 @@ async function createBeca(bec) {
       if (becaFound) return [null, "La beca ya existe"];
       if (fecha_actual > fechainicio && fecha_actual < fechafin){
         return [null, "No se pueden crear becas en periodo de postulacion"];
+      }
+      if(fechafin < fechainicio){
+        return [null, "La fecha de fin no puede ser menor que la fecha de inicio"];
       }
       if (bec.nombre.includes('  ')) {
         return [null, "El nombre de la beca no puede contener dos espacios en blanco consecutivos"];
@@ -58,6 +95,7 @@ async function createBeca(bec) {
             documentos,
             fecha_inicio,
             fecha_fin,
+            dirigida,
             monto,
             tipo_pago,
         });
@@ -77,6 +115,14 @@ async function updateBeca(id, bec) {
     try {
       const becFound = await Becas.findById(id);
       if (!becFound) return [null, "la beca no existe"];
+      // Verificar si los requisitos existen
+      const requisitosExisten = await Promise.all(bec.requisitos.map(async (codigo) => {
+        const requisito = await Requisito.findOne({ codigo });
+        return requisito ? true : false;
+      }));
+      if (requisitosExisten.includes(false)) {
+        return [null, "Uno o más códigos de requisito no existen"];
+      }
       const fecha_actual = Date.now();
       /*Verificar que no se este modificando una beca durante el periodo de postulacion*/
       const fechaf = new Date(becFound.fecha_fin);
@@ -84,7 +130,7 @@ async function updateBeca(id, bec) {
       if (fecha_actual > fechai && fecha_actual < fechaf){
         return [null, "No se pueden modificar becas en periodo de postulacion"];
       }
-      const { nombre, requisitos, documentos, fecha_inicio, fecha_fin, monto, tipo_pago } = bec;
+      const { nombre, requisitos, documentos, fecha_inicio, fecha_fin, dirigida, monto, tipo_pago } = bec;
       /*Verificar que la fecha actual no este entre las fechas de postulacion*/
       const fechafin = new Date(bec.fecha_fin);
       const fechainicio = new Date(bec.fecha_inicio);
@@ -94,6 +140,10 @@ async function updateBeca(id, bec) {
       if (bec.nombre.includes('  ')) {
         return [null, "El nombre de la beca no puede contener dos espacios en blanco consecutivos"];
       }
+      /*Verificar que la fecha fin no sea menor que la fecha de inicio*/
+      if(fechafin < fechainicio){
+        return [null, "La fecha de fin no puede ser menor que la fecha de inicio"];
+      }
       const becUpdated = await Becas.findByIdAndUpdate(
         id,
         {
@@ -102,6 +152,7 @@ async function updateBeca(id, bec) {
             documentos,
             fecha_inicio,
             fecha_fin,
+            dirigida,
             monto,
             tipo_pago,
         },

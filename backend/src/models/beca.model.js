@@ -25,8 +25,11 @@ const becaSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    dirigida:{
+      type:[String],
+    },
     monto: {
-      type: Number,
+      type: mongoose.Schema.Types.Mixed,
       required: true,
     },
     tipo_pago: {

@@ -3,6 +3,11 @@ const { respondSuccess, respondError } = require("../utils/resHandler");
 const { handleError } = require("../utils/errorHandler");
 const PostulacionService = require("../services/postulacion.service");
 
+/**
+ * Obtiene las becas y sus requisitos
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
 async function getBecasPostulacion(req, res) {
     try {
         const [becas, errorBecas] = await PostulacionService.getBecasPostulacion();
@@ -17,19 +22,39 @@ async function getBecasPostulacion(req, res) {
     }
 }
 
+  /**
+ * Crea la una postulacion
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
 async function createPostulacion(req, res) {
-    try {
-        const { user, beca, archivos } = req.body;
-        const [postulacion, errorPostulacion] = await PostulacionService.createPostulacion(user, beca, archivos);
-        if (errorPostulacion) return respondError(req, res, 404, errorPostulacion);
-    
-        respondSuccess(req, res, 201, postulacion);
-    } catch (error) {
-        handleError(error, "postulacion.controller -> createPostulacion");
-        respondError(req, res, 400, error.message);
+  try {
+    //obtener los archivos dentro de la peticion
+    const body = []
+    for (const archivo of req.files) {
+      body.push({
+        nombre: archivo.originalname,
+        contenido: archivo.buffer,
+      })
+    ;
     }
-}
+    // obtener el id de la beca dentro de la peticion
+    const beca_id = req.body.beca_id;
 
+    //llamar al servicio para crear la postulacion
+    const [postulacion, errorPostulacion] = await PostulacionService.createPostulacion(body, req._id, beca_id);
+
+    if (errorPostulacion) return respondError(req, res, 400, errorPostulacion);
+    if (!postulacion) {
+      return respondError(req, res, 400, "No se creó la postulación");
+    }
+
+    respondSuccess(req, res, 201, postulacion);
+  } catch (error) {
+    handleError(error, "postulacion.controller -> createPostulacion");
+    respondError(req, res, 500, "No se creó la postulación");
+  }
+}
 /**
  * Obtiene el estado de postulacion por su id
  * @param {Object} req - Objeto de petición
