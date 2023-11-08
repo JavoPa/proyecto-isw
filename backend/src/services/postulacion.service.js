@@ -42,6 +42,12 @@ async function getEstado(id) {
             date: "$fecha_recepcion",
           },
         },
+        fecha_de_apelacion: {
+          $dateToString: {
+            format: "%d-%m-%Y",
+            date: "$fecha_apelacion",
+          },
+        },
         estado: 1,
         motivos: 1,
         beca: 1,
@@ -211,7 +217,7 @@ async function createApelacion(archivos, id) {
     });
     postulacionFound.estado = "Apelada";
     postulacionFound.motivos = "Apelacion solicitada";
-    postulacionFound.fecha_recepcion = fecha_actual;
+    postulacionFound.fecha_apelacion = fecha_actual;
     await postulacionFound.save();
 
     return ["Apelacion enviada", null];

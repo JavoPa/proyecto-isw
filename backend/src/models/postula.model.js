@@ -35,6 +35,9 @@ const postulaSchema = new mongoose.Schema(
     puntaje: {
       type: Number,
       default: 0
+    },
+    fecha_apelacion: {
+      type: Date,
     }
   },
   {
