@@ -68,7 +68,7 @@ async function getEstado(id) {
  * @param {string} beca_id Id de la beca
  * @returns {Promise} Promesa con el objeto de la postulacion creada
  */
-async function createPostulacion(archivos, user_id, beca_id) {
+async function createPostulacion(archivos, user_id, beca_id, comentario) {
   try {
     //verificar que se hayan subido archivos
     if (!archivos || archivos.length === 0) {
@@ -101,6 +101,7 @@ async function createPostulacion(archivos, user_id, beca_id) {
       estado: "Enviada",
       motivos: `Postulación ${beca.nombre}`,
       fecha_recepcion: fechaActual,
+      comentario: comentario,
     });
     // Iterar sobre los archivos y agregarlos a la postulación
     archivos.forEach((archivo) => {

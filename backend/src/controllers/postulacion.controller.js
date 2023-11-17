@@ -41,8 +41,9 @@ async function createPostulacion(req, res) {
     // obtener el id de la beca dentro de la peticion
     const beca_id = req.body.beca_id;
 
+    const comentario = req.body.comentario;
     //llamar al servicio para crear la postulacion
-    const [postulacion, errorPostulacion] = await PostulacionService.createPostulacion(body, req._id, beca_id);
+    const [postulacion, errorPostulacion] = await PostulacionService.createPostulacion(body, req._id, beca_id, comentario);
 
     if (errorPostulacion) return respondError(req, res, 400, errorPostulacion);
     if (!postulacion) {
