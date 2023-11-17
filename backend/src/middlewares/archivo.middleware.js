@@ -23,7 +23,7 @@ function validateFileExtensions(files) {
 }
 
 /**
- * Maneja la subida de archivos
+ * Maneja la subida de un unico archivo
  * @param {Object} req - Objeto de petición
  * @param {Object} res - Objeto de respuesta
  * @param {Function} next - Función para continuar con la siguiente función
@@ -54,6 +54,44 @@ async function subirSingle(req, res, next) {
   }
 }
 
+/**
+ * Maneja la subida de multiples archivos
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ * @param {Function} next - Función para continuar con la siguiente función
+ */
+async function subirMultiples(req, res, next) {
+  try {
+    upload.any('archivoPDF')(req, res, function (err) {
+      if (err) {
+        return respondError(
+          req,
+          res,
+          400,
+          "Error al subir los archivos",
+        );
+      }
+      if (!req.files || req.files.length === 0) {
+        return respondError(
+          req,
+          res,
+          400,
+          "No se recibieron archivos",
+        );
+      }
+      next();
+    });
+  } catch (error) {
+    handleError(error, "archivo.middleware -> subir");
+  }
+}
+
+/**
+ * Maneja la subida de 5 archivos como maximo
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ * @param {Function} next - Función para continuar con la siguiente función
+ */
 async function subirArray(req, res, next) {
   try {
     upload.array('archivoPDF',5)(req, res, function (err) {
@@ -93,4 +131,5 @@ async function subirArray(req, res, next) {
 module.exports = {
   subirSingle,
   subirArray,
+  subirMultiples,
 };

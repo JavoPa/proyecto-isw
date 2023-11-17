@@ -29,7 +29,7 @@ router.post('/postular', archivoMiddleware.subirArray, postulacionController.cre
 router.get('/estado', postulacionController.getEstado);
 
 //Ruta para apelar un estado de postulacion
-router.post('/apelar', archivoMiddleware.subirSingle, postulacionController.createApelacion);
+router.post('/apelar', archivoMiddleware.subirMultiples, postulacionController.createApelacion);
 
 // Exporta el enrutador
 module.exports = router;

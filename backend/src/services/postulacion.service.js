@@ -211,9 +211,11 @@ async function createApelacion(archivos, id) {
     if (postulacionFound.estado != "Rechazada") return [null, "El usuario no presenta una postulacion rechazada"];
 
     //Agrega el archivo PDF a la matriz documentosPDF
-    postulacionFound.documentosPDF.push({
-      nombre: nombre,
-      contenido: contenido,
+    archivos.forEach((archivo) => {
+      postulacionFound.documentosPDF.push({
+        nombre: archivo.nombre,
+        contenido: archivo.contenido,
+      });
     });
     postulacionFound.estado = "Apelada";
     postulacionFound.motivos = "Apelacion solicitada";

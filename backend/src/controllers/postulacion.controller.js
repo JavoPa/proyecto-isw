@@ -80,10 +80,13 @@ async function getEstado(req, res) {
  */
   async function createApelacion(req, res) {
     try {
-      const body = {
-        nombre: req.file.originalname,
-        contenido: req.file.buffer,
-      };
+      const body = []
+      for (const archivo of req.files) {
+        body.push({
+          nombre: archivo.originalname,
+          contenido: archivo.buffer,
+        });
+      }
       const [newApelacion, apelacionError] = await PostulacionService.createApelacion(body, req._id);
   
       if (apelacionError) return respondError(req, res, 400, apelacionError);
