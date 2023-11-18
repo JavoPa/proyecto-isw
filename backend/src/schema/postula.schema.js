@@ -22,6 +22,13 @@ const postulaPuntajeSchema = Joi.object({
         "string.base": "El estado debe ser de tipo string.",
         //"string.pattern.base": "El puntaje proporcionado no es un numero",
       }),
+      motivos: Joi.string()
+      .required()
+      .messages({
+        "string.empty": "El motivo no puede estar vacio.",
+        "any.required": "El motivo es obligatorio.",
+        "string.base": "El motivo debe ser de tipo string.",
+      }),
   });
 
   const postulaDocumentosFaltantes = Joi.object({
