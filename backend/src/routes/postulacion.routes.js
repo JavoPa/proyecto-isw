@@ -5,6 +5,8 @@ const express = require("express");
 //**Controlador de becas */
 const postulacionController = require("../controllers/postulacion.controller.js");
 
+const apelacionController = require("../controllers/apela.controller.js");
+
 /** Middleware de autenticación */
 const authenticationMiddleware = require("../middlewares/authentication.middleware.js");
 
@@ -29,7 +31,7 @@ router.post('/postular', archivoMiddleware.subirArray, postulacionController.cre
 router.get('/estado', postulacionController.getEstado);
 
 //Ruta para apelar un estado de postulacion
-router.post('/apelar', archivoMiddleware.subirMultiples, postulacionController.createApelacion);
+router.post('/apelar', archivoMiddleware.subirMultiples, apelacionController.createApelacion);
 
 // Exporta el enrutador
 module.exports = router;
