@@ -3,6 +3,7 @@ const { respondSuccess, respondError } = require("../utils/resHandler");
 const { handleError } = require("../utils/errorHandler");
 const ApelacionService = require("../services/apela.service");
 const { postulaDocumentosFaltantes } = require("../schema/postula.schema");
+const { userIdSchema } = require("../schema/user.schema");
 
  /**
  * Crea la apelacion de la postulacion
@@ -73,8 +74,31 @@ async function getApelaciones(req, res) {
     }
   }
 
+/**
+ * Obtiene una apelacion por su id
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
+async function getApelacionById(req, res) {
+  try {
+    const { params } = req;
+    const { error: paramsError } = userIdSchema.validate(params);
+    if (paramsError) return respondError(req, res, 400, paramsError.message);
+
+    const [postulacion, errorPostulacion] = await ApelacionService.getApelacionById(params.id);
+
+    if (errorPostulacion) return respondError(req, res, 404, errorPostulacion);
+
+    respondSuccess(req, res, 200, postulacion);
+  } catch (error) {
+    handleError(error, "apela.controller -> getApelacionById");
+    respondError(req, res, 500, "No se pudo obtener la apelacion");
+  }
+}
+
   module.exports = {
     createApelacion,
     updateDocumentosFaltantes,
     getApelaciones,
+    getApelacionById
 };

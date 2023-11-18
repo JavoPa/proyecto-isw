@@ -95,9 +95,29 @@ async function getApelaciones() {
     }
   }
 
+/**
+ * Obtiene una apelacion por id
+ * @returns {Promise} Promesa con el objeto de la postulacion
+ */
+async function getApelacionById(id) {
+  try {
+    const apelacion = await Apela.findById({_id: id})
+      .populate({
+        path: "postulacion",
+      });
+
+    if (!apelacion) return [null, "La apelacion no existe"];
+
+    return [apelacion, null];
+  } catch (error) {
+    handleError(error, "apela.service -> getApelacionById");
+  }
+}
+
   module.exports = {
     createApelacion,
     updateDocumentosFaltantes,
     getApelaciones,
+    getApelacionById
   };
   
