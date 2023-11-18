@@ -113,7 +113,8 @@ async function updateEstado(id, body) {
     const postulacionUpdated = await Postula.findByIdAndUpdate(
       id,
       {
-        estado: body.estado
+        estado: body.estado,
+        motivos: body.motivos
       },
       { new: true },
     );

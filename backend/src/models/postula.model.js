@@ -38,7 +38,12 @@ const postulaSchema = new mongoose.Schema(
     },
     comentario: {
       type: String,
+    },
+    documentosFaltantes: [ // String con los documentos faltantes en caso de ser rechazada
+    {
+      type: String,
     }
+  ],
   },
   {
     versionKey: false,

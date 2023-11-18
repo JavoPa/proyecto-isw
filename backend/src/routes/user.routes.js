@@ -5,6 +5,8 @@ const express = require("express");
 /** Controlador de usuarios */
 const usuarioController = require("../controllers/user.controller.js");
 
+const apelacionController = require("../controllers/apela.controller.js");
+
 /** Middlewares de autorización */
 const authorizationMiddleware = require("../middlewares/authorization.middleware.js");
 
@@ -45,6 +47,10 @@ router.put("/postulaciones/:id/puntaje", authorizationMiddleware.isAdmin, usuari
 router.put("/postulaciones/:id/estado", authorizationMiddleware.isAdmin, usuarioController.updateEstado); // Actualiza estado por id de postulacion
 router.get("/postulaciones/:id/informe", authorizationMiddleware.isAdmin, usuarioController.getInformeById); // Obtiene informe de postulacion
 router.get("/informe", authorizationMiddleware.isAdmin, usuarioController.getInforme); // Informe de becas asignadas y puntaje
+
+// Ruta para requerimiento de apelacion por parte del encargado
+router.get("/apelaciones", authorizationMiddleware.isAdmin, apelacionController.getApelaciones); // Obtiene todas las apelaciones
+router.post("/postulacion/:id/documentosfaltantes", authorizationMiddleware.isAdmin, apelacionController.updateDocumentosFaltantes); // Establece mensaje de documentos faltantes
 
 // Exporta el enrutador
 module.exports = router;

@@ -74,34 +74,9 @@ async function getEstado(req, res) {
     }
   }
   
-  /**
- * Crea la apelacion de la postulacion
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- */
-  async function createApelacion(req, res) {
-    try {
-      const body = {
-        nombre: req.file.originalname,
-        contenido: req.file.buffer,
-      };
-      const [newApelacion, apelacionError] = await PostulacionService.createApelacion(body, req._id);
-  
-      if (apelacionError) return respondError(req, res, 400, apelacionError);
-      if (!newApelacion) {
-        return respondError(req, res, 400, "No se creo la apelacion");
-      }
-  
-      respondSuccess(req, res, 201, newApelacion);
-    } catch (error) {
-      handleError(error, "user.controller -> createApelacion");
-      respondError(req, res, 500, "No se creo la apelacion");
-    }
-  }
 
 module.exports = {
     getBecasPostulacion,
     createPostulacion,
     getEstado,
-    createApelacion,
 };
