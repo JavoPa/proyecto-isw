@@ -36,9 +36,11 @@ const postulaSchema = new mongoose.Schema(
       type: Number,
       default: 0
     },
-    fecha_apelacion: {
-      type: Date,
-    }
+    documentosFaltantes: [ // String con los documentos faltantes en caso de ser rechazada
+      {
+        type: String,
+      }
+    ],
   },
   {
     versionKey: false,
