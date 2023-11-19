@@ -4,7 +4,7 @@ const User = require("../models/user.model.js");
 const Role = require("../models/role.model.js");
 const { handleError } = require("../utils/errorHandler");
 const Postula = require("../models/postula.model.js");
-
+const fs = require('fs');
 /**
  * Obtiene todos los usuarios de la base de datos
  * @returns {Promise} Promesa con el objeto de los usuarios
@@ -37,9 +37,16 @@ async function getDocuments(id) {
     if (!documents) return [null, "No hay documentos"];
     if (documents.documentosPDF.length === 0) return [null, "No hay documentos en esta postulación"];
 
+    /*
+    for (let i = 0; i < documents.documentosPDF.length; i++) {
+      const pdfBuffer = documents.documentosPDF[i].contenido;
+      fs.writeFileSync(`documento-${i}.pdf`, pdfBuffer);
+    } 
+    */
+   
     return [documents, null];
   } catch (error) {
-    handleError(error, "postulacion.service -> getEstado");
+    handleError(error, "user.service -> getDocuments");
   }
 }
 
@@ -106,7 +113,8 @@ async function updateEstado(id, body) {
     const postulacionUpdated = await Postula.findByIdAndUpdate(
       id,
       {
-        estado: body.estado
+        estado: body.estado,
+        motivos: body.motivos
       },
       { new: true },
     );

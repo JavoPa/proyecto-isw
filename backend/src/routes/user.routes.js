@@ -5,6 +5,8 @@ const express = require("express");
 /** Controlador de usuarios */
 const usuarioController = require("../controllers/user.controller.js");
 
+const apelacionController = require("../controllers/apela.controller.js");
+
 /** Middlewares de autorización */
 const authorizationMiddleware = require("../middlewares/authorization.middleware.js");
 
@@ -36,11 +38,20 @@ router.delete(
 );
 
 // Rutas para requerimiento de seleccion
-router.get('/postulantes', authorizationMiddleware.isAdmin, usuarioController.getPostulantes);
-router.get("/documentos/:id", authorizationMiddleware.isAdmin, usuarioController.getDocuments);
-router.put("/:id/puntaje", authorizationMiddleware.isAdmin, usuarioController.updatePuntaje);
-router.put("/:id/estado", authorizationMiddleware.isAdmin, usuarioController.updateEstado);
-router.get("/informe", authorizationMiddleware.isAdmin, usuarioController.getInforme)
+router.get('/postulantes', authorizationMiddleware.isAdmin, usuarioController.getPostulantes); // Obtiene a todos los postulantes
+router.get("/postulantes/:id", authorizationMiddleware.isAdmin, usuarioController.getPostulanteById); // Obtiene la informacion de un solo postulante
+router.get("/postulaciones", authorizationMiddleware.isAdmin, usuarioController.getPostulaciones); // Obtiene todas las postulaciones
+router.get("/postulaciones/:id", authorizationMiddleware.isAdmin, usuarioController.getPostulacionById); // Obtiene una postulacion por su id
+router.get("/postulaciones/:id/documentos/:docnum", authorizationMiddleware.isAdmin, usuarioController.getDocuments); // Obtiene documentos por id de postulacion
+router.put("/postulaciones/:id/puntaje", authorizationMiddleware.isAdmin, usuarioController.updatePuntaje); // Actualiza puntaje por id de postulacion
+router.put("/postulaciones/:id/estado", authorizationMiddleware.isAdmin, usuarioController.updateEstado); // Actualiza estado por id de postulacion
+router.get("/postulaciones/:id/informe", authorizationMiddleware.isAdmin, usuarioController.getInformeById); // Obtiene informe de postulacion
+router.get("/informe", authorizationMiddleware.isAdmin, usuarioController.getInforme); // Informe de becas asignadas y puntaje
+
+// Ruta para requerimiento de apelacion por parte del encargado
+router.get("/apelaciones", authorizationMiddleware.isAdmin, apelacionController.getApelaciones); // Obtiene todas las apelaciones
+router.get("/apelacion/:id", authorizationMiddleware.isAdmin, apelacionController.getApelacionById); // Obtiene una apelacion por su id
+router.post("/postulacion/:id/documentosfaltantes", authorizationMiddleware.isAdmin, apelacionController.updateDocumentosFaltantes); // Establece mensaje de documentos faltantes
 
 // Exporta el enrutador
 module.exports = router;

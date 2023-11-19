@@ -35,7 +35,15 @@ const postulaSchema = new mongoose.Schema(
     puntaje: {
       type: Number,
       default: 0
+    },
+    comentario: {
+      type: String,
+    },
+    documentosFaltantes: [ // String con los documentos faltantes en caso de ser rechazada
+    {
+      type: String,
     }
+  ],
   },
   {
     versionKey: false,

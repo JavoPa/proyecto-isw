@@ -2,9 +2,9 @@
 // Importa el modelo de datos 'User'
 const Postula = require("../models/postula.model.js");
 const Beca = require("../models/beca.model.js");
+const User = require("../models/user.model.js");
 const { handleError } = require("../utils/errorHandler");
-const moment = require("moment");
-//const mongoose = require('mongoose');
+const Apela = require("../models/apela.model.js");
 
 
 /**
@@ -21,6 +21,7 @@ async function getBecasPostulacion() {
   }
 }
 
+
 /**
  * Obtiene el estado de la postulacion del usuario
  * @param {string} Id del usuario
@@ -28,9 +29,12 @@ async function getBecasPostulacion() {
  */
 async function getEstado(id) {
   try {
-    const estado = await Postula.findOne({ postulante: id })
+    //Buscar la ultima postulacion del usuario
+    const postulacion = await Postula.findOne({ postulante: id })
+      .sort({ fecha_recepcion: -1 })
+      .limit(1)
       .select({
-        _id: 0,
+        _id: 1,
         fecha_de_recepcion: {
           $dateToString: {
             format: "%d-%m-%Y",
@@ -47,8 +51,26 @@ async function getEstado(id) {
         select: "-_id nombre",
       })
       .exec();
-    if (!estado) return [null, "No hay postulacion"];
+    if (!postulacion) return [null, "No hay postulacion"];
 
+    //Buscar la apelacion de la postulacion
+    const apelacion = await Apela.findOne({ postulacion: postulacion._id })
+      .select({
+        _id: 0,
+        fecha_de_apelacion: {
+          $dateToString: {
+            format: "%d-%m-%Y",
+            date: "$fecha_apelacion",
+          },
+        },
+        documentosPDF: 1,
+      })
+      .exec();
+    //if (!apelacion) return [postulacion, null];
+    const estado = {
+      postulacion: postulacion,
+      apelacion: apelacion ? apelacion : "No hay apelacion relacionada",
+    };
     return [estado, null];
   } catch (error) {
     handleError(error, "postulacion.service -> getEstado");
@@ -57,50 +79,61 @@ async function getEstado(id) {
 
 
 /**
- * Crea una postulacion subiendo la información del usuario 
- * @param {Object} user Objeto de usuario
- * @param {Object} beca Objeto de beca
- * @param {Object} archivos Archivos requeridos para la beca
- * @returns {Promise} Promesa con el objeto de usuario creado
+ * Crea una postulacion
+ * @param {Object} archivos Objeto de archivos
+ * @param {string} user_id Id del usuario
+ * @param {string} beca_id Id de la beca
+ * @returns {Promise} Promesa con el objeto de la postulacion creada
  */
-async function createPostulacion(user, beca, archivos) {
+async function createPostulacion(archivos, user_id, beca_id, comentario) {
   try {
-    const { nombre, contenido } = archivos;
-
-    // Verificar si el usuario ya tiene una postulación para esta beca
-    const postulacionExistente = await Postula.findOne({ postulante: user._id});
-    if (postulacionExistente) return [null, "Ya existe una postulación para este usuario"];
-
-    // Verificar si el usuario ha subido los archivos requeridos
-    if (!nombre || !contenido) return [null, "Debe subir los archivos requeridos"];
-    
-    // Check if the file type is pdf, png or jpg
-    const allowedTypes = ["application/pdf", "image/png", "image/jpeg"];
-    if (!allowedTypes.includes(contenido.mimetype)) {
-      return [null, "El archivo debe ser pdf, png o jpg"];
+    //verificar que se hayan subido archivos
+    if (!archivos || archivos.length === 0) {
+      return [null, "No se subieron archivos."];
     }
+    
+    //obtener datos del usuario
+    const user = await User.findById(user_id);
+    if (!user) return [null, "No se encontró el usuario"];
+
+    //obtener datos de la beca
+    const beca = await Beca.findById(beca_id);
+    if (!beca) return [null, "No se encontró la beca"];
 
     // Verificar si el usuario está dentro del plazo para postular
     const fechaActual = new Date();
     if (fechaActual > beca.fecha_fin) return [null, "El plazo para postular ha vencido"];
     if (fechaActual < beca.fecha_inicio) return [null, "El plazo para postular aún no comienza"];
 
-    // Crear la postulación
+   
+
+    // Verificar que el usuario no haya postulado a esta beca en el año actual
+    const postulacionExistente= await Postula.findOne({ postulante: user_id })
+    if (postulacionExistente) return [null, "Ya existe una postulación para este usuario"];
+
+    //crear la postulacion
     const postulacion = new Postula({
       postulante: user,
       beca: beca,
-      //postulante: mongoose.Types.ObjectId(user._id), 
-      //beca: mongoose.Types.ObjectId(beca._id),
-      documentosPDF: [{ nombre, contenido }],
       estado: "Enviada",
       motivos: `Postulación ${beca.nombre}`,
       fecha_recepcion: fechaActual,
+      comentario: comentario,
     });
+    // Iterar sobre los archivos y agregarlos a la postulación
+    archivos.forEach((archivo) => {
+      postulacion.documentosPDF.push({
+        nombre: archivo.nombre,
+        contenido: archivo.contenido,
+      });
+    });
+
+    //guardar la postulacion
     await postulacion.save();
 
-    return [postulacion, null];
+    return ["Postulacion creada", null];
   } catch (error) {
-    handleError(error, "postulacion.service -> crearPostulacion");
+    handleError(error, "postulacion.service -> createPostulacion");
   }
 }
 
@@ -112,7 +145,8 @@ async function createPostulacion(user, beca, archivos) {
 async function getPostulaciones() {
   try {
     const postulaciones = await Postula.find()
-      .select("beca postulante puntaje")
+      //.select("beca postulante puntaje")
+      .select("-documentosPDF")
       .populate({
         path: "beca",
         select: "nombre"
@@ -130,49 +164,30 @@ async function getPostulaciones() {
   }
 }
 
+
 /**
- * Crea una apelacion modificando el estado de postula y actualizando los documentos
- * @param {Object} user Objeto de usuario
- * @returns {Promise} Promesa con el objeto de usuario creado
+ * Obtiene una postulacion por id
+ * @returns {Promise} Promesa con el objeto de la postulacion
  */
-async function createApelacion(archivos, id) {
+async function getPostulacionById(id) {
   try {
-    const { nombre , contenido } = archivos;
+    const postulacion = await Postula.findById({_id: id})
+      //.select("beca postulante puntaje")
+      //.select("-documentosPDF")
+      .populate({
+        path: "beca",
+        select: "nombre"
+      })
+      .populate({
+        path: "postulante",
+        select: "nombres apellidos"
+      });
 
-    //Buscar al postulante
-    const postulacionFound = await Postula.findOne({ postulante: id })
-    if (!postulacionFound) return [null, "El usuario no tiene postulacion"];
+    if (!postulacion) return [null, "La postulacion no existe"];
 
-    //Verificacion de plazos (maximo 2 semanas despues de la fecha de fin de la beca)
-    const fecha_actual = Date.now();
-    const beca = await Beca.findById(postulacionFound.beca);
-    if (!beca) return [null, "No se encontró la beca"];
-    const fechaFinalizacionApelacion = new Date(beca.fecha_fin); //Se crea una fecha con la fecha de fin de la beca
-    fechaFinalizacionApelacion.setDate(fechaFinalizacionApelacion.getDate() + 14); //Se le suman 14 dias a la fecha de fin de la beca
-    if (fecha_actual > fechaFinalizacionApelacion) { //Si se sobre pasa de las 2 semanas de plazo siguientes a la fecha fin de la beca
-      return [null, "El plazo de apelacion ha vencido"];
-    }
-    if (fecha_actual < beca.fecha_fin){ //Si aun no termina el periodo de postulacion la beca
-      return [null, "El periodo de apelacion aun no comienza"];
-    }
-    
-    //Verificacion de postulacion previa rechazada
-    if (postulacionFound.estado == "Apelada") return [null, "El usuario ya tiene una apelacion en proceso"];
-    if (postulacionFound.estado != "Rechazada") return [null, "El usuario no presenta una postulacion rechazada"];
-
-    //Agrega el archivo PDF a la matriz documentosPDF
-    postulacionFound.documentosPDF.push({
-      nombre: nombre,
-      contenido: contenido,
-    });
-    postulacionFound.estado = "Apelada";
-    postulacionFound.motivos = "Apelacion solicitada";
-    postulacionFound.fecha_recepcion = fecha_actual;
-    await postulacionFound.save();
-
-    return ["Apelacion enviada", null];
+    return [postulacion, null];
   } catch (error) {
-    handleError(error, "postulacion.service -> createApelacion");
+    handleError(error, "postulacion.service -> getPostulacionById");
   }
 }
 
@@ -181,5 +196,5 @@ module.exports = {
   createPostulacion,
   getEstado,
   getPostulaciones,
-  createApelacion,
+  getPostulacionById,
 };
