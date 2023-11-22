@@ -82,11 +82,22 @@ async function createApelacion(archivos, id) {
 async function getApelaciones() {
     try {
       const apelaciones = await Apela.find()
-        .select("-documentosPDF")
-        .populate({
-          path: "postulacion"
-        });
-  
+        .select({
+          fecha_de_apelacion: {
+            $dateToString: {
+              format: "%d-%m-%Y",
+              date: "$fecha_apelacion",
+            },
+          },
+        })
+        .populate({ 
+          path: "postulacion", 
+          populate: [
+          { path: "postulante" },
+          { path: "beca" },
+          ]
+        })
+
       if (!apelaciones) return [null, "No hay apelaciones"];
   
       return [apelaciones, null];

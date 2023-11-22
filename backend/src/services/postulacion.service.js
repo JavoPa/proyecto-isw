@@ -64,6 +64,7 @@ async function getEstado(id) {
           },
         },
         documentosPDF: 1,
+        estado: 1,
       })
       .exec();
     //if (!apelacion) return [postulacion, null];

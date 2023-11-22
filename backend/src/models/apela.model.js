@@ -5,6 +5,11 @@ const mongoose = require("mongoose");
 // Crea el esquema de la coleccion 'postula'
 const apelaSchema = new mongoose.Schema(
   {
+    estado: {
+      type: String,
+      enum: ["En revisión", "Aceptada", "Rechazada"],
+      default: "En revisión",
+    },
     fecha_apelacion: {
       type: Date,
       default: Date.now
