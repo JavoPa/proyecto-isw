@@ -3,6 +3,7 @@ const { handleError } = require("../utils/errorHandler");
 const Postula = require("../models/postula.model.js");
 const Apela = require("../models/apela.model.js");
 const Beca = require("../models/beca.model.js");
+const User = require("../models/user.model.js");
 
 /**
  * Crea una apelacion modificando el estado de postula y subiendo los documentos a la tabla apela
@@ -30,8 +31,8 @@ async function createApelacion(archivos, id) {
       }
       
       //Verificacion de postulacion previa rechazada
-      if (postulacionFound.estado == "Apelada") return [null, "El usuario ya tiene una apelacion en proceso"];
-      if (postulacionFound.estado != "Rechazada") return [null, "El usuario no presenta una postulacion rechazada"];
+      if (postulacionFound.estado == "Apelada") return [null, "Ya tienes una apelacion en proceso"];
+      if (postulacionFound.estado != "Rechazada") return [null, "No tienes una postulacion rechazada"];
   
       //Crea la apelacion
       const apelacion = new Apela({
@@ -92,9 +93,16 @@ async function getApelaciones() {
         })
         .populate({ 
           path: "postulacion", 
+          select: 'estado motivos',
           populate: [
-          { path: "postulante" },
-          { path: "beca" },
+            { 
+              path: "postulante",
+              select: 'nombres apellidos' // Solo selecciona el campo 'nombres'
+            },
+            { 
+              path: "beca",
+              select: 'nombre' // Solo selecciona el campo 'nombre'
+            },
           ]
         })
 
@@ -113,13 +121,52 @@ async function getApelaciones() {
 async function getApelacionById(id) {
   try {
     const apelacion = await Apela.findById({_id: id})
-      .populate({
-        path: "postulacion",
-      });
+    .select({
+      fecha_de_apelacion: {
+        $dateToString: {
+          format: "%d-%m-%Y",
+          date: "$fecha_apelacion",
+        },
+      },
+      postulacion: 1,
+    })
 
     if (!apelacion) return [null, "La apelacion no existe"];
+    if (!apelacion.postulacion) return [null, "La apelacion no tiene una postulacion asociada"];
 
-    return [apelacion, null];
+    const postulacion = await Postula.findById({_id: apelacion.postulacion})
+    .select({
+      fecha_de_recepcion: {
+        $dateToString: {
+          format: "%d-%m-%Y",
+          date: "$fecha_recepcion",
+        },
+      },
+      estado: 1,
+      motivos: 1,
+      postulante: 1,
+      beca: 1,
+    })
+    if (!postulacion.beca) return [null, "La postulacion no tiene beca asociada"];
+    const beca = await Beca.findById({_id: postulacion.beca})
+    .select({
+      nombre: 1,
+      documentos: 1,
+    })
+    const postulante = await User.findById({_id: postulacion.postulante})
+    .select({
+      nombre: 1,
+      apellido: 1,
+      email: 1,
+      rut: 1,
+    })
+    const result = {
+      apelacion,
+      postulacion,
+      beca,
+      postulante
+    };
+    return [result, null];
   } catch (error) {
     handleError(error, "apela.service -> getApelacionById");
   }
