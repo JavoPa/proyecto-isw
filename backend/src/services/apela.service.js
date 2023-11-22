@@ -97,11 +97,11 @@ async function getApelaciones() {
           populate: [
             { 
               path: "postulante",
-              select: 'nombres apellidos' // Solo selecciona el campo 'nombres'
+              select: 'nombres apellidos'
             },
             { 
               path: "beca",
-              select: 'nombre' // Solo selecciona el campo 'nombre'
+              select: 'nombre'
             },
           ]
         })
@@ -155,8 +155,8 @@ async function getApelacionById(id) {
     })
     const postulante = await User.findById({_id: postulacion.postulante})
     .select({
-      nombre: 1,
-      apellido: 1,
+      nombres: 1,
+      apellidos: 1,
       email: 1,
       rut: 1,
     })

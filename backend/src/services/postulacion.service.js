@@ -70,7 +70,7 @@ async function getEstado(id) {
     //if (!apelacion) return [postulacion, null];
     const estado = {
       postulacion: postulacion,
-      apelacion: apelacion ? apelacion : "No hay apelacion relacionada",
+      apelacion: apelacion,
     };
     return [estado, null];
   } catch (error) {
