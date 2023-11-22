@@ -17,6 +17,7 @@ function Login() {
     <div>
       <h2>Inicia sesion!</h2>
       <LoginForm />
+      <button onClick={() => navigate('/')}>Volver a home</button>
     </div>
   );
 }

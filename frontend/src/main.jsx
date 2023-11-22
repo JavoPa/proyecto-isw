@@ -8,10 +8,11 @@ import Login from './routes/Login.jsx';
 import Apelaciones from './routes/Apelaciones.jsx';
 import Estado from './routes/Estado.jsx';
 import PublicRoot from './routes/PublicRoot.jsx';
-//import Apelar from './routes/Apelar.jsx';
+import Apelar from './routes/Apelar.jsx';
+import AdminRoot from './routes/AdminRoot.jsx';
 
 const router = createBrowserRouter([
-  {
+  { // Rutas publicas
     path: '/',
     element: <PublicRoot />,
     errorElement: <ErrorPage />,
@@ -26,7 +27,7 @@ const router = createBrowserRouter([
       // },
     ],
   },
-  {
+  { // Rutas privadas de postulacion por parte del postulante
     path: '/postulacion',
     element: <Root />,
     errorElement: <ErrorPage />,
@@ -35,15 +36,15 @@ const router = createBrowserRouter([
         path: 'estado',
         element: <Estado />,
       },
-      // {
-      //   path: 'apelar',
-      //   element: <Apelar />,
-      // },
+      {
+        path: 'apelar',
+        element: <Apelar />,
+      },
     ],
   },
-  {
+  { // Rutas privadas de gestion por parte del encargado
     path: '/gestion',
-    element: <Root />,
+    element: <AdminRoot />,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -52,7 +53,7 @@ const router = createBrowserRouter([
       },
     ],
   },
-  {
+  { // Ruta de login
     path: '/auth',
     element: <Login />,
   },
