@@ -17,3 +17,78 @@
 a {
   text-decoration: inherit;
 }
+/*Lista de apelaciones*/
+.lista-apelaciones {
+  list-style-type: none;
+  padding: 0;
+}
+
+.item-apelacion {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #CCCCCC;
+  border-radius: 5px;
+  color: #333333;
+}
+/*Estado de postulacion*/
+.estado-container {
+  width: 60%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #CCCCCC;
+  border-radius: 5px;
+  color: #333333;
+}
+
+.estado-details {
+  margin-top: 20px;
+}
+
+.estado-details p {
+  margin-bottom: 10px;
+}
+
+.estado-apelacion {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #2E7D32;
+  color: #CCCCCC
+}
+/*Barra de navegacion*/
+.navbar {
+  background-color: #333;
+  padding: 10px 0;
+}
+
+.navbar-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+.navbar-item {
+  color: #fff;
+}
+
+.navbar-link {
+  color: #fff;
+  text-decoration: none;
+}
+
+.navbar-link:hover {
+  color: #ddd;
+}
+/* Informacion de usuario */
+.user-info {
+  position: absolute;
+  top: 60px;
+  right: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #2E7D32;
+  color: #FFFFFF
+}

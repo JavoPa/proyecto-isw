@@ -14,10 +14,10 @@ function NavBar() {
           <Link to="/postular" className="navbar-link">Postular</Link>
         </li>
         <li className="navbar-item">
-          <Link to="/estado" className="navbar-link">Estado</Link>
+          <Link to="/postulacion/estado" className="navbar-link">Estado</Link>
         </li>
         <li className="navbar-item">
-          <Link to="/apelar" className="navbar-link">Apelar</Link>
+          <Link to="/postulacion/apelar" className="navbar-link">Apelar</Link>
         </li>
       </ul>
     </nav>
