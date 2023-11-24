@@ -5,9 +5,9 @@ export const getEstado = async () => {
     const response = await axios.get('/postulacion/estado');
     const { status, data } = response;
     if (status === 200) {
-      return data.data;
+      return data;
     }
   } catch (error) {
-    console.log("Error de estado.service "+error);
+    return error.response.data
   }
 };

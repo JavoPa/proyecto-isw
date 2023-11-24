@@ -5,10 +5,10 @@ export async function getApelaciones() {
       const response = await axios.get('/users/apelaciones');
       const { status, data } = response;
       if (status === 200) {
-        return data.data;
+        return data;
       }
     } catch (error) {
-      console.log(error);
+      return error.response.data
     }
 }
 
@@ -17,10 +17,10 @@ export async function getApelacionById(id) {
       const response = await axios.get(`/users/apelacion/${id}`);
       const { status, data } = response;
       if (status === 200) {
-        return data.data;
+        return data;
       }
     } catch (error) {
-      console.log(error);
+      return error.response.data
     }
 }
 
@@ -29,18 +29,21 @@ export async function updateDocumentosFaltantes(id, body) {
       const response = await axios.post(`/users/postulacion/${id}/documentosfaltantes`, body);
       const { status, data } = response;
       if (status === 200) {
-        return data.data;
+        return data;
       }
     } catch (error) {
-      console.log(error);
+      return error.response.data
     }
 }
 
-export async function apelar(file) {
+export async function apelar(motivo, files) {
   try {
     const formData = new FormData();
-    formData.append('file', file);
-
+    formData.append('motivo', motivo);
+    const filesArray = Array.from(files);
+    filesArray.forEach((file, index) => {
+      formData.append(`file${index}`, file);
+    });
     const response = await axios.post(`/postulacion/apelar`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
