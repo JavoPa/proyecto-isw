@@ -156,6 +156,32 @@ form input[type="submit"]:hover {
   background-color: #1b5e20;
 }
 
+/* Estilo del mensaje de campo obligatorio formulario */
+.campo-obligatorio {
+  color: red;
+}
+
+/* Estilo para el label de subida de documentos */
+.label-file {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #1565C0;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.label-file:hover {
+  background-color: #0D47A1;
+}
+
+.input-file {
+  margin-left: 10px;
+}
+
 /* Ventana flotante para la apelacion */
 .modal {
   position: fixed;
