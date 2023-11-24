@@ -11,8 +11,9 @@ const User = require("../models/user.model.js");
  * @param {Object} id id del usuario
  * @returns {Promise} Promesa con el objeto de usuario creado
  */
-async function createApelacion(archivos, id) {
+async function createApelacion(motivo, archivos, id) {
     try {
+      if(!motivo) return [null, "No se ingreso el motivo de la apelacion"];
       //Buscar ultima postulacion del usuario
       const postulacionFound = await Postula.findOne({ postulante: id }).sort({ fecha_recepcion: -1 }).limit(1).exec()
       if (!postulacionFound) return [null, "El usuario no tiene postulacion"];
@@ -31,12 +32,16 @@ async function createApelacion(archivos, id) {
       }
       
       //Verificacion de postulacion previa rechazada
-      if (postulacionFound.estado == "Apelada") return [null, "Ya tienes una apelacion en proceso"];
+      //if (postulacionFound.estado == "Apelada") return [null, "Ya tienes una apelacion en proceso"];
       if (postulacionFound.estado != "Rechazada") return [null, "No tienes una postulacion rechazada"];
+      //Verificacion de que no haya apelecion previa
+      const apelacionFound = await Apela.findOne({ postulacion: postulacionFound._id });
+      if (apelacionFound) return [null, "Ya tienes una apelacion en proceso"];
   
       //Crea la apelacion
       const apelacion = new Apela({
         postulacion: postulacionFound,
+        motivo: motivo,
       });
   
       //Agrega el archivo a la apelacion
@@ -47,9 +52,9 @@ async function createApelacion(archivos, id) {
         });
       });
       await apelacion.save();
-      postulacionFound.estado = "Apelada";
-      postulacionFound.motivos = "Apelacion solicitada";
-      await postulacionFound.save();
+      //postulacionFound.estado = "Apelada";
+      //postulacionFound.motivos = "Apelacion solicitada";
+      //await postulacionFound.save();
   
       return ["Apelacion enviada", null];
     } catch (error) {
@@ -84,6 +89,7 @@ async function getApelaciones() {
     try {
       const apelaciones = await Apela.find()
         .select({
+          motivo: 1,
           fecha_de_apelacion: {
             $dateToString: {
               format: "%d-%m-%Y",
@@ -129,6 +135,7 @@ async function getApelacionById(id) {
         },
       },
       postulacion: 1,
+      motivo: 1,
     })
 
     if (!apelacion) return [null, "La apelacion no existe"];

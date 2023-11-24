@@ -45,6 +45,7 @@ async function getEstado(id) {
         motivos: 1,
         beca: 1,
         documentosPDF: 1,
+        documentosFaltantes: 1,
       })
       .populate({
         path: "beca",
@@ -65,6 +66,7 @@ async function getEstado(id) {
         },
         documentosPDF: 1,
         estado: 1,
+        motivos: 1,
       })
       .exec();
     //if (!apelacion) return [postulacion, null];

@@ -19,7 +19,8 @@ const { userIdSchema } = require("../schema/user.schema");
           contenido: archivo.buffer,
         });
       }
-      const [newApelacion, apelacionError] = await ApelacionService.createApelacion(archivos, req._id);
+      const motivo = req.body.motivo;
+      const [newApelacion, apelacionError] = await ApelacionService.createApelacion(motivo, archivos, req._id);
   
       if (apelacionError) return respondError(req, res, 400, apelacionError);
       if (!newApelacion) {
