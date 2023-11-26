@@ -44,11 +44,11 @@ async function getEstado(id) {
         estado: 1,
         motivos: 1,
         beca: 1,
-        documentosPDF: 1,
+        documentosFaltantes: 1,
       })
       .populate({
         path: "beca",
-        select: "-_id nombre",
+        select: "nombre fecha_fin",
       })
       .exec();
     if (!postulacion) return [null, "No hay postulacion"];
@@ -63,13 +63,29 @@ async function getEstado(id) {
             date: "$fecha_apelacion",
           },
         },
-        documentosPDF: 1,
+        estado: 1,
+        motivos: 1,
       })
       .exec();
     //if (!apelacion) return [postulacion, null];
+    //Creacion de fecha fin de apelacion
+    const fechaInicioApelacion = new Date(postulacion.beca.fecha_fin).toLocaleDateString('es-ES', {
+      day: '2-digit', 
+      month: '2-digit', 
+      year: 'numeric'
+    });
+    const fechaFinApelacion = new Date(postulacion.beca.fecha_fin);
+    fechaFinApelacion.setDate(fechaFinApelacion.getDate() + 14);
+    const fechaFinFormateada = fechaFinApelacion.toLocaleDateString('es-ES', {
+      day: '2-digit', 
+      month: '2-digit', 
+      year: 'numeric'
+    });
     const estado = {
       postulacion: postulacion,
-      apelacion: apelacion ? apelacion : "No hay apelacion relacionada",
+      apelacion: apelacion,
+      fecha_inicio_apelacion: fechaInicioApelacion,
+      fecha_fin_apelacion: fechaFinFormateada,
     };
     return [estado, null];
   } catch (error) {
@@ -191,10 +207,40 @@ async function getPostulacionById(id) {
   }
 }
 
+/**
+ * Actualiza los motivos y documentos faltantes de la postulacion
+ * @param {Object} id Id de postulacion
+ * @param {Object} body Motivos y documentos faltantes de la postulacion
+ * @returns {Promise} Promesa con el objeto de usuario creado
+ */
+async function actualizarMotivos(id, body) {
+  try {
+    const postulacionFound = await Postula.findById(id);
+    if (!postulacionFound) return [null, "La postulacion no existe"];
+
+    let updateObject = { $set: { motivos: body.motivos } };
+
+    if (body.documentosFaltantes) {
+      updateObject.$push = { documentosFaltantes: { $each: body.documentosFaltantes } };
+    }
+
+    const postulacionUpdated = await Postula.findByIdAndUpdate(
+      id,
+      updateObject,
+      { new: true },
+    );
+
+    return [postulacionUpdated, null];
+  } catch (error) {
+    handleError(error, "postulacion.service -> actualizarMotivos");
+  }
+}
+
 module.exports = {
   getBecasPostulacion,
   createPostulacion,
   getEstado,
   getPostulaciones,
   getPostulacionById,
+  actualizarMotivos,
 };

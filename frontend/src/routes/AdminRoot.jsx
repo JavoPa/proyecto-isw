@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../services/auth.service';
 import { AuthProvider, useAuth } from '../context/AuthContext';
-import NavBar from './NavBar';
+import AdminNavBar from './AdminNavBar';
 
 function Root() {
   return (
@@ -24,7 +24,7 @@ function PageRoot() {
 
   return (
     <div>
-      <NavBar />
+      <AdminNavBar />
       <div className="user-info">
         <p>Estas logeado como: {user.email}</p>
         <button onClick={handleLogout}>Cerrar sesion</button>

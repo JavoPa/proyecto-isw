@@ -17,3 +17,242 @@
 a {
   text-decoration: inherit;
 }
+
+/* Estilo global de los botones */
+button {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #1565C0;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+button:hover {
+  background-color: #0D47A1;
+}
+
+/*Lista de apelaciones*/
+.lista-apelaciones {
+  list-style-type: none;
+  padding: 0;
+}
+
+.item-apelacion {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #CCCCCC;
+  border-radius: 5px;
+  color: #333333;
+  cursor: pointer; /* Cambia el cursor a una mano cuando se pasa por encima */
+  transition: background-color 0.3s ease; /* Añade una transición al cambiar el color de fondo */
+}
+
+.item-apelacion:hover {
+  background-color: #AAAAAA; /* Cambia el color de fondo cuando se pasa por encima */
+}
+/*Estado de postulacion*/
+.estado-container {
+  width: 60%;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #CCCCCC;
+  border-radius: 5px;
+  color: #333333;
+}
+
+.estado-details {
+  margin-top: 20px;
+}
+
+.estado-details p {
+  margin-bottom: 10px;
+}
+
+.estado-apelacion {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #2E7D32;
+  color: #CCCCCC
+}
+/*Barra de navegacion*/
+.navbar {
+  background-color: #333;
+  padding: 10px 0;
+}
+
+.navbar-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+.navbar-item {
+  color: #fff;
+}
+
+.navbar-link {
+  color: #fff;
+  text-decoration: none;
+}
+
+.navbar-link:hover {
+  color: #ddd;
+}
+/* Informacion de usuario */
+.user-info {
+  position: absolute;
+  top: 60px;
+  right: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #2E7D32;
+  color: #FFFFFF
+}
+/* Banner de exito */
+.success-banner {
+  width: 20%;
+  background-color: #dff0d8;
+  color: #3c763d;
+  padding: 10px;
+  margin: 20px auto;
+  border: 1px solid #d6e9c6;
+  border-radius: 4px;
+  text-align: center;
+}
+/* Banner de error */
+.error-banner {
+  width: 40%;
+  background-color: #f2dede;
+  color: #a94442;
+  padding: 10px;
+  margin: 20px auto;
+  border: 1px solid #ebccd1;
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* Estilo de los forms */
+form {
+  display: flex;
+  flex-direction: column; /* Apilamos los elementos verticalmente */
+  gap: 20px; /* Espacio entre los elementos */
+  width: 60%;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #CCCCCC;
+  border-radius: 5px; /* Bordes redondeados */
+  color: #333333;
+}
+
+/* Estilo del input */
+form input[type="file"] {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+/* Estilo del botón de envío */
+form input[type="submit"] {
+  background-color: #2E7D32;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Estilo del botón de envío al pasar el mouse */
+form input[type="submit"]:hover {
+  background-color: #1b5e20;
+}
+
+/* Estilo del mensaje de campo obligatorio formulario */
+.campo-obligatorio {
+  color: red;
+}
+
+/* Estilo para el label de subida de documentos */
+.label-file {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #1565C0;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.label-file:hover {
+  background-color: #0D47A1;
+}
+
+.input-file {
+  margin-left: 10px;
+}
+
+/* Ventana flotante para la apelacion */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-height: 80vh; /* 90% de la altura de la ventana */
+  overflow-y: auto; /* permite el desplazamiento si el contenido es demasiado grande */
+  max-width: 60vh;
+  padding: 20px;
+  background-color: #2E7D32; /* Color de fondo de la lista de apelaciones */
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  color: #ffffff; /* Color de texto de los items de la lista de apelaciones */
+}
+
+/* Estilo de los botones centrados */
+.boton-centrado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #1565C0;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  margin: 20px auto;
+}
+.boton-centrado:hover {
+  background-color: #0D47A1;
+}
+
+.modal button {
+  margin: 10px;
+}
+
+.filtro-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filtro-container select, .filtro-container input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.filtro-container input {
+  flex-grow: 1;
+}

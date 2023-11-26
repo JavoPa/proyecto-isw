@@ -3,15 +3,18 @@ const { handleError } = require("../utils/errorHandler");
 const Postula = require("../models/postula.model.js");
 const Apela = require("../models/apela.model.js");
 const Beca = require("../models/beca.model.js");
+const User = require("../models/user.model.js");
 
 /**
  * Crea una apelacion modificando el estado de postula y subiendo los documentos a la tabla apela
+ * @param {Object} motivo Motivo de apelacion
  * @param {Object} archivos Archivos requeridos para la beca
  * @param {Object} id id del usuario
  * @returns {Promise} Promesa con el objeto de usuario creado
  */
-async function createApelacion(archivos, id) {
+async function createApelacion(motivo, archivos, id) {
     try {
+      if(!motivo) return [null, "No se ingreso el motivo de la apelacion"];
       //Buscar ultima postulacion del usuario
       const postulacionFound = await Postula.findOne({ postulante: id }).sort({ fecha_recepcion: -1 }).limit(1).exec()
       if (!postulacionFound) return [null, "El usuario no tiene postulacion"];
@@ -30,12 +33,16 @@ async function createApelacion(archivos, id) {
       }
       
       //Verificacion de postulacion previa rechazada
-      if (postulacionFound.estado == "Apelada") return [null, "El usuario ya tiene una apelacion en proceso"];
-      if (postulacionFound.estado != "Rechazada") return [null, "El usuario no presenta una postulacion rechazada"];
+      //if (postulacionFound.estado == "Apelada") return [null, "Ya tienes una apelacion en proceso"];
+      if (postulacionFound.estado != "Rechazada") return [null, "No tienes una postulacion rechazada"];
+      //Verificacion de que no haya apelecion previa
+      const apelacionFound = await Apela.findOne({ postulacion: postulacionFound._id });
+      if (apelacionFound) return [null, "Ya tienes una apelacion en proceso"];
   
       //Crea la apelacion
       const apelacion = new Apela({
         postulacion: postulacionFound,
+        motivo: motivo,
       });
   
       //Agrega el archivo a la apelacion
@@ -46,9 +53,9 @@ async function createApelacion(archivos, id) {
         });
       });
       await apelacion.save();
-      postulacionFound.estado = "Apelada";
-      postulacionFound.motivos = "Apelacion solicitada";
-      await postulacionFound.save();
+      //postulacionFound.estado = "Apelada";
+      //postulacionFound.motivos = "Apelacion solicitada";
+      //await postulacionFound.save();
   
       return ["Apelacion enviada", null];
     } catch (error) {
@@ -56,22 +63,33 @@ async function createApelacion(archivos, id) {
     }
   }
 
-  async function updateDocumentosFaltantes(id, body) {
+/**
+ * Actualiza el estado de una apelacion
+ * @param {Object} id Id de postulacion
+ * @param {Object} body Motivos y documentos faltantes de la postulacion
+ * @returns {Promise} Promesa con el objeto de usuario creado
+ */
+  async function actualizarEstado(id, body) {
     try {
-      const postulacionFound = await Postula.findById(id);
-      if (!postulacionFound) return [null, "La postulacion no existe"];
+      const apelacionFound = await Apela.findById(id);
+      if (!apelacionFound) return [null, "La postulacion no existe"];
+
+      let updateObject = { 
+        $set: { 
+          motivos: body.motivos,
+          estado: body.estado 
+        } 
+      };
   
-      const postulacionUpdated = await Postula.findByIdAndUpdate(
+      const apelacionUpdated = await Apela.findByIdAndUpdate(
         id,
-        {
-          $push: { documentosFaltantes: { $each: body.documentosFaltantes } }
-        },
+        updateObject,
         { new: true },
       );
   
-      return [postulacionUpdated, null];
+      return [apelacionUpdated, null];
     } catch (error) {
-      handleError(error, "apela.service -> updateDocumentosFaltantes");
+      handleError(error, "apela.service -> actualizarEstado");
     }
   }
   
@@ -82,11 +100,31 @@ async function createApelacion(archivos, id) {
 async function getApelaciones() {
     try {
       const apelaciones = await Apela.find()
-        .select("-documentosPDF")
-        .populate({
-          path: "postulacion"
-        });
-  
+        .select({
+          motivo: 1,
+          estado: 1,
+          fecha_de_apelacion: {
+            $dateToString: {
+              format: "%d-%m-%Y",
+              date: "$fecha_apelacion",
+            },
+          },
+        })
+        .populate({ 
+          path: "postulacion", 
+          select: 'estado motivos',
+          populate: [
+            { 
+              path: "postulante",
+              select: 'nombres apellidos'
+            },
+            { 
+              path: "beca",
+              select: 'nombre'
+            },
+          ]
+        })
+
       if (!apelaciones) return [null, "No hay apelaciones"];
   
       return [apelaciones, null];
@@ -102,13 +140,55 @@ async function getApelaciones() {
 async function getApelacionById(id) {
   try {
     const apelacion = await Apela.findById({_id: id})
-      .populate({
-        path: "postulacion",
-      });
+    .select({
+      fecha_de_apelacion: {
+        $dateToString: {
+          format: "%d-%m-%Y",
+          date: "$fecha_apelacion",
+        },
+      },
+      postulacion: 1,
+      motivo: 1,
+      estado: 1,
+      motivos: 1,
+    })
 
     if (!apelacion) return [null, "La apelacion no existe"];
+    if (!apelacion.postulacion) return [null, "La apelacion no tiene una postulacion asociada"];
 
-    return [apelacion, null];
+    const postulacion = await Postula.findById({_id: apelacion.postulacion})
+    .select({
+      fecha_de_recepcion: {
+        $dateToString: {
+          format: "%d-%m-%Y",
+          date: "$fecha_recepcion",
+        },
+      },
+      estado: 1,
+      motivos: 1,
+      postulante: 1,
+      beca: 1,
+    })
+    if (!postulacion.beca) return [null, "La postulacion no tiene beca asociada"];
+    const beca = await Beca.findById({_id: postulacion.beca})
+    .select({
+      nombre: 1,
+      documentos: 1,
+    })
+    const postulante = await User.findById({_id: postulacion.postulante})
+    .select({
+      nombres: 1,
+      apellidos: 1,
+      email: 1,
+      rut: 1,
+    })
+    const result = {
+      apelacion,
+      postulacion,
+      beca,
+      postulante
+    };
+    return [result, null];
   } catch (error) {
     handleError(error, "apela.service -> getApelacionById");
   }
@@ -116,7 +196,7 @@ async function getApelacionById(id) {
 
   module.exports = {
     createApelacion,
-    updateDocumentosFaltantes,
+    actualizarEstado,
     getApelaciones,
     getApelacionById
   };
