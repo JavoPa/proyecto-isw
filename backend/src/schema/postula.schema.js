@@ -31,14 +31,18 @@ const postulaPuntajeSchema = Joi.object({
       }),
   });
 
-  const postulaDocumentosFaltantes = Joi.object({
+  const actualizarMotivo = Joi.object({
     documentosFaltantes: Joi.array().items(Joi.string().required().messages({
         "string.empty": "El nombre del documento no puede estar vacio.",
         "any.required": "El nombre del documento es obligatorio.",
         "string.base": "El nombre del documento debe ser de tipo string.",
-    })).required().messages({
+    })).messages({
         "array.base": "Los documentos deben ser de tipo array.",
-        "any.required": "El documento es obligatorio.",
+    }),
+    motivos: Joi.string().required().messages({
+        "string.empty": "El motivo no puede estar vacío.",
+        "any.required": "El motivo es obligatorio.",
+        "string.base": "El motivo debe ser de tipo string.",
     }),
 });
 
@@ -87,4 +91,4 @@ const postulacionSchema = Joi.object({
 });
 
 
-module.exports = { postulacionSchema, postulaPuntajeSchema, postulaEstadoSchema, postulaDocumentosFaltantes };
+module.exports = { postulacionSchema, postulaPuntajeSchema, postulaEstadoSchema, actualizarMotivo };

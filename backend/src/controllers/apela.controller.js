@@ -2,7 +2,7 @@
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const { handleError } = require("../utils/errorHandler");
 const ApelacionService = require("../services/apela.service");
-const { postulaDocumentosFaltantes } = require("../schema/postula.schema");
+const { actualizarMotivo } = require("../schema/postula.schema");
 const { userIdSchema } = require("../schema/user.schema");
 
  /**
@@ -29,7 +29,7 @@ const { userIdSchema } = require("../schema/user.schema");
   
       respondSuccess(req, res, 201, newApelacion);
     } catch (error) {
-      handleError(error, "user.controller -> createApelacion");
+      handleError(error, "apela.controller -> createApelacion");
       respondError(req, res, 500, "No se creo la apelacion");
     }
   }
@@ -39,19 +39,19 @@ const { userIdSchema } = require("../schema/user.schema");
  * @param {Object} req - Objeto de petición
  * @param {Object} res - Objeto de respuesta
  */
-  async function updateDocumentosFaltantes(req, res) {
+  async function actualizarMotivos(req, res) {
     try {
       const { params, body } = req;
-      const { error: bodyError } = postulaDocumentosFaltantes.validate(body);
+      const { error: bodyError } = actualizarMotivo.validate(body);
       if (bodyError) return respondError(req, res, 400, bodyError.message);
   
-      const [postulacion, postulaError] = await ApelacionService.updateDocumentosFaltantes(params.id, body);
+      const [postulacion, postulaError] = await ApelacionService.actualizarMotivos(params.id, body);
       if (postulaError) return respondError(req, res, 400, postulaError);
       
   
       respondSuccess(req, res, 200, postulacion);
     } catch (error) {
-      handleError(error, "user.controller -> updateDocumentosFaltantes");
+      handleError(error, "apela.controller -> actualizarMotivos");
       respondError(req, res, 500, "No se pudo actualizar el estado de documentos faltantes");
     }
   }
@@ -99,7 +99,7 @@ async function getApelacionById(req, res) {
 
   module.exports = {
     createApelacion,
-    updateDocumentosFaltantes,
+    actualizarMotivos,
     getApelaciones,
     getApelacionById
 };

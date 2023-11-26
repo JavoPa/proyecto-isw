@@ -62,22 +62,26 @@ async function createApelacion(motivo, archivos, id) {
     }
   }
 
-  async function updateDocumentosFaltantes(id, body) {
+  async function actualizarMotivos(id, body) {
     try {
       const postulacionFound = await Postula.findById(id);
       if (!postulacionFound) return [null, "La postulacion no existe"];
+
+      let updateObject = { $set: { motivos: body.motivos } };
+
+      if (body.documentosFaltantes) {
+        updateObject.$push = { documentosFaltantes: { $each: body.documentosFaltantes } };
+      }
   
       const postulacionUpdated = await Postula.findByIdAndUpdate(
         id,
-        {
-          $push: { documentosFaltantes: { $each: body.documentosFaltantes } }
-        },
+        updateObject,
         { new: true },
       );
   
       return [postulacionUpdated, null];
     } catch (error) {
-      handleError(error, "apela.service -> updateDocumentosFaltantes");
+      handleError(error, "apela.service -> actualizarMotivos");
     }
   }
   
@@ -181,7 +185,7 @@ async function getApelacionById(id) {
 
   module.exports = {
     createApelacion,
-    updateDocumentosFaltantes,
+    actualizarMotivos,
     getApelaciones,
     getApelacionById
   };

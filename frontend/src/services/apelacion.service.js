@@ -24,18 +24,6 @@ export async function getApelacionById(id) {
     }
 }
 
-export async function updateDocumentosFaltantes(id, body) {
-    try {
-      const response = await axios.post(`/users/postulacion/${id}/documentosfaltantes`, body);
-      const { status, data } = response;
-      if (status === 200) {
-        return data;
-      }
-    } catch (error) {
-      return error.response.data
-    }
-}
-
 export async function apelar(motivo, files) {
   try {
     const formData = new FormData();

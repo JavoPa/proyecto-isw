@@ -51,7 +51,7 @@ router.get("/informe", authorizationMiddleware.isAdmin, usuarioController.getInf
 // Ruta para requerimiento de apelacion por parte del encargado
 router.get("/apelaciones", authorizationMiddleware.isAdmin, apelacionController.getApelaciones); // Obtiene todas las apelaciones
 router.get("/apelacion/:id", authorizationMiddleware.isAdmin, apelacionController.getApelacionById); // Obtiene una apelacion por su id
-router.post("/postulacion/:id/documentosfaltantes", authorizationMiddleware.isAdmin, apelacionController.updateDocumentosFaltantes); // Establece mensaje de documentos faltantes
+router.post("/postulacion/:id/actualizarmotivos", authorizationMiddleware.isAdmin, apelacionController.actualizarMotivos); // Establece motivos y mensaje de documentos faltantes opcional
 
 // Exporta el enrutador
 module.exports = router;

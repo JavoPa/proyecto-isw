@@ -44,12 +44,11 @@ async function getEstado(id) {
         estado: 1,
         motivos: 1,
         beca: 1,
-        documentosPDF: 1,
         documentosFaltantes: 1,
       })
       .populate({
         path: "beca",
-        select: "-_id nombre",
+        select: "nombre fecha_fin",
       })
       .exec();
     if (!postulacion) return [null, "No hay postulacion"];
@@ -64,15 +63,29 @@ async function getEstado(id) {
             date: "$fecha_apelacion",
           },
         },
-        documentosPDF: 1,
         estado: 1,
         motivos: 1,
       })
       .exec();
     //if (!apelacion) return [postulacion, null];
+    //Creacion de fecha fin de apelacion
+    const fechaInicioApelacion = new Date(postulacion.beca.fecha_fin).toLocaleDateString('es-ES', {
+      day: '2-digit', 
+      month: '2-digit', 
+      year: 'numeric'
+    });
+    const fechaFinApelacion = new Date(postulacion.beca.fecha_fin);
+    fechaFinApelacion.setDate(fechaFinApelacion.getDate() + 14);
+    const fechaFinFormateada = fechaFinApelacion.toLocaleDateString('es-ES', {
+      day: '2-digit', 
+      month: '2-digit', 
+      year: 'numeric'
+    });
     const estado = {
       postulacion: postulacion,
       apelacion: apelacion,
+      fecha_inicio_apelacion: fechaInicioApelacion,
+      fecha_fin_apelacion: fechaFinFormateada,
     };
     return [estado, null];
   } catch (error) {
