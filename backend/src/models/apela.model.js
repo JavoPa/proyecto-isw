@@ -7,8 +7,8 @@ const apelaSchema = new mongoose.Schema(
   {
     estado: {
       type: String,
-      enum: ["En revisión", "Aceptada", "Rechazada"],
-      default: "En revisión",
+      enum: ["Pendiente", "Aceptada", "Rechazada"],
+      default: "Pendiente",
     },
     fecha_apelacion: {
       type: Date,
@@ -29,7 +29,7 @@ const apelaSchema = new mongoose.Schema(
     },
     motivos: { // Motivos del estado de la apelacion
       type: String,
-      default: "Pendiente de revision",
+      default: "Pendiente de revisión",
     }
   },
   {

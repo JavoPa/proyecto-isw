@@ -239,3 +239,20 @@ form input[type="submit"]:hover {
 .modal button {
   margin: 10px;
 }
+
+.filtro-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filtro-container select, .filtro-container input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.filtro-container input {
+  flex-grow: 1;
+}

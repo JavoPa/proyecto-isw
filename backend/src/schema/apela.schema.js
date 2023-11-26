@@ -4,7 +4,7 @@ const Joi = require("joi");
 
 const actualizaEstado = Joi.object({
     estado: Joi.string()
-      .valid('En revisión', 'Aceptada', 'Rechazada')
+      .valid('Pendiente', 'Aceptada', 'Rechazada')
       .required()
       .messages({
         "string.base": "El estado debe ser de tipo string.",

@@ -10,6 +10,9 @@ function Apelaciones() {
   const [errorEstado, setErrorEstado] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [motivos, setMotivos] = useState('');
+  const [filtroNombre, setFiltro] = useState('');
+  const [filtroApellido, setFiltroApellido] = useState('');
+  const [filtroEstado, setFiltroEstado] = useState('');
 
   useEffect(() => {
     getApelaciones().then((response) => {
@@ -68,15 +71,29 @@ function Apelaciones() {
     <>
       {successMessage && <div className="success-banner">{successMessage}</div>}
       <h1>Lista de apelaciones</h1>
+      <div className="filtro-container">
+        <select value={filtroEstado} onChange={e => setFiltroEstado(e.target.value)}>
+          <option value="">Todas</option>
+          <option value="pendiente">Pendiente</option>
+          <option value="aceptada">Aprobado</option>
+          <option value="rechazada">Rechazado</option>
+        </select>
+        <input type="text" value={filtroNombre} onChange={e => setFiltro(e.target.value)} placeholder="Filtrar por nombres" />
+        <input type="text" value={filtroApellido} onChange={e => setFiltroApellido(e.target.value)} placeholder="Filtrar por apellidos" />
+      </div>
       {apelaciones ? (
-        <ul className="lista-apelaciones">
-          {apelaciones.map((apelacion) => (
-            <li key={apelacion._id} className="item-apelacion" onClick={() => handleClick(apelacion._id)}>
-              {apelacion.postulacion.postulante.nombres} {apelacion.postulacion.postulante.apellidos} - {apelacion.postulacion.beca.nombre} - {apelacion.fecha_de_apelacion} - {apelacion.estado}
-              <button style={{ marginLeft: '10px' }} onClick={() => handleClick(apelacion._id)}>Ver detalles</button>
-            </li>
-          ))}
-        </ul>
+      <ul className="lista-apelaciones">
+      {apelaciones.filter(apelacion => 
+          apelacion.postulacion.postulante.nombres.toLowerCase().includes(filtroNombre.toLowerCase()) &&
+          apelacion.postulacion.postulante.apellidos.toLowerCase().includes(filtroApellido.toLowerCase()) &&
+          (filtroEstado === '' || apelacion.estado.toLowerCase() === filtroEstado.toLowerCase())
+        ).map((apelacion) => (
+          <li key={apelacion._id} className="item-apelacion" onClick={() => handleClick(apelacion._id)}>
+            {apelacion.postulacion.postulante.nombres} {apelacion.postulacion.postulante.apellidos} - {apelacion.postulacion.beca.nombre} - {apelacion.fecha_de_apelacion} - {apelacion.estado}
+            <button style={{ marginLeft: '10px' }} onClick={() => handleClick(apelacion._id)}>Ver detalles</button>
+          </li>
+        ))}
+      </ul>
       ) : (
         <div>{errorApelaciones && <div className="error-banner">{errorApelaciones}</div>}</div>
       )}
