@@ -31,7 +31,7 @@ const postulaPuntajeSchema = Joi.object({
       }),
   });
 
-  const actualizarMotivo = Joi.object({
+  const actualizaMotivo = Joi.object({
     documentosFaltantes: Joi.array().items(Joi.string().required().messages({
         "string.empty": "El nombre del documento no puede estar vacio.",
         "any.required": "El nombre del documento es obligatorio.",
@@ -91,4 +91,4 @@ const postulacionSchema = Joi.object({
 });
 
 
-module.exports = { postulacionSchema, postulaPuntajeSchema, postulaEstadoSchema, actualizarMotivo };
+module.exports = { postulacionSchema, postulaPuntajeSchema, postulaEstadoSchema, actualizaMotivo };

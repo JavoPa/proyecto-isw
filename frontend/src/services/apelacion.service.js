@@ -47,3 +47,15 @@ export async function apelar(motivo, files) {
     return error.response.data;
   }
 }
+
+export async function actualizarEstado(id, body) {
+  try {
+    const response = await axios.post(`/users/apelacion/${id}/actualizarestado`, body);
+    const { status, data } = response;
+    if (status === 200) {
+      return data;
+    }
+  } catch (error) {
+    return error.response.data
+  }
+}

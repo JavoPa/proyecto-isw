@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getApelaciones, getApelacionById } from "../services/apelacion.service";
+import { getApelaciones, getApelacionById, actualizarEstado } from "../services/apelacion.service";
 
 function Apelaciones() {
   const [apelaciones, setApelaciones] = useState([]);
@@ -7,6 +7,9 @@ function Apelaciones() {
   const [selectedApelacion, setSelectedApelacion] = useState(null);
   const [errorApelaciones, setErrorApelaciones] = useState(null);
   const [errorApelacion, setErrorApelacion] = useState(null);
+  const [errorEstado, setErrorEstado] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [motivos, setMotivos] = useState('');
 
   useEffect(() => {
     getApelaciones().then((response) => {
@@ -28,15 +31,49 @@ function Apelaciones() {
       }
     });
   }
+  
+  const handleEstadoAprobar = (id, motivos) => {
+    if(!motivos){ motivos = "Apelacion aprobada" }
+    actualizarEstado(id, {estado: "Aceptada", motivos:motivos}).then((response) => {
+      if(response.state === "Success"){
+        setShowModal(false);
+        setSelectedApelacion(null);
+        setErrorEstado(null);
+        setSuccessMessage('Apelación aprobada correctamente');
+        setTimeout(() => {
+          setSuccessMessage(null);
+        }, 5000);
+      }else{
+        setErrorEstado(response.message);
+      }
+    });
+  }
+  const handleEstadoRechazar = (id, motivos) => {
+    actualizarEstado(id, {estado: "Rechazada", motivos: motivos}).then((response) => {
+      if(response.state === "Success"){
+        setShowModal(false);
+        setSelectedApelacion(null);
+        setErrorEstado(null);
+        setSuccessMessage('Apelación rechazada correctamente');
+        setTimeout(() => {
+          setSuccessMessage(null);
+        }, 5000);
+      }else{
+        setErrorEstado(response.message);
+      }
+    });
+  }
 
   return (
     <>
+      {successMessage && <div className="success-banner">{successMessage}</div>}
       <h1>Lista de apelaciones</h1>
       {apelaciones ? (
         <ul className="lista-apelaciones">
           {apelaciones.map((apelacion) => (
             <li key={apelacion._id} className="item-apelacion" onClick={() => handleClick(apelacion._id)}>
-              {apelacion.postulacion.postulante.nombres} {apelacion.postulacion.postulante.apellidos} - {apelacion.postulacion.beca.nombre} - {apelacion.fecha_de_apelacion}
+              {apelacion.postulacion.postulante.nombres} {apelacion.postulacion.postulante.apellidos} - {apelacion.postulacion.beca.nombre} - {apelacion.fecha_de_apelacion} - {apelacion.estado}
+              <button style={{ marginLeft: '10px' }} onClick={() => handleClick(apelacion._id)}>Ver detalles</button>
             </li>
           ))}
         </ul>
@@ -57,8 +94,20 @@ function Apelaciones() {
           <p>Estado: {selectedApelacion.postulacion.estado}</p>
           <p>Motivos: {selectedApelacion.postulacion.motivos}</p>
           <h2>Apelación:</h2>
+          <p>Estado: {selectedApelacion.apelacion.estado}</p>
+          <p>Motivos de estado: {selectedApelacion.apelacion.motivos}</p>
           <p>Motivo de apelación: {selectedApelacion.apelacion.motivo}</p>
           <p>Fecha de apelación: {selectedApelacion.apelacion.fecha_de_apelacion}</p>
+          <label htmlFor="motivos">Motivos:</label>
+          <input
+            id="motivos"
+            type="text"
+            value={motivos}
+            onChange={event => setMotivos(event.target.value)}
+          />
+          <button onClick={() => handleEstadoAprobar(selectedApelacion.apelacion._id, motivos)}>Aprobar</button>
+          <button onClick={() => handleEstadoRechazar(selectedApelacion.apelacion._id, motivos)}>Rechazar</button>
+          <div>{errorEstado && <div className="error-banner">{errorEstado}</div>}</div>
           <button onClick={() => setShowModal(false)}>Cerrar</button>
         </div>
       )}

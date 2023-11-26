@@ -207,10 +207,40 @@ async function getPostulacionById(id) {
   }
 }
 
+/**
+ * Actualiza los motivos y documentos faltantes de la postulacion
+ * @param {Object} id Id de postulacion
+ * @param {Object} body Motivos y documentos faltantes de la postulacion
+ * @returns {Promise} Promesa con el objeto de usuario creado
+ */
+async function actualizarMotivos(id, body) {
+  try {
+    const postulacionFound = await Postula.findById(id);
+    if (!postulacionFound) return [null, "La postulacion no existe"];
+
+    let updateObject = { $set: { motivos: body.motivos } };
+
+    if (body.documentosFaltantes) {
+      updateObject.$push = { documentosFaltantes: { $each: body.documentosFaltantes } };
+    }
+
+    const postulacionUpdated = await Postula.findByIdAndUpdate(
+      id,
+      updateObject,
+      { new: true },
+    );
+
+    return [postulacionUpdated, null];
+  } catch (error) {
+    handleError(error, "postulacion.service -> actualizarMotivos");
+  }
+}
+
 module.exports = {
   getBecasPostulacion,
   createPostulacion,
   getEstado,
   getPostulaciones,
   getPostulacionById,
+  actualizarMotivos,
 };

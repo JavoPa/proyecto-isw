@@ -2,7 +2,7 @@
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const { handleError } = require("../utils/errorHandler");
 const ApelacionService = require("../services/apela.service");
-const { actualizarMotivo } = require("../schema/postula.schema");
+const { actualizaEstado } = require("../schema/apela.schema");
 const { userIdSchema } = require("../schema/user.schema");
 
  /**
@@ -35,24 +35,24 @@ const { userIdSchema } = require("../schema/user.schema");
   }
 
 /**
- * Define los documentos faltantes en la postulacion rechazada
+ * Actualiza el estado de una apelacion
  * @param {Object} req - Objeto de petición
  * @param {Object} res - Objeto de respuesta
  */
-  async function actualizarMotivos(req, res) {
+  async function actualizarEstado(req, res) {
     try {
       const { params, body } = req;
-      const { error: bodyError } = actualizarMotivo.validate(body);
+      const { error: bodyError } = actualizaEstado.validate(body);
       if (bodyError) return respondError(req, res, 400, bodyError.message);
   
-      const [postulacion, postulaError] = await ApelacionService.actualizarMotivos(params.id, body);
+      const [postulacion, postulaError] = await ApelacionService.actualizarEstado(params.id, body);
       if (postulaError) return respondError(req, res, 400, postulaError);
       
   
       respondSuccess(req, res, 200, postulacion);
     } catch (error) {
-      handleError(error, "apela.controller -> actualizarMotivos");
-      respondError(req, res, 500, "No se pudo actualizar el estado de documentos faltantes");
+      handleError(error, "apela.controller -> actualizarEstado");
+      respondError(req, res, 500, "No se pudo actualizar el estado de la apelación");
     }
   }
   
@@ -99,7 +99,7 @@ async function getApelacionById(req, res) {
 
   module.exports = {
     createApelacion,
-    actualizarMotivos,
+    actualizarEstado,
     getApelaciones,
     getApelacionById
 };

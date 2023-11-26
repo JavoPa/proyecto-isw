@@ -206,11 +206,12 @@ form input[type="submit"]:hover {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 80%;
-  max-width: 500px;
+  max-height: 80vh; /* 90% de la altura de la ventana */
+  overflow-y: auto; /* permite el desplazamiento si el contenido es demasiado grande */
+  max-width: 60vh;
   padding: 20px;
   background-color: #2E7D32; /* Color de fondo de la lista de apelaciones */
-  border: 1px solid #333333;
-  border-radius: 4px;
+  border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   color: #ffffff; /* Color de texto de los items de la lista de apelaciones */
@@ -233,4 +234,8 @@ form input[type="submit"]:hover {
 }
 .boton-centrado:hover {
   background-color: #0D47A1;
+}
+
+.modal button {
+  margin: 10px;
 }

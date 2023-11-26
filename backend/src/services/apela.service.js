@@ -7,6 +7,7 @@ const User = require("../models/user.model.js");
 
 /**
  * Crea una apelacion modificando el estado de postula y subiendo los documentos a la tabla apela
+ * @param {Object} motivo Motivo de apelacion
  * @param {Object} archivos Archivos requeridos para la beca
  * @param {Object} id id del usuario
  * @returns {Promise} Promesa con el objeto de usuario creado
@@ -62,26 +63,33 @@ async function createApelacion(motivo, archivos, id) {
     }
   }
 
-  async function actualizarMotivos(id, body) {
+/**
+ * Actualiza el estado de una apelacion
+ * @param {Object} id Id de postulacion
+ * @param {Object} body Motivos y documentos faltantes de la postulacion
+ * @returns {Promise} Promesa con el objeto de usuario creado
+ */
+  async function actualizarEstado(id, body) {
     try {
-      const postulacionFound = await Postula.findById(id);
-      if (!postulacionFound) return [null, "La postulacion no existe"];
+      const apelacionFound = await Apela.findById(id);
+      if (!apelacionFound) return [null, "La postulacion no existe"];
 
-      let updateObject = { $set: { motivos: body.motivos } };
-
-      if (body.documentosFaltantes) {
-        updateObject.$push = { documentosFaltantes: { $each: body.documentosFaltantes } };
-      }
+      let updateObject = { 
+        $set: { 
+          motivos: body.motivos,
+          estado: body.estado 
+        } 
+      };
   
-      const postulacionUpdated = await Postula.findByIdAndUpdate(
+      const apelacionUpdated = await Apela.findByIdAndUpdate(
         id,
         updateObject,
         { new: true },
       );
   
-      return [postulacionUpdated, null];
+      return [apelacionUpdated, null];
     } catch (error) {
-      handleError(error, "apela.service -> actualizarMotivos");
+      handleError(error, "apela.service -> actualizarEstado");
     }
   }
   
@@ -94,6 +102,7 @@ async function getApelaciones() {
       const apelaciones = await Apela.find()
         .select({
           motivo: 1,
+          estado: 1,
           fecha_de_apelacion: {
             $dateToString: {
               format: "%d-%m-%Y",
@@ -140,6 +149,8 @@ async function getApelacionById(id) {
       },
       postulacion: 1,
       motivo: 1,
+      estado: 1,
+      motivos: 1,
     })
 
     if (!apelacion) return [null, "La apelacion no existe"];
@@ -185,7 +196,7 @@ async function getApelacionById(id) {
 
   module.exports = {
     createApelacion,
-    actualizarMotivos,
+    actualizarEstado,
     getApelaciones,
     getApelacionById
   };

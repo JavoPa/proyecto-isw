@@ -2,6 +2,7 @@
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const { handleError } = require("../utils/errorHandler");
 const PostulacionService = require("../services/postulacion.service");
+const { actualizaMotivo } = require("../schema/postula.schema");
 
 /**
  * Obtiene las becas y sus requisitos
@@ -74,9 +75,32 @@ async function getEstado(req, res) {
     }
   }
   
+/**
+ * Actualiza los motivos y documentos faltantes de la postulacion
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
+async function actualizarMotivos(req, res) {
+  try {
+    const { params, body } = req;
+    const { error: bodyError } = actualizaMotivo.validate(body);
+    if (bodyError) return respondError(req, res, 400, bodyError.message);
+
+    const [postulacion, postulaError] = await PostulacionService.actualizarMotivos(params.id, body);
+    if (postulaError) return respondError(req, res, 400, postulaError);
+    
+
+    respondSuccess(req, res, 200, postulacion);
+  } catch (error) {
+    handleError(error, "postulacion.controller -> actualizarMotivos");
+    respondError(req, res, 500, "No se pudo actualizar los motivos de la postulación");
+  }
+}
+  
 
 module.exports = {
     getBecasPostulacion,
     createPostulacion,
     getEstado,
+    actualizarMotivos,
 };
