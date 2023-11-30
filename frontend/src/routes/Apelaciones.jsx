@@ -141,8 +141,19 @@ function Apelaciones() {
                   if (!selectedApelacion.apelacion.documentosPDF[index]) {
                     return <p key={index}>- {documento} - No se ha recibido archivo</p>;;
                   }
-                  const pdfBuffer = new Uint8Array(selectedApelacion.apelacion.documentosPDF[index].contenido.data).buffer;
-                  const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
+                  const fileBuffer = new Uint8Array(selectedApelacion.apelacion.documentosPDF[index].contenido.data).buffer;
+                  const fileName = selectedApelacion.apelacion.documentosPDF[index].nombre;
+                  const fileExtension = fileName.split('.').pop().toLowerCase();
+                  let blob;
+                
+                  if (fileExtension === 'pdf') {
+                    blob = new Blob([fileBuffer], { type: 'application/pdf' });
+                  } else if (['jpg', 'jpeg', 'png'].includes(fileExtension)) {
+                    blob = new Blob([fileBuffer], { type: 'image/' + fileExtension });
+                  } else {
+                    return <p key={index}>- {documento} - *Formato de archivo no soportado</p>;
+                  }
+                
                   const url = URL.createObjectURL(blob);
 
                   return (
