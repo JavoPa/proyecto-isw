@@ -14,14 +14,18 @@ function Apelaciones() {
   const [filtroApellido, setFiltroApellido] = useState('');
   const [filtroEstado, setFiltroEstado] = useState('');
 
-  useEffect(() => {
+  const fetchApelaciones = () => {
     getApelaciones().then((response) => {
-      if (response.state === "Success"){
+      if(response.state === "Success"){
         setApelaciones(response.data);
       }else{
         setErrorApelaciones(response.message);
       }
-    })
+    });
+  };
+  
+  useEffect(() => {
+    fetchApelaciones();
   }, []);
   
   const handleClick = (id) => {
@@ -43,6 +47,7 @@ function Apelaciones() {
         setSelectedApelacion(null);
         setErrorEstado(null);
         setSuccessMessage('Apelación aprobada correctamente');
+        fetchApelaciones();
         setTimeout(() => {
           setSuccessMessage(null);
         }, 5000);
@@ -58,6 +63,7 @@ function Apelaciones() {
         setSelectedApelacion(null);
         setErrorEstado(null);
         setSuccessMessage('Apelación rechazada correctamente');
+        fetchApelaciones();
         setTimeout(() => {
           setSuccessMessage(null);
         }, 5000);
@@ -82,50 +88,91 @@ function Apelaciones() {
         <input type="text" value={filtroApellido} onChange={e => setFiltroApellido(e.target.value)} placeholder="Filtrar por apellidos" />
       </div>
       {apelaciones ? (
-      <ul className="lista-apelaciones">
-      {apelaciones.filter(apelacion => 
-          apelacion.postulacion.postulante.nombres.toLowerCase().includes(filtroNombre.toLowerCase()) &&
-          apelacion.postulacion.postulante.apellidos.toLowerCase().includes(filtroApellido.toLowerCase()) &&
-          (filtroEstado === '' || apelacion.estado.toLowerCase() === filtroEstado.toLowerCase())
-        ).map((apelacion) => (
-          <li key={apelacion._id} className="item-apelacion" onClick={() => handleClick(apelacion._id)}>
-            {apelacion.postulacion.postulante.nombres} {apelacion.postulacion.postulante.apellidos} - {apelacion.postulacion.beca.nombre} - {apelacion.fecha_de_apelacion} - {apelacion.estado}
-            <button style={{ marginLeft: '10px' }} onClick={() => handleClick(apelacion._id)}>Ver detalles</button>
-          </li>
-        ))}
-      </ul>
+        <table className="lista-apelaciones">
+          <thead>
+            <tr>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Beca</th>
+              <th>Fecha de Apelación</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {apelaciones.filter(apelacion => 
+              apelacion.postulacion.postulante.nombres.toLowerCase().includes(filtroNombre.toLowerCase()) &&
+              apelacion.postulacion.postulante.apellidos.toLowerCase().includes(filtroApellido.toLowerCase()) &&
+              (filtroEstado === '' || apelacion.estado.toLowerCase() === filtroEstado.toLowerCase())
+            ).map((apelacion) => (
+              <tr key={apelacion._id} className="item-apelacion" onClick={() => handleClick(apelacion._id)}>
+                <td>{apelacion.postulacion.postulante.nombres}</td>
+                <td>{apelacion.postulacion.postulante.apellidos}</td>
+                <td>{apelacion.postulacion.beca.nombre}</td>
+                <td>{apelacion.fecha_de_apelacion}</td>
+                <td>{apelacion.estado}</td>
+                <td>
+                  <button style={{ marginLeft: '10px' }} onClick={() => handleClick(apelacion._id)}>Ver detalles</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       ) : (
         <div>{errorApelaciones && <div className="error-banner">{errorApelaciones}</div>}</div>
       )}
       {showModal && selectedApelacion && (
-        <div className="modal">
-          {/* Muestra la información de la apelación seleccionada */}
-          <h2>Postulante:</h2>
-          <p>Nombres: {selectedApelacion.postulante.nombres} {selectedApelacion.postulante.apellidos}</p>
-          <p>Rut: {selectedApelacion.postulante.rut}</p>
-          <p>Correo: {selectedApelacion.postulante.email}</p>
-          <h2>Beca:</h2>
-          <p>Nombre: {selectedApelacion.beca.nombre}</p>
-          <p>Documentos:</p> {selectedApelacion.beca.documentos.map((documento, index) => (<p key={index}>- {documento}</p>))}
-          <h2>Postulación:</h2>
-          <p>Estado: {selectedApelacion.postulacion.estado}</p>
-          <p>Motivos: {selectedApelacion.postulacion.motivos}</p>
-          <h2>Apelación:</h2>
-          <p>Estado: {selectedApelacion.apelacion.estado}</p>
-          <p>Motivos de estado: {selectedApelacion.apelacion.motivos}</p>
-          <p>Motivo de apelación: {selectedApelacion.apelacion.motivo}</p>
-          <p>Fecha de apelación: {selectedApelacion.apelacion.fecha_de_apelacion}</p>
-          <label htmlFor="motivos">Motivos:</label>
-          <input
-            id="motivos"
-            type="text"
-            value={motivos}
-            onChange={event => setMotivos(event.target.value)}
-          />
-          <button onClick={() => handleEstadoAprobar(selectedApelacion.apelacion._id, motivos)}>Aprobar</button>
-          <button onClick={() => handleEstadoRechazar(selectedApelacion.apelacion._id, motivos)}>Rechazar</button>
-          <div>{errorEstado && <div className="error-banner">{errorEstado}</div>}</div>
-          <button onClick={() => setShowModal(false)}>Cerrar</button>
+        <div className="modal-background">
+          <div className="modal">
+            {/* Muestra la información de la apelación seleccionada */}
+            <h2>Postulante:</h2>
+            <p>Nombres: {selectedApelacion.postulante.nombres} {selectedApelacion.postulante.apellidos}</p>
+            <p>Rut: {selectedApelacion.postulante.rut}</p>
+            <p>Correo: {selectedApelacion.postulante.email}</p>
+            <h2>Beca:</h2>
+            <p>Nombre: {selectedApelacion.beca.nombre}</p>
+            <p>Documentos:</p> {selectedApelacion.beca.documentos.map((documento, index) => (<p key={index}>- {documento}</p>))}
+            <h2>Postulación:</h2>
+            <p>Estado: {selectedApelacion.postulacion.estado}</p>
+            <p>Motivos: {selectedApelacion.postulacion.motivos}</p>
+            <p>Documentos faltantes: </p>
+              {selectedApelacion.postulacion.documentosFaltantes && selectedApelacion.postulacion.documentosFaltantes.length > 0 ? (
+                selectedApelacion.postulacion.documentosFaltantes.map((documento, index) => {
+                  if (!selectedApelacion.apelacion.documentosPDF[index]) {
+                    return <p key={index}>- {documento} - No se ha recibido archivo</p>;;
+                  }
+                  const pdfBuffer = new Uint8Array(selectedApelacion.apelacion.documentosPDF[index].contenido.data).buffer;
+                  const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
+                  const url = URL.createObjectURL(blob);
+
+                  return (
+                    <div key={index}>
+                      <p>- {documento}</p>
+                      <a className="button" href={url} target="_blank" rel="noopener noreferrer">Ver</a>
+                      <a className="button" href={url} download={selectedApelacion.apelacion.documentosPDF[index].nombre}>Descargar</a>
+                    </div>
+                  );
+                })
+              ) : (
+                <p className='campo-obligatorio'>No se ha indicado documentos faltantes.</p>
+              )}
+            <h2>Apelación:</h2>
+            <p>Estado: {selectedApelacion.apelacion.estado}</p>
+            <p>Motivos de estado: {selectedApelacion.apelacion.motivos}</p>
+            <p>Motivo de apelación: {selectedApelacion.apelacion.motivo}</p>
+            <p>Fecha de apelación: {selectedApelacion.apelacion.fecha_de_apelacion}</p>
+            <label htmlFor="motivos">Motivos:</label>
+            <input
+              id="motivos"
+              type="text"
+              value={motivos}
+              onChange={event => setMotivos(event.target.value)}
+            />
+            <button onClick={() => handleEstadoAprobar(selectedApelacion.apelacion._id, motivos)}>Aprobar</button>
+            <button onClick={() => handleEstadoRechazar(selectedApelacion.apelacion._id, motivos)}>Rechazar</button>
+            <div>{errorEstado && <div className="error-banner">{errorEstado}</div>}</div>
+            <button onClick={() => setShowModal(false)}>Cerrar</button>
+          </div>
         </div>
       )}
       <div>{errorApelacion && <div className="error-banner">{errorApelacion}</div>}</div>

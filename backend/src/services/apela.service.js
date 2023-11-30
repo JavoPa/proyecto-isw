@@ -73,7 +73,8 @@ async function createApelacion(motivo, archivos, id) {
     try {
       const apelacionFound = await Apela.findById(id);
       if (!apelacionFound) return [null, "La postulacion no existe"];
-
+      if(body.estado===apelacionFound.estado && body.motivos===apelacionFound.motivos) return [null, "La postulación ya tiene el mismo estado y motivos"]; //Validacion para no ingresar un mismo estado
+      
       let updateObject = { 
         $set: { 
           motivos: body.motivos,
@@ -151,6 +152,7 @@ async function getApelacionById(id) {
       motivo: 1,
       estado: 1,
       motivos: 1,
+      documentosPDF: 1,
     })
 
     if (!apelacion) return [null, "La apelacion no existe"];
@@ -168,6 +170,7 @@ async function getApelacionById(id) {
       motivos: 1,
       postulante: 1,
       beca: 1,
+      documentosFaltantes: 1,
     })
     if (!postulacion.beca) return [null, "La postulacion no tiene beca asociada"];
     const beca = await Beca.findById({_id: postulacion.beca})
