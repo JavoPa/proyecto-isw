@@ -33,12 +33,45 @@ button {
 button:hover {
   background-color: #0D47A1;
 }
+.button {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #1565C0;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  margin-right: 10px;
+}
+.button:hover {
+  background-color: #0D47A1;
+}
 
 /*Lista de apelaciones*/
 .lista-apelaciones {
-  list-style-type: none;
-  padding: 0;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
 }
+
+.lista-apelaciones th,
+.lista-apelaciones td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.lista-apelaciones th {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.lista-apelaciones tr:hover {
+  background-color: #AAAAAA;
+}
+
 
 .item-apelacion {
   margin-bottom: 10px;
@@ -50,9 +83,7 @@ button:hover {
   transition: background-color 0.3s ease; /* Añade una transición al cambiar el color de fondo */
 }
 
-.item-apelacion:hover {
-  background-color: #AAAAAA; /* Cambia el color de fondo cuando se pasa por encima */
-}
+
 /*Estado de postulacion*/
 .estado-container {
   width: 60%;
@@ -200,6 +231,17 @@ form input[type="submit"]:hover {
 }
 
 /* Ventana flotante para la apelacion */
+.modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .modal {
   position: fixed;
   top: 50%;
@@ -255,4 +297,79 @@ form input[type="submit"]:hover {
 
 .filtro-container input {
   flex-grow: 1;
+}
+/*Container de seguimiento*/
+.tracking-container {
+  display: flex;
+  justify-content: space-between;
+  width: 60%;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #CCCCCC;
+  border-radius: 5px;
+  color: #333333;
+}
+.line {
+  width: 15vw; /* Ancho del 50% del contenedor */
+  height: 6px;
+  background-color: grey;
+  position: absolute;
+  top: 25%;
+  right: -6vw;
+  transform: translate(50%, -50%);
+}
+.line.active {
+  background-color: green;
+}
+.node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  margin: auto;
+}
+
+.circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: grey;
+  border: 5px solid rgb(185, 184, 184);
+}
+
+.node.active .circle {
+  background-color: green;
+}
+.node.active p {
+  font-weight: bold;
+  color: green;
+}
+
+.node.enviada .circle {
+  background-color: rgb(0, 41, 128);
+}
+.node.enviada p {
+  font-weight: bold;
+  color: rgb(0, 41, 128);
+}
+.node.aprobada .circle {
+  background-color: green;
+}
+.node.aprobada p {
+  font-weight: bold;
+  color: green;
+}
+.node.rechazada .circle {
+  background-color: rgb(128, 0, 0);
+}
+.node.rechazada p {
+  font-weight: bold;
+  color: rgb(128, 0, 0);
+}
+.node.enrevision .circle {
+  background-color: rgb(128, 109, 0);
+}
+.node.enrevision p {
+  font-weight: bold;
+  color: rgb(128, 119, 0);
 }
