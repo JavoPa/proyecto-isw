@@ -56,11 +56,7 @@ function Estado() {
         <div className="tracking-container">
           <div className={`node ${postulacion.estado === 'Enviada' ? 'enviada' : ''}`}>
             <div className="circle"></div>
-            <p>Enviada</p>
-          </div>
-          <div className={`node ${postulacion.estado === 'En Revisión' ? 'enrevision' : ''}`}>
-            <div className="circle"></div>
-            <p>En Revisión</p>
+            <p>Enviada / En revisión</p>
           </div>
           <div className={`node ${postulacion.estado === 'Aprobada' ? 'aprobada' : ''}`}>
             <div className="circle"></div>
@@ -72,11 +68,11 @@ function Estado() {
           </div>
           <div className={`node ${apelacion?.estado === 'Pendiente' ? 'enrevision' : ''}`}>
             <div className="circle"></div>
-            <p>Apelación</p>
+            <p>Apelación en proceso</p>
           </div>
           <div className={`node ${apelacion?.estado === 'Aceptada' ? 'aprobada' : ''}`}>
             <div className="circle"></div>
-            <p>Apelada</p>
+            <p>Apelación aprobada</p>
           </div>
         </div>
       }
