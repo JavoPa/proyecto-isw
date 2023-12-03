@@ -50,7 +50,7 @@ async function subirSingle(req, res, next) {
       next();
     });
   } catch (error) {
-    handleError(error, "archivo.middleware -> subir");
+    handleError(error, "archivo.middleware -> subirSingle");
   }
 }
 
@@ -79,10 +79,20 @@ async function subirMultiples(req, res, next) {
           "No se recibieron archivos",
         );
       }
+      const files = req.files;
+      const invalidFiles = validateFileExtensions(files);
+      if (invalidFiles.length > 0) {
+        return respondError(
+          req,
+          res,
+          400,
+          "Sólo se permiten archivos con las siguientes extensiones: " + allowedFileTypes.join(', '),
+        );
+      }
       next();
     });
   } catch (error) {
-    handleError(error, "archivo.middleware -> subir");
+    handleError(error, "archivo.middleware -> subirMultiples");
   }
 }
 

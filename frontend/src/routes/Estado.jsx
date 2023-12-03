@@ -52,6 +52,30 @@ function Estado() {
           <div>{error && <div className="error-banner">{error}</div>}</div>
         )}
       </div>
+      {postulacion && 
+        <div className="tracking-container">
+          <div className={`node ${postulacion.estado === 'Enviada' ? 'enviada' : ''}`}>
+            <div className="circle"></div>
+            <p>Enviada / En revisión</p>
+          </div>
+          <div className={`node ${postulacion.estado === 'Aprobada' ? 'aprobada' : ''}`}>
+            <div className="circle"></div>
+            <p>Aprobada</p>
+          </div>
+          <div className={`node ${postulacion.estado === 'Rechazada' && !apelacion ? 'rechazada' : ''}`}>
+            <div className="circle"></div>
+            <p>Rechazada</p>
+          </div>
+          <div className={`node ${apelacion?.estado === 'Pendiente' ? 'enrevision' : ''}`}>
+            <div className="circle"></div>
+            <p>Apelación en proceso</p>
+          </div>
+          <div className={`node ${apelacion?.estado === 'Aceptada' ? 'aprobada' : ''}`}>
+            <div className="circle"></div>
+            <p>Apelación aprobada</p>
+          </div>
+        </div>
+      }
     </>
   );
 }

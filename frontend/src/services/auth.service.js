@@ -17,8 +17,9 @@ export const login = async ({ email, password }) => {
       ] = `Bearer ${data.data.accessToken}`;
       cookies.set('jwt-auth', data.data.accessToken, { path: '/' });
     }
+    return data;
   } catch (error) {
-    console.log(error);
+    return error.response.data
   }
 };
 
@@ -26,6 +27,7 @@ export const logout = () => {
   localStorage.removeItem('user');
   delete axios.defaults.headers.common['Authorization'];
   cookies.remove('jwt');
+  cookies.remove('jwt-auth');
 };
 
 export const test = async () => {
