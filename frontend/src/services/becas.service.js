@@ -22,3 +22,17 @@ export const getBecaById = async (becaId) => {
       throw error;
     }
 };
+
+
+export const deleteBeca = async (becaId) => {
+    try {
+      const response = await axios.delete(`/becas/${becaId}`);
+      const { status, data } = response;
+      if (status === 204) {
+        return data.data;
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
