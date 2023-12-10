@@ -20,6 +20,10 @@ const ListaBecas = () => {
     cargarBecas();
   }, []);
 
+  const handleVerBeca = (id) => {
+    navigate(`/beca/${id}`);
+  };
+
   return (
     <div>
       <h1>Lista de Becas</h1>
@@ -28,6 +32,8 @@ const ListaBecas = () => {
         {becas.map((beca) => (
           <li key={beca.id}>
             {beca.nombre}
+            {/* Agrega un botón de ver para cada beca */}
+            <button onClick={() => handleVerBeca(beca._id)}>Ver Beca</button>
           </li>
         ))}
       </ul>

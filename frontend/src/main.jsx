@@ -10,6 +10,7 @@ import Estado from './routes/Estado.jsx';
 import PublicRoot from './routes/PublicRoot.jsx';
 import Apelar from './routes/Apelar.jsx';
 import ListaBecas from './components/Becas/ListaBecas.jsx';
+import BecaDetalle from './components/Becas/BecaDetalle.jsx';
 import AdminRoot from './routes/AdminRoot.jsx';
 
 const router = createBrowserRouter([
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: '/becas',
     element: <ListaBecas />,
+  },
+  {
+    path:"/beca/:_id", 
+    element:<BecaDetalle />,
   },
   { // Rutas privadas de postulacion por parte del postulante
     path: '/postulacion',

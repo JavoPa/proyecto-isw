@@ -12,3 +12,13 @@ export const getBecas = async () => {
     throw error;
   }
 };
+
+export const getBecaById = async (becaId) => {
+    try {
+      const response = await axios.get(`/becas/${becaId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error en getBecaById:', error);
+      throw error;
+    }
+};
