@@ -9,6 +9,7 @@ import Apelaciones from './routes/Apelaciones.jsx';
 import Estado from './routes/Estado.jsx';
 import PublicRoot from './routes/PublicRoot.jsx';
 import Apelar from './routes/Apelar.jsx';
+import ListaBecas from './components/Becas/ListaBecas.jsx';
 import AdminRoot from './routes/AdminRoot.jsx';
 
 const router = createBrowserRouter([
@@ -21,11 +22,11 @@ const router = createBrowserRouter([
         path: '/',
         element: <App />,
       },
-      // {
-      //   path: '/becas',
-      //   element: <Becas />,
-      // },
     ],
+  },
+  {
+    path: '/becas',
+    element: <ListaBecas />,
   },
   { // Rutas privadas de postulacion por parte del postulante
     path: '/postulacion',
