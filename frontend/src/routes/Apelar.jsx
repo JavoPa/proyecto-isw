@@ -1,25 +1,24 @@
-import LoginForm from '../components/LoginForm';
+import ApelarForm from '../components/ApelarForm';
 import { useNavigate } from 'react-router-dom';
 
-function Login() {
+function Apelar() {
   const navigate = useNavigate();
 
   if (localStorage.getItem('user')) {
     return (
-      <>
-        <h2>Ya estas logeado!</h2>
-        <button onClick={() => navigate('/')}>Ir a home</button>
-      </>
+      <div>
+        <ApelarForm />
+      </div>
     );
   }
 
   return (
     <div>
       <h2>Inicia sesion!</h2>
-      <LoginForm />
+      <button onClick={() => navigate('/auth')}>Iniciar sesión</button>
       <button onClick={() => navigate('/')}>Volver a home</button>
     </div>
   );
 }
 
-export default Login;
+export default Apelar;

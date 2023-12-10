@@ -7,6 +7,8 @@ const usuarioController = require("../controllers/user.controller.js");
 
 const apelacionController = require("../controllers/apela.controller.js");
 
+const postulacionController = require("../controllers/postulacion.controller.js");
+
 /** Middlewares de autorización */
 const authorizationMiddleware = require("../middlewares/authorization.middleware.js");
 
@@ -51,7 +53,8 @@ router.get("/informe", authorizationMiddleware.isAdmin, usuarioController.getInf
 // Ruta para requerimiento de apelacion por parte del encargado
 router.get("/apelaciones", authorizationMiddleware.isAdmin, apelacionController.getApelaciones); // Obtiene todas las apelaciones
 router.get("/apelacion/:id", authorizationMiddleware.isAdmin, apelacionController.getApelacionById); // Obtiene una apelacion por su id
-router.post("/postulacion/:id/documentosfaltantes", authorizationMiddleware.isAdmin, apelacionController.updateDocumentosFaltantes); // Establece mensaje de documentos faltantes
+router.post("/postulacion/:id/actualizarmotivos", authorizationMiddleware.isAdmin, postulacionController.actualizarMotivos); // Establece motivos y mensaje de documentos faltantes opcional
+router.post("/apelacion/:id/actualizarestado", authorizationMiddleware.isAdmin, apelacionController.actualizarEstado); // Actualiza estado de apelacion
 
 // Exporta el enrutador
 module.exports = router;
