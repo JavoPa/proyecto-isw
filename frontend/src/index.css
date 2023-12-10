@@ -204,19 +204,7 @@ form input[type="submit"] {
   width: 100%;
 }
 
-.becas-table th, .becas-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-.becas-table th {
-  background-color: #f2f2f2;
-  color: black;
-  text-align: center;
-}
-
-.becas-table td.actions {
+.lista-apelaciones td.actions {
   width: 100px; /* Ajusta el ancho según tus preferencias */
   text-align: center; /* Centra el contenido en las celdas de acción */
 }

@@ -38,7 +38,7 @@ const ListaBecas = () => {
   return (
     <div>
       <h1>Lista de Becas</h1>
-      <table className="becas-table">
+      <table className="lista-apelaciones">
         <thead>
           <tr>
             <th>Nombre</th>
@@ -50,7 +50,7 @@ const ListaBecas = () => {
         </thead>
         <tbody>
           {becas.map((beca) => (
-            <tr key={beca._id}>
+            <tr key={beca._id} className='item-apelacion'>
               <td>{beca.nombre}</td>
               <td>{beca.fecha_de_inicio}</td>
               <td>{beca.fecha_de_fin}</td>

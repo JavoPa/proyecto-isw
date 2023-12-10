@@ -23,16 +23,17 @@ const router = createBrowserRouter([
         path: '/',
         element: <App />,
       },
+      {
+        path: '/becas',
+        element: <ListaBecas />,
+      },
+      {
+        path:"/beca/:_id", 
+        element:<BecaDetalle />,
+      },
     ],
   },
-  {
-    path: '/becas',
-    element: <ListaBecas />,
-  },
-  {
-    path:"/beca/:_id", 
-    element:<BecaDetalle />,
-  },
+
   { // Rutas privadas de postulacion por parte del postulante
     path: '/postulacion',
     element: <Root />,
