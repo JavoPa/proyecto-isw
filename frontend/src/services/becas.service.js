@@ -36,3 +36,22 @@ export const deleteBeca = async (becaId) => {
       throw error;
     }
   };
+
+  export async function createBeca(becaData) {
+    try {
+        const response = await axios.post('/becas', becaData);
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+  }
+
+  export const getRequisitos = async () => {
+    try {
+      const response = await axios.get('/requisitos');
+      return response.data;
+    } catch (error) {
+      console.error('Error al obtener requisitos:', error);
+      throw error;
+    }
+  };

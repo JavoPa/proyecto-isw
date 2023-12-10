@@ -20,6 +20,7 @@ const ListaBecas = () => {
     cargarBecas();
   }, []);
 
+
   const handleVerBeca = (id) => {
     navigate(`/beca/${id}`);
   };
@@ -33,6 +34,10 @@ const ListaBecas = () => {
     } catch (error) {
       console.error('Error al eliminar la beca:', error);
     }
+  };
+
+  const redirectToCrearBeca = () => {
+    navigate('/crear');
   };
 
   return (
@@ -68,6 +73,7 @@ const ListaBecas = () => {
           ))}
         </tbody>
       </table>
+      <button onClick={redirectToCrearBeca}>Crear Beca</button>
     </div>
   );
 };
