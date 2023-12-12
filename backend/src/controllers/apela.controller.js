@@ -4,6 +4,7 @@ const { handleError } = require("../utils/errorHandler");
 const ApelacionService = require("../services/apela.service");
 const { actualizaEstado } = require("../schema/apela.schema");
 const { userIdSchema } = require("../schema/user.schema");
+const { creaApelacion } = require("../schema/apela.schema");
 
  /**
  * Crea la apelacion de la postulacion
@@ -20,6 +21,9 @@ const { userIdSchema } = require("../schema/user.schema");
         });
       }
       const motivo = req.body.motivo;
+      const { body } = req;
+      const { error: bodyError } = creaApelacion.validate(body);
+      if (bodyError) return respondError(req, res, 400, bodyError.message);
       const [newApelacion, apelacionError] = await ApelacionService.createApelacion(motivo, archivos, req._id);
   
       if (apelacionError) return respondError(req, res, 400, apelacionError);
@@ -43,6 +47,8 @@ const { userIdSchema } = require("../schema/user.schema");
     try {
       const { params, body } = req;
       const { error: bodyError } = actualizaEstado.validate(body);
+      const { error: paramsError } = userIdSchema.validate(params);
+      if (paramsError) return respondError(req, res, 400, paramsError.message);
       if (bodyError) return respondError(req, res, 400, bodyError.message);
   
       const [postulacion, postulaError] = await ApelacionService.actualizarEstado(params.id, body);

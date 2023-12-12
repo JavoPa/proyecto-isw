@@ -32,17 +32,25 @@ const postulaPuntajeSchema = Joi.object({
   });
 
   const actualizaMotivo = Joi.object({
-    documentosFaltantes: Joi.array().items(Joi.string().required().messages({
+    documentosFaltantes: Joi.array().items(Joi.string()
+        .pattern(/^[a-zA-Z\s]*$/, 'letters and spaces')
+        .required()
+        .messages({
         "string.empty": "El nombre del documento no puede estar vacio.",
         "any.required": "El nombre del documento es obligatorio.",
         "string.base": "El nombre del documento debe ser de tipo string.",
+        "string.pattern.name": "Los documentos solo deben contener letras y espacios.",
     })).messages({
         "array.base": "Los documentos deben ser de tipo array.",
     }),
-    motivos: Joi.string().required().messages({
+    motivos: Joi.string()
+    .pattern(/^[a-zA-Z\s]*$/, 'letters and spaces')
+    .required()
+    .messages({
         "string.empty": "El motivo no puede estar vacío.",
         "any.required": "El motivo es obligatorio.",
         "string.base": "El motivo debe ser de tipo string.",
+        "string.pattern.name": "El motivo solo debe contener letras y espacios.",
     }),
 });
 
