@@ -1,12 +1,11 @@
-# Proyecto ingeniería de software
+## Proyecto ingeniería de software
 
-## Descripción
+# Descripción
 
 - Software para facilitar y optimizar el proceso de solicitud, revisión, y asignación de becas a estudiantes, garantizando una gestión eficiente y transparente de las becas municipale
 
-## Requisitos funcionales
+# Requisitos funcionales
 
-# Postulación y Renovación
 - Que un postulante pueda ver las becas disponibles y sus requisitos, para poder postular solamente a una beca, siendo capaz de subir los archivos requeridos dentro del tiempo establecido de 2 semanas luego de la publicación de las becas, y pueda renovar sus becas o postular nuevamente con sus datos personales registrados, luego de esto la postulación se guarda en la base de datos. 
 Estado y apelación
 
