@@ -13,6 +13,7 @@ function Apelaciones() {
   const [filtroNombre, setFiltro] = useState('');
   const [filtroApellido, setFiltroApellido] = useState('');
   const [filtroEstado, setFiltroEstado] = useState('');
+  const [filtroRut, setFiltroRut] = useState('');
 
   const fetchApelaciones = () => {
     getApelaciones().then((response) => {
@@ -84,6 +85,7 @@ function Apelaciones() {
           <option value="aceptada">Aprobado</option>
           <option value="rechazada">Rechazado</option>
         </select>
+        <input type="text" value={filtroRut} onChange={e => setFiltroRut(e.target.value)} placeholder="Filtrar por RUT" />
         <input type="text" value={filtroNombre} onChange={e => setFiltro(e.target.value)} placeholder="Filtrar por nombres" />
         <input type="text" value={filtroApellido} onChange={e => setFiltroApellido(e.target.value)} placeholder="Filtrar por apellidos" />
       </div>
@@ -100,9 +102,12 @@ function Apelaciones() {
             </tr>
           </thead>
           <tbody>
-            {apelaciones.filter(apelacion => 
+            {apelaciones
+            .sort((a, b) => new Date(a.fecha_apelacion) - new Date(b.fecha_apelacion))
+            .filter(apelacion => 
               apelacion.postulacion.postulante.nombres.toLowerCase().includes(filtroNombre.toLowerCase()) &&
               apelacion.postulacion.postulante.apellidos.toLowerCase().includes(filtroApellido.toLowerCase()) &&
+              apelacion.postulacion.postulante.rut.toString().includes(filtroRut) &&
               (filtroEstado === '' || apelacion.estado.toLowerCase() === filtroEstado.toLowerCase())
             ).map((apelacion) => (
               <tr key={apelacion._id} className="item-apelacion" onClick={() => handleClick(apelacion._id)}>
@@ -172,7 +177,7 @@ function Apelaciones() {
             <p>Motivos de estado: {selectedApelacion.apelacion.motivos}</p>
             <p>Motivo de apelación: {selectedApelacion.apelacion.motivo}</p>
             <p>Fecha de apelación: {selectedApelacion.apelacion.fecha_de_apelacion}</p>
-            <label htmlFor="motivos">Motivos:</label>
+            <label htmlFor="motivos" style={{marginRight: '10px'}}>Motivos:</label>
             <input
               id="motivos"
               type="text"
