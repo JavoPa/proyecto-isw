@@ -105,6 +105,14 @@ async function subirMultiples(req, res, next) {
 async function subirArray(req, res, next) {
   try {
     upload.array('archivoPDF',5)(req, res, function (err) {
+      if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+        return respondError(
+          req,
+          res,
+          400,
+          "No se permiten más de 5 archivos",
+        );
+      }
       if (err) {
         return respondError(
           req,
