@@ -110,6 +110,7 @@ async function getApelaciones() {
               date: "$fecha_apelacion",
             },
           },
+          fecha_apelacion: 1,
         })
         .populate({ 
           path: "postulacion", 
@@ -117,7 +118,7 @@ async function getApelaciones() {
           populate: [
             { 
               path: "postulante",
-              select: 'nombres apellidos'
+              select: 'nombres apellidos rut'
             },
             { 
               path: "beca",

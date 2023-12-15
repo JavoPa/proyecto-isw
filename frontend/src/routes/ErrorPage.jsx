@@ -1,13 +1,21 @@
-import { useRouteError, Link } from 'react-router-dom';
+import { useRouteError, Link, useNavigate } from 'react-router-dom';
 
 const ErrorPage = () => {
   const error = useRouteError();
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('user')) || {};
 
-  /**
-   * Este mensaje de error, está pensado para los desarrolladores.
-   * En un entorno de producción, no se debería mostrar este mensaje o almenos
-   * no de esta forma.
-   */
+  const isEncargado = user.roles && user.roles.length > 0 && user.roles[0].name === 'encargado';
+  const isPostulante = user.roles && user.roles.length > 0 && user.roles[0].name === 'postulante';
+
+  const handleButtonClick = () => {
+    if (isEncargado) {
+      navigate('/gestion');
+    } else if (isPostulante) {
+      navigate('/');
+    }
+  };
+
   console.error({
     status: error.status,
     statusText: error.statusText,
@@ -17,8 +25,8 @@ const ErrorPage = () => {
   return (
     <div>
       <h1>Oops!</h1>
-      <p>Sorry, un error inesperado a ocurrido.</p>
-      <Link to="/"><button>Volver a Inicio</button></Link>
+      <p>Sorry, un error inesperado ha ocurrido.</p>
+      <button onClick={handleButtonClick}>Volver a Inicio</button>
     </div>
   );
 };

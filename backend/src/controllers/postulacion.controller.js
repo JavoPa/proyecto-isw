@@ -3,6 +3,7 @@ const { respondSuccess, respondError } = require("../utils/resHandler");
 const { handleError } = require("../utils/errorHandler");
 const PostulacionService = require("../services/postulacion.service");
 const { actualizaMotivo } = require("../schema/postula.schema");
+const { userIdSchema } = require("../schema/user.schema");
 
 /**
  * Obtiene las becas y sus requisitos
@@ -84,6 +85,8 @@ async function actualizarMotivos(req, res) {
   try {
     const { params, body } = req;
     const { error: bodyError } = actualizaMotivo.validate(body);
+    const { error: paramsError } = userIdSchema.validate(params);
+    if (paramsError) return respondError(req, res, 400, paramsError.message);
     if (bodyError) return respondError(req, res, 400, bodyError.message);
 
     const [postulacion, postulaError] = await PostulacionService.actualizarMotivos(params.id, body);

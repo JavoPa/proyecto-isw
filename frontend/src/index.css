@@ -125,11 +125,20 @@ button:hover {
 
 .navbar-item {
   color: #fff;
+  padding: 5px 10px; /* Añade un poco de padding */
+}
+
+.navbar-item.active {
+  /* Estilos para el elemento li activo */
+  background-color: #1565C0; /* Cambia el color de fondo a un rojo oscuro */
+  color: #fff; /* Cambia el color del texto a blanco */
+  border-radius: 10px; /* Añade bordes redondeados */
 }
 
 .navbar-link {
   color: #fff;
   text-decoration: none;
+  transition: color 0.3s ease; /* Añade una transición suave al cambiar el color */
 }
 
 .navbar-link:hover {
@@ -197,6 +206,34 @@ form input[type="submit"] {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.becas-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.lista-apelaciones td.actions {
+  width: 100px; /* Ajusta el ancho según tus preferencias */
+  text-align: center; /* Centra el contenido en las celdas de acción */
+}
+
+.ver-button {
+  background-color: #3498db; 
+  color: white; 
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.eliminar-button {
+  background-color: #e74c3c; 
+  color: white; 
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
 }
 
 /* Estilo del botón de envío al pasar el mouse */
