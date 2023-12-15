@@ -10,7 +10,22 @@ const moment = require("moment");
 async function getBecas() {
     try {
       const becas = await Becas.find()
-       .select("_id nombre")
+       .select({
+        _id:1,
+        nombre:1,
+        fecha_de_inicio:{
+          $dateToString: {
+            format: "%d-%m-%Y",
+            date: "$fecha_inicio",
+          },
+        },
+        fecha_de_fin:{
+          $dateToString: {
+            format: "%d-%m-%Y",
+            date: "$fecha_fin",
+          },
+        },
+      })
        .populate()
        .exec();
       if (!becas) return [null, "No hay Becas"];
