@@ -80,8 +80,8 @@ async function getBecasid(id) {
 async function createBeca(bec) {
     try {
       // Verificar si los requisitos existen
-      const requisitosExisten = await Promise.all(bec.requisitos.map(async (codigo) => {
-        const requisito = await Requisito.findOne({ codigo });
+      const requisitosExisten = await Promise.all(bec.requisitos.map(async (_id) => {
+        const requisito = await Requisito.findOne({ _id });
         return requisito ? true : false;
       }));
       if (requisitosExisten.includes(false)) {
@@ -131,8 +131,8 @@ async function updateBeca(id, bec) {
       const becFound = await Becas.findById(id);
       if (!becFound) return [null, "la beca no existe"];
       // Verificar si los requisitos existen
-      const requisitosExisten = await Promise.all(bec.requisitos.map(async (codigo) => {
-        const requisito = await Requisito.findOne({ codigo });
+      const requisitosExisten = await Promise.all(bec.requisitos.map(async (_id) => {
+        const requisito = await Requisito.findOne({ _id });
         return requisito ? true : false;
       }));
       if (requisitosExisten.includes(false)) {

@@ -11,7 +11,7 @@ const becaSchema = new mongoose.Schema(
       unique: true,
     },
     requisitos: [{
-      type: Number,
+      type: String,
       ref: 'Requisito' // Referencia al modelo de "Requisito"
     }],
     documentos: {

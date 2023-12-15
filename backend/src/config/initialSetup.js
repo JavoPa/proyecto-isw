@@ -112,7 +112,7 @@ async function createBecas() {
     await Promise.all([
       new Beca({
         nombre: "Beca excelencia estudiantil colegio",
-        requisitos: [1,2],
+        requisitos: ["657cb9c1654c5678344db1af", "657cb9c1654c5678344db1ae"],
         documentos: ["Fotocopia de cedula de identidad (ambos lados)","Certificado de alumno regular", "Certificado de notas año anterior"],
         fecha_inicio: moment("14-12-2023", "DD-MM-YYYY").toDate(),
         fecha_fin: moment("28-12-2023", "DD-MM-YYYY").toDate(),
@@ -122,7 +122,7 @@ async function createBecas() {
       }).save(),
       new Beca({
         nombre: "Beca excelencia estudiantil liceo",
-        requisitos: [1,2],
+        requisitos: ["657cb9c1654c5678344db1af", "657cb9c1654c5678344db1ae"],
         documentos: ["Fotocopia de cedula de identidad (ambos lados)", "Certificado de alumno regular", "Certificado de notas año anterior"],
         fecha_inicio: moment("01-12-2023", "DD-MM-YYYY").toDate(),
         fecha_fin: moment("15-12-2023", "DD-MM-YYYY").toDate(),
@@ -132,7 +132,7 @@ async function createBecas() {
       }).save(),
       new Beca({
         nombre: "Beca excelencia estudiantil universidad",
-        requisitos: [1,2],
+        requisitos: ["657cb9c1654c5678344db1af", "657cb9c1654c5678344db1ae"],
         documentos: ["Fotocopia de cedula de identidad (ambos lados)", "Certificado de alumno regular", "Certificado de notas año anterior"],
         fecha_inicio: moment("01-12-2023", "DD-MM-YYYY").toDate(),
         fecha_fin: moment("15-12-2023", "DD-MM-YYYY").toDate(),
@@ -142,7 +142,7 @@ async function createBecas() {
       }).save(),
       new Beca({
         nombre: "Beca discapacidad",
-        requisitos: [3],
+        requisitos: ["657cb9c1654c5678344db1b0"],
         documentos: ["Fotocopia de cedula de identidad (ambos lados)", "Certificado de discapacidad"],
         fecha_inicio: moment("01-12-2023", "DD-MM-YYYY").toDate(),
         fecha_fin: moment("15-12-2023", "DD-MM-YYYY").toDate(),
@@ -152,7 +152,7 @@ async function createBecas() {
       }).save(),
       new Beca({
         nombre: "Beca de residencia",
-        requisitos: [4,5],
+        requisitos: ["657cb9c1654c5678344db1b2", "657cb9c1654c5678344db1b3"],
         documentos: ["Fotocopia de cedula de identidad (ambos lados)", "Certificado de residencia","Contrato de arriendo", "Certificado de alumno regular"],
         fecha_inicio: moment("01-12-2023", "DD-MM-YYYY").toDate(),
         fecha_fin: moment("14-12-2023", "DD-MM-YYYY").toDate(),
@@ -162,7 +162,7 @@ async function createBecas() {
       }).save(),
       new Beca({
         nombre: "Beca subsidio pagos basicos",
-        requisitos: [6,7],
+        requisitos: ["657cb9c1654c5678344db1b2", "657cb9c1654c5678344db1b1"],
         documentos: ["Fotocopia de cedula de identidad (ambos lados) del jefe de hogar", "Ficha social de hogares","liquidacion de sueldo (ultimos 3 meses)"],
         fecha_inicio: moment("14-12-2023", "DD-MM-YYYY").toDate(),
         fecha_fin: moment("28-12-2023", "DD-MM-YYYY").toDate(),
@@ -172,7 +172,7 @@ async function createBecas() {
       }).save(),
       new Beca({
         nombre: "Beca ayuda adulto mayor",
-        requisitos: [8],
+        requisitos: ["657cb9c1654c5678344db1b5"],
         documentos: ["Fotocopia de cedula de identidad (ambos lados)"],
         fecha_inicio: moment("18-01-2023", "DD-MM-YYYY").toDate(),
         fecha_fin: moment("01-01-2024", "DD-MM-YYYY").toDate(),
@@ -194,35 +194,27 @@ async function createRequisitos() {
     await Promise.all([
       new Requisito({
         descripcion: "Ser estudiante regular",
-        codigo: 1,
       }).save(),
       new Requisito({
         descripcion: "Tener promedio de notas igual o mayor a 6",
-        codigo: 2,
       }).save(),
       new Requisito({
         descripcion: "Presentar alguna discapacidad",
-        codigo: 3,
       }).save(),
       new Requisito({
         descripcion: "Ser estudiante que su hogar familiar se encuentre fuera de la ciudad de estudio",
-        codigo: 4,
       }).save(),
       new Requisito({
         descripcion: "Poseer contrato de arriendo",
-        codigo: 5,
       }).save(),
       new Requisito({
         descripcion: " Estar registrado en el Registro social de hogares",
-        codigo: 6,
       }).save(),
       new Requisito({
         descripcion: "Pertenecer al 60% más vulnerable del país",
-        codigo: 7,
       }).save(),
       new Requisito({
         descripcion: "Tener 65 años o más",
-        codigo: 8,
       }).save(),
     ]);
     console.log("* => Requisitos creados exitosamente");
