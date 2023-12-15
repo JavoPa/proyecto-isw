@@ -11,10 +11,6 @@ const requisitoSchema = Joi.object({
     "string.base": "La descripción debe ser de tipo string.",
     "string.min": "La descripción debe tener al menos 5 caracteres.",
   }),
-  codigo: Joi.number().integer().positive().required().messages({
-    "number.base": "El codigo debe ser de tipo número.",
-    "any.required": "El codigo es obligatorio.",
-  }),
 }).messages({
   "object.unknown": "No se permiten propiedades adicionales.",
 });

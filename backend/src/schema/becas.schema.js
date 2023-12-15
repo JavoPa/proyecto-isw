@@ -11,10 +11,10 @@ const becaSchema = Joi.object({
     "string.base": "El nombre debe ser de tipo string.",
     "string.min": "El nombre debe tener al menos 5 caracteres.",
   }),
-  requisitos: Joi.array().items(Joi.number().integer().positive()).required().messages({
+  requisitos: Joi.array().items(Joi.string()).required().messages({
     "array.base": "Los requisitos deben ser de tipo array.",
     "any.required": "Los requisitos son obligatorios.",
-    "number.base": "Cada requisito debe ser un número entero.",
+    "string.base": "Cada requisito debe ser un número entero.",
   }),
   documentos: Joi.array().items(Joi.string()).required().messages({
     "array.base": "Los documentos deben ser de tipo array.",
