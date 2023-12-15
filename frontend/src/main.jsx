@@ -12,6 +12,7 @@ import Apelar from './routes/Apelar.jsx';
 import ListaBecas from './components/Becas/ListaBecas.jsx';
 import BecaDetalle from './components/Becas/BecaDetalle.jsx';
 import CrearBecas from './components/Becas/CrearBecas.jsx';
+import ModificarBeca from './components/Becas/ModificarBeca.jsx';
 import AdminRoot from './routes/AdminRoot.jsx';
 
 const router = createBrowserRouter([
@@ -23,18 +24,6 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <App />,
-      },
-      {
-        path: '/becas',
-        element: <ListaBecas />,
-      },
-      {
-        path:"/beca/:_id", 
-        element:<BecaDetalle />,
-      },
-      {
-        path: '/crear',
-        element: <CrearBecas />,
       },
     ],
   },
@@ -62,6 +51,22 @@ const router = createBrowserRouter([
       {
         path: 'apelaciones',
         element: <Apelaciones />,
+      },
+      {
+        path: 'becas',
+        element: <ListaBecas />,
+      },
+      {
+        path:"beca/:_id", 
+        element:<BecaDetalle />,
+      },
+      {
+        path: 'crear',
+        element: <CrearBecas />,
+      },
+      {
+        path:"modificar/:_id", 
+        element:<ModificarBeca />,
       },
     ],
   },

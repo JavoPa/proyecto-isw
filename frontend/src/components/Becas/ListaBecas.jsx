@@ -22,7 +22,7 @@ const ListaBecas = () => {
 
 
   const handleVerBeca = (id) => {
-    navigate(`/beca/${id}`);
+    navigate(`/gestion/beca/${id}`);
   };
 
   const handleDeleteBeca = async (id) => {
@@ -37,7 +37,7 @@ const ListaBecas = () => {
   };
 
   const redirectToCrearBeca = () => {
-    navigate('/crear');
+    navigate('/gestion/crear');
   };
 
   return (

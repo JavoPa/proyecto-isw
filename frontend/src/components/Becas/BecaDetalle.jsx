@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getBecaById } from '../../services/becas.service';
 
 const DetallesBeca = () => {
   const { _id } = useParams();
   const [beca, setBeca] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const cargarDetallesBeca = async () => {
@@ -25,6 +27,10 @@ const DetallesBeca = () => {
     return <div>Cargando...</div>;
   }
 
+  const handleModificarBeca = () => {
+    navigate(`/gestion/modificar/${_id}`);
+  };
+
   return (
     <div>
       <h1>Detalles de la Beca</h1>
@@ -36,6 +42,8 @@ const DetallesBeca = () => {
       <p>Dirigida a: {beca.dirigida.join(', ')}</p>
       <p>Monto: {beca.monto}</p>
       <p>Pagos: {beca.tipo_pago}</p>
+
+      <button onClick={handleModificarBeca}>Modificar Beca</button>
     </div>
   );
 };

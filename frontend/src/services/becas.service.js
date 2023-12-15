@@ -55,3 +55,16 @@ export const deleteBeca = async (becaId) => {
       throw error;
     }
   };
+
+  export const updateBeca = async (becaId, becaData) => {
+    try {
+      const response = await axios.put(`/becas/${becaId}`, becaData);
+      const { status, data } = response;
+      if (status === 200) {
+        return data.data;
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
