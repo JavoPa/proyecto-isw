@@ -29,7 +29,7 @@ const ModificarBeca = () => {
         if (becaData && becaData.requisitos) {
           setNuevosDatos({
             nombre: becaData.nombre,
-            requisitos: becaData.requisitos.map((req) => req.codigo),
+            requisitos: becaData.requisitos.map((req) => req._id),
             documentos: becaData.documentos,
             fecha_inicio: becaData.fecha_inicio,
             fecha_fin: becaData.fecha_fin,
@@ -63,19 +63,24 @@ const ModificarBeca = () => {
     }));
   };
 
-  const handleRequisitoToggle = (codigo) => {
+  const handleRequisitoToggle = (requisitoId) => {
     setNuevosDatos((prevDatos) => ({
       ...prevDatos,
-      requisitos: prevDatos.requisitos.includes(codigo)
-        ? prevDatos.requisitos.filter((req) => req !== codigo)
-        : [...prevDatos.requisitos, codigo],
+      requisitos: prevDatos.requisitos.includes(requisitoId)
+        ? prevDatos.requisitos.filter((reqId) => reqId !== requisitoId)
+        : [...prevDatos.requisitos, requisitoId],
     }));
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault(); 
+    handleModificarBeca();
   };
 
   const handleModificarBeca = async () => {
   try {
     // Aquí puedes realizar alguna validación de datos antes de enviar la actualización
-    const requisitosArray = nuevosDatos.requisitos.map((req) => Number(req));
+    const requisitosArray = nuevosDatos.requisitos;
     const documentosArray = Array.isArray(nuevosDatos.documentos) ? nuevosDatos.documentos : nuevosDatos.documentos.split(', ');
     const dirigidaArray = Array.isArray(nuevosDatos.dirigida) ? nuevosDatos.dirigida : nuevosDatos.dirigida.split(', ');
 
@@ -92,8 +97,8 @@ const ModificarBeca = () => {
       documentos: documentosArray,
       dirigida: dirigidaArray,
     });
-
     navigate('/gestion/becas'); // Redirige a la lista de becas después de la modificación
+
   } catch (error) {
     console.error('Error al modificar la beca:', error);
   }
@@ -102,83 +107,82 @@ const ModificarBeca = () => {
   if (!beca || !requisitosOptions.length) {
     return <div>Cargando...</div>;
   }
+
   return (
-    <div>
-      <div>
-        <h1>Modificar Beca</h1>
-        <label>Nombre de la beca:</label>
+    <form onSubmit={handleFormSubmit}>
+        <h2 style={{ textAlign:'center' }}>MODIFICANDO  BECA</h2>        
+        <label className="input-label" htmlFor="motivos"><strong>Nombre Beca</strong></label>
         <input
           type="text"
           name="nombre"
           value={nuevosDatos.nombre}
           onChange={handleInputChange}
         />
-      </div>
-      <label>Requisitos:</label>
-      {requisitosOptions.map((req) => (
-        <div key={req.codigo}>
-          <input
-            type="checkbox"
-            id={`req-${req.codigo}`}
-            value={req.codigo}
-            checked={nuevosDatos.requisitos.includes(req.codigo)}
-            onChange={() => handleRequisitoToggle(req.codigo)}
-          />
-          <label htmlFor={`req-${req.codigo}`}>{req.descripcion}</label>
-        </div>
-      ))}
-      <div>
-        <label>Documentos (separados por coma):</label>
+        <label className="input-label" htmlFor="motivos"><strong>Requisitos de la Beca</strong></label>
+          {requisitosOptions.map((req) => (
+            <div key={req._id}>
+              <input
+                type="checkbox"
+                id={`req-${req._id}`}
+                value={req.codigo}
+                checked={nuevosDatos.requisitos.includes(req._id)}
+                onChange={() => handleRequisitoToggle(req._id)}
+              />
+              <label htmlFor={`req-${req._id}`}>{req.descripcion}</label>
+            </div>
+           ))}
+
+        <label className="input-label" htmlFor="motivos"><strong>Documentos</strong></label>
         <input
           type="text"
           name="documentos"
           value={nuevosDatos.documentos}
           onChange={handleInputChange}
         /> 
-      </div>
 
-        <label>Fecha de inicio:</label>
+        <label className="input-label" htmlFor="motivos"><strong>Fecha de Inicio</strong></label>
         <input
           type="text"
           name="fecha_inicio"
           value={nuevosDatos.fecha_inicio}
           onChange={handleInputChange}
         />
-        <div>
-        <label>Fecha de fin:</label>
+
+        <label className="input-label" htmlFor="motivos"><strong>Fecha de Fin</strong></label>
         <input
           type="text"
           name="fecha_fin"
           value={nuevosDatos.fecha_fin}
           onChange={handleInputChange}
         />
-        </div>
-        <label>Dirigida a (separados por coma):</label>
+
+        <label className="input-label" htmlFor="motivos"><strong>Dirigida</strong></label>
         <input
           type="text"
           name="dirigida"
           value={nuevosDatos.dirigida}
           onChange={handleInputChange}
         />
-        <div>
-        <label>Monto:</label>
+
+        <label className="input-label" htmlFor="motivos"><strong>Monto de pago</strong></label>
         <input
           type="number"
           name="monto"
           value={nuevosDatos.monto}
           onChange={handleInputChange}
         />
-        </div>
-        <label>Tipo de pago:</label>
+
+        <label className="input-label" htmlFor="motivos"><strong>Intervalo de Pagos</strong></label>
         <input
           type="text"
           name="tipo_pago"
           value={nuevosDatos.tipo_Pago}
           onChange={handleInputChange}
         />
+
         <div></div>
-      <button onClick={handleModificarBeca}>Guardar Cambios</button>
-    </div>
+      <button type="submit">Guardar Cambios</button>
+    </form>
   );
 };
   export default ModificarBeca;
