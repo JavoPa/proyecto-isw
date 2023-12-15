@@ -131,16 +131,16 @@ function Apelaciones() {
           <div className="modal">
             {/* Muestra la información de la apelación seleccionada */}
             <h2>Postulante:</h2>
-            <p>Nombres: {selectedApelacion.postulante.nombres} {selectedApelacion.postulante.apellidos}</p>
-            <p>Rut: {selectedApelacion.postulante.rut}</p>
-            <p>Correo: {selectedApelacion.postulante.email}</p>
-            <h2>Beca:</h2>
-            <p>Nombre: {selectedApelacion.beca.nombre}</p>
-            <p>Documentos:</p> {selectedApelacion.beca.documentos.map((documento, index) => (<p key={index}>- {documento}</p>))}
+            <p><strong>Nombres:</strong> {selectedApelacion.postulante.nombres} {selectedApelacion.postulante.apellidos}</p>
+            <p><strong>Rut:</strong> {selectedApelacion.postulante.rut}</p>
+            <p><strong>Correo:</strong> {selectedApelacion.postulante.email}</p>
+            <h2><strong>Beca:</strong></h2>
+            <p><strong>Nombre:</strong> {selectedApelacion.beca.nombre}</p>
+            <p><strong>Documentos:</strong></p> {selectedApelacion.beca.documentos.map((documento, index) => (<p key={index}>- {documento}</p>))}
             <h2>Postulación:</h2>
-            <p>Estado: {selectedApelacion.postulacion.estado}</p>
-            <p>Motivos: {selectedApelacion.postulacion.motivos}</p>
-            <p>Documentos faltantes: </p>
+            <p><strong>Estado:</strong> {selectedApelacion.postulacion.estado}</p>
+            <p><strong>Motivos:</strong> {selectedApelacion.postulacion.motivos}</p>
+            <p><strong>Documentos faltantes:</strong> </p>
               {selectedApelacion.postulacion.documentosFaltantes && selectedApelacion.postulacion.documentosFaltantes.length > 0 ? (
                 selectedApelacion.postulacion.documentosFaltantes.map((documento, index) => {
                   if (!selectedApelacion.apelacion.documentosPDF[index]) {
@@ -173,11 +173,11 @@ function Apelaciones() {
                 <p className='campo-obligatorio'>No se ha indicado documentos faltantes.</p>
               )}
             <h2>Apelación:</h2>
-            <p>Estado: {selectedApelacion.apelacion.estado}</p>
-            <p>Motivos de estado: {selectedApelacion.apelacion.motivos}</p>
-            <p>Motivo de apelación: {selectedApelacion.apelacion.motivo}</p>
-            <p>Fecha de apelación: {selectedApelacion.apelacion.fecha_de_apelacion}</p>
-            <label htmlFor="motivos" style={{marginRight: '10px'}}>Motivos:</label>
+            <p><strong>Estado:</strong> {selectedApelacion.apelacion.estado}</p>
+            <p><strong>Motivos de estado:</strong> {selectedApelacion.apelacion.motivos}</p>
+            <p><strong>Motivo de apelación:</strong> {selectedApelacion.apelacion.motivo}</p>
+            <p><strong>Fecha de apelación:</strong> {selectedApelacion.apelacion.fecha_de_apelacion}</p>
+            <label htmlFor="motivos" style={{marginRight: '10px'}}><strong>Motivos:</strong></label>
             <input
               id="motivos"
               type="text"
