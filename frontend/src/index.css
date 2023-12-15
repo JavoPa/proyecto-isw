@@ -4,8 +4,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #000000;
+  background-color: #FFFFFF;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -22,7 +22,7 @@ a {
 button {
   display: inline-block;
   padding: 10px 15px;
-  background-color: #1565C0;
+  background-color: #2196F3;
   color: white;
   cursor: pointer;
   border-radius: 5px;
@@ -31,12 +31,12 @@ button {
   transition: background-color 0.3s ease;
 }
 button:hover {
-  background-color: #0D47A1;
+  background-color: #1769aa;
 }
 .button {
   display: inline-block;
   padding: 10px 15px;
-  background-color: #1565C0;
+  background-color: #2196F3;
   color: white;
   cursor: pointer;
   border-radius: 5px;
@@ -46,7 +46,7 @@ button:hover {
   margin-right: 10px;
 }
 .button:hover {
-  background-color: #0D47A1;
+  background-color: #1769aa;
 }
 
 /*Lista de apelaciones*/
@@ -109,12 +109,17 @@ button:hover {
   background-color: #2E7D32;
   color: #CCCCCC
 }
+
 /*Barra de navegacion*/
+body {
+  margin: 0;
+  padding: 0;
+}
 .navbar {
-  background-color: #333;
+  width: 100%;
+  background-color: #FF9800;
   padding: 10px 0;
 }
-
 .navbar-list {
   list-style-type: none;
   margin: 0;
@@ -122,28 +127,25 @@ button:hover {
   display: flex;
   justify-content: space-around;
 }
-
 .navbar-item {
   color: #fff;
   padding: 5px 10px; /* Añade un poco de padding */
 }
-
 .navbar-item.active {
   /* Estilos para el elemento li activo */
-  background-color: #1565C0; /* Cambia el color de fondo a un rojo oscuro */
+  background-color: #2196F3; /* Cambia el color de fondo a un rojo oscuro */
   color: #fff; /* Cambia el color del texto a blanco */
   border-radius: 10px; /* Añade bordes redondeados */
 }
-
 .navbar-link {
   color: #fff;
   text-decoration: none;
   transition: color 0.3s ease; /* Añade una transición suave al cambiar el color */
 }
-
 .navbar-link:hover {
   color: #ddd;
 }
+
 /* Informacion de usuario */
 .user-info {
   position: absolute;
@@ -152,7 +154,7 @@ button:hover {
   margin-bottom: 10px;
   padding: 10px;
   border-radius: 5px;
-  background-color: #2E7D32;
+  background-color: #4CAF50;
   color: #FFFFFF
 }
 /* Banner de exito */
@@ -222,7 +224,7 @@ form input[type="submit"]:hover {
 .label-file {
   display: inline-block;
   padding: 10px 15px;
-  background-color: #1565C0;
+  background-color: #2196F3;
   color: white;
   cursor: pointer;
   border-radius: 5px;
@@ -274,7 +276,7 @@ form input[type="submit"]:hover {
   flex-direction: column;
   align-items: center;
   padding: 10px 15px;
-  background-color: #1565C0;
+  background-color: #2196F3;
   color: white;
   cursor: pointer;
   border-radius: 5px;
@@ -375,10 +377,10 @@ form input[type="submit"]:hover {
   font-weight: bold;
   color: rgb(128, 0, 0);
 }
-.node.enrevision .circle {
+.node.pendiente .circle {
   background-color: rgb(128, 109, 0);
 }
-.node.enrevision p {
+.node.pendiente p {
   font-weight: bold;
   color: rgb(128, 119, 0);
 }
