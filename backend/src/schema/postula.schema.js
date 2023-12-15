@@ -5,10 +5,12 @@ const Joi = require("joi");
 const postulaPuntajeSchema = Joi.object({
     puntaje: Joi.number()
       .integer()
+      .min(0)
       .required()
       //.pattern(/^[0-9]+$/)
       .messages({
         "string.base": "El puntaje debe ser de tipo int.",
+        "number.min": "El puntaje debe ser un valor positivo"
         //"string.pattern.base": "El puntaje proporcionado no es un numero",
       }),
   });
@@ -22,7 +24,37 @@ const postulaPuntajeSchema = Joi.object({
         "string.base": "El estado debe ser de tipo string.",
         //"string.pattern.base": "El puntaje proporcionado no es un numero",
       }),
+      motivos: Joi.string()
+      .required()
+      .messages({
+        "string.empty": "El motivo no puede estar vacio.",
+        "any.required": "El motivo es obligatorio.",
+        "string.base": "El motivo debe ser de tipo string.",
+      }),
   });
+
+  const actualizaMotivo = Joi.object({
+    documentosFaltantes: Joi.array().items(Joi.string()
+        .pattern(/^[a-zA-Z\s]*$/, 'letters and spaces')
+        .required()
+        .messages({
+        "string.empty": "El nombre del documento no puede estar vacio.",
+        "any.required": "El nombre del documento es obligatorio.",
+        "string.base": "El nombre del documento debe ser de tipo string.",
+        "string.pattern.name": "Los documentos solo deben contener letras y espacios.",
+    })).messages({
+        "array.base": "Los documentos deben ser de tipo array.",
+    }),
+    motivos: Joi.string()
+    .pattern(/^[a-zA-Z\s]*$/, 'letters and spaces')
+    .required()
+    .messages({
+        "string.empty": "El motivo no puede estar vacío.",
+        "any.required": "El motivo es obligatorio.",
+        "string.base": "El motivo debe ser de tipo string.",
+        "string.pattern.name": "El motivo solo debe contener letras y espacios.",
+    }),
+});
 
 const postulacionSchema = Joi.object({
     fecha_recepcion: Joi.date().required().messages({
@@ -69,4 +101,4 @@ const postulacionSchema = Joi.object({
 });
 
 
-module.exports = { postulacionSchema, postulaPuntajeSchema, postulaEstadoSchema };
+module.exports = { postulacionSchema, postulaPuntajeSchema, postulaEstadoSchema, actualizaMotivo };

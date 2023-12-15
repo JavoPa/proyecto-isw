@@ -17,7 +17,7 @@ const postulaSchema = new mongoose.Schema(
     ],
     estado: {
       type: String,
-      enum: ['Enviada', 'Rechazada', 'Apelada', 'Aprobada'],
+      enum: ['Enviada', 'Rechazada', 'Aprobada'],
       default: 'Enviado',
     },
     motivos: {
@@ -38,7 +38,12 @@ const postulaSchema = new mongoose.Schema(
     },
     comentario: {
       type: String,
+    },
+    documentosFaltantes: [ // String con los documentos faltantes en caso de ser rechazada
+    {
+      type: String,
     }
+  ],
   },
   {
     versionKey: false,

@@ -2,6 +2,8 @@
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const { handleError } = require("../utils/errorHandler");
 const PostulacionService = require("../services/postulacion.service");
+const { actualizaMotivo } = require("../schema/postula.schema");
+const { userIdSchema } = require("../schema/user.schema");
 
 /**
  * Obtiene las becas y sus requisitos
@@ -74,34 +76,34 @@ async function getEstado(req, res) {
     }
   }
   
-  /**
- * Crea la apelacion de la postulacion
+/**
+ * Actualiza los motivos y documentos faltantes de la postulacion
  * @param {Object} req - Objeto de petición
  * @param {Object} res - Objeto de respuesta
  */
-  async function createApelacion(req, res) {
-    try {
-      const body = {
-        nombre: req.file.originalname,
-        contenido: req.file.buffer,
-      };
-      const [newApelacion, apelacionError] = await PostulacionService.createApelacion(body, req._id);
-  
-      if (apelacionError) return respondError(req, res, 400, apelacionError);
-      if (!newApelacion) {
-        return respondError(req, res, 400, "No se creo la apelacion");
-      }
-  
-      respondSuccess(req, res, 201, newApelacion);
-    } catch (error) {
-      handleError(error, "user.controller -> createApelacion");
-      respondError(req, res, 500, "No se creo la apelacion");
-    }
+async function actualizarMotivos(req, res) {
+  try {
+    const { params, body } = req;
+    const { error: bodyError } = actualizaMotivo.validate(body);
+    const { error: paramsError } = userIdSchema.validate(params);
+    if (paramsError) return respondError(req, res, 400, paramsError.message);
+    if (bodyError) return respondError(req, res, 400, bodyError.message);
+
+    const [postulacion, postulaError] = await PostulacionService.actualizarMotivos(params.id, body);
+    if (postulaError) return respondError(req, res, 400, postulaError);
+    
+
+    respondSuccess(req, res, 200, postulacion);
+  } catch (error) {
+    handleError(error, "postulacion.controller -> actualizarMotivos");
+    respondError(req, res, 500, "No se pudo actualizar los motivos de la postulación");
   }
+}
+  
 
 module.exports = {
     getBecasPostulacion,
     createPostulacion,
     getEstado,
-    createApelacion,
+    actualizarMotivos,
 };

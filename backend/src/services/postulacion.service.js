@@ -4,8 +4,7 @@ const Postula = require("../models/postula.model.js");
 const Beca = require("../models/beca.model.js");
 const User = require("../models/user.model.js");
 const { handleError } = require("../utils/errorHandler");
-const moment = require("moment");
-//const mongoose = require('mongoose');
+const Apela = require("../models/apela.model.js");
 
 
 /**
@@ -31,11 +30,11 @@ async function getBecasPostulacion() {
 async function getEstado(id) {
   try {
     //Buscar la ultima postulacion del usuario
-    const estado = await Postula.findOne({ postulante: id })
+    const postulacion = await Postula.findOne({ postulante: id })
       .sort({ fecha_recepcion: -1 })
       .limit(1)
       .select({
-        _id: 0,
+        _id: 1,
         fecha_de_recepcion: {
           $dateToString: {
             format: "%d-%m-%Y",
@@ -45,15 +44,49 @@ async function getEstado(id) {
         estado: 1,
         motivos: 1,
         beca: 1,
-        documentosPDF: 1,
+        documentosFaltantes: 1,
       })
       .populate({
         path: "beca",
-        select: "-_id nombre",
+        select: "nombre fecha_fin",
       })
       .exec();
-    if (!estado) return [null, "No hay postulacion"];
+    if (!postulacion) return [null, "No hay postulacion"];
 
+    //Buscar la apelacion de la postulacion
+    const apelacion = await Apela.findOne({ postulacion: postulacion._id })
+      .select({
+        _id: 0,
+        fecha_de_apelacion: {
+          $dateToString: {
+            format: "%d-%m-%Y",
+            date: "$fecha_apelacion",
+          },
+        },
+        estado: 1,
+        motivos: 1,
+      })
+      .exec();
+    //if (!apelacion) return [postulacion, null];
+    //Creacion de fecha fin de apelacion
+    const fechaInicioApelacion = new Date(postulacion.beca.fecha_fin).toLocaleDateString('es-ES', {
+      day: '2-digit', 
+      month: '2-digit', 
+      year: 'numeric'
+    });
+    const fechaFinApelacion = new Date(postulacion.beca.fecha_fin);
+    fechaFinApelacion.setDate(fechaFinApelacion.getDate() + 14);
+    const fechaFinFormateada = fechaFinApelacion.toLocaleDateString('es-ES', {
+      day: '2-digit', 
+      month: '2-digit', 
+      year: 'numeric'
+    });
+    const estado = {
+      postulacion: postulacion,
+      apelacion: apelacion,
+      fecha_inicio_apelacion: fechaInicioApelacion,
+      fecha_fin_apelacion: fechaFinFormateada,
+    };
     return [estado, null];
   } catch (error) {
     handleError(error, "postulacion.service -> getEstado");
@@ -174,50 +207,32 @@ async function getPostulacionById(id) {
   }
 }
 
-
 /**
- * Crea una apelacion modificando el estado de postula y actualizando los documentos
- * @param {Object} archivos Archivos requeridos para la beca
- * @param {Object} id id del usuario
+ * Actualiza los motivos y documentos faltantes de la postulacion
+ * @param {Object} id Id de postulacion
+ * @param {Object} body Motivos y documentos faltantes de la postulacion
  * @returns {Promise} Promesa con el objeto de usuario creado
  */
-async function createApelacion(archivos, id) {
+async function actualizarMotivos(id, body) {
   try {
-    const { nombre , contenido } = archivos;
-    //Buscar ultima postulacion del usuario
-    const postulacionFound = await Postula.findOne({ postulante: id }).sort({ fecha_recepcion: -1 }).limit(1).exec()
-    if (!postulacionFound) return [null, "El usuario no tiene postulacion"];
+    const postulacionFound = await Postula.findById(id);
+    if (!postulacionFound) return [null, "La postulacion no existe"];
 
-    //Verificacion de plazos (maximo 2 semanas despues de la fecha de fin de la beca)
-    const fecha_actual = Date.now();
-    const beca = await Beca.findById(postulacionFound.beca);
-    if (!beca) return [null, "No se encontró la beca"];
-    const fechaFinalizacionApelacion = new Date(beca.fecha_fin); //Se crea una fecha con la fecha de fin de la beca
-    fechaFinalizacionApelacion.setDate(fechaFinalizacionApelacion.getDate() + 14); //Se le suman 14 dias a la fecha de fin de la beca
-    if (fecha_actual > fechaFinalizacionApelacion) { //Si se sobre pasa de las 2 semanas de plazo siguientes a la fecha fin de la beca
-      return [null, "El plazo de apelacion ha vencido"];
+    let updateObject = { $set: { motivos: body.motivos } };
+
+    if (body.documentosFaltantes) {
+      updateObject.$push = { documentosFaltantes: { $each: body.documentosFaltantes } };
     }
-    if (fecha_actual < beca.fecha_fin){ //Si aun no termina el periodo de postulacion la beca
-      return [null, "El periodo de apelacion aun no comienza"];
-    }
-    
-    //Verificacion de postulacion previa rechazada
-    if (postulacionFound.estado == "Apelada") return [null, "El usuario ya tiene una apelacion en proceso"];
-    if (postulacionFound.estado != "Rechazada") return [null, "El usuario no presenta una postulacion rechazada"];
 
-    //Agrega el archivo PDF a la matriz documentosPDF
-    postulacionFound.documentosPDF.push({
-      nombre: nombre,
-      contenido: contenido,
-    });
-    postulacionFound.estado = "Apelada";
-    postulacionFound.motivos = "Apelacion solicitada";
-    postulacionFound.fecha_recepcion = fecha_actual;
-    await postulacionFound.save();
+    const postulacionUpdated = await Postula.findByIdAndUpdate(
+      id,
+      updateObject,
+      { new: true },
+    );
 
-    return ["Apelacion enviada", null];
+    return [postulacionUpdated, null];
   } catch (error) {
-    handleError(error, "postulacion.service -> createApelacion");
+    handleError(error, "postulacion.service -> actualizarMotivos");
   }
 }
 
@@ -227,5 +242,5 @@ module.exports = {
   getEstado,
   getPostulaciones,
   getPostulacionById,
-  createApelacion,
+  actualizarMotivos,
 };
