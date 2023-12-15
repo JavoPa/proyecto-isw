@@ -33,8 +33,8 @@ async function getBecasid(req, res) {
       if (errorBeca) return respondError(req, res, 404, errorBeca);
 
       const requisitosNombres = await Promise.all(
-        beca.requisitos.map(async (codigo) => {
-          const [requisito, errorRequisito] = await RequisitoService.getReqByCod(codigo);
+        beca.requisitos.map(async (_id) => {
+          const [requisito, errorRequisito] = await RequisitoService.getReqByCod(_id);
           return requisito ? requisito.descripcion : null;
         })
       ); 
@@ -64,7 +64,6 @@ async function createBeca(req, res) {
       const { error: bodyError } = becaSchema.validate(body);
       if (bodyError) return respondError(req, res, 400, bodyError.message);
 
-      //convertir fecha a formato date de mongo
       body.fecha_inicio = moment(body.fecha_inicio, "DD-MM-YYYY").toDate();
       body.fecha_fin = moment(body.fecha_fin, "DD-MM-YYYY").toDate();
       

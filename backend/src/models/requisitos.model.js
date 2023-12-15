@@ -11,11 +11,6 @@ const requisitoSchema = new mongoose.Schema(
         required: true,
         unique: true,
     },
-    codigo:{
-        type: Number,
-        required: true,
-        unique: true,
-    },
   },
   {
     versionKey: false,

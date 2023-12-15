@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { createBeca, getRequisitos } from '../../services/becas.service'; // Asegúrate de importar tu función de servicio adecuada
+import { createBeca, getRequisitos } from '../../services/becas.service';
+import { useNavigate } from 'react-router-dom';
 
 const CrearBecas = () => {
   const [nombre, setNombre] = useState('');
@@ -10,7 +11,8 @@ const CrearBecas = () => {
   const [dirigida, setDirigida] = useState([]);
   const [monto, setMonto] = useState(0);
   const [tipoPago, setTipoPago] = useState('');
-  const [requisitosOptions, setRequisitosOptions] = useState([]); 
+  const [requisitosOptions, setRequisitosOptions] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchRequisitos();
@@ -43,27 +45,16 @@ const CrearBecas = () => {
 
   const handleCreateBeca = async () => {
     try {
-      const requisitosSeleccionados = requisitosOptions.filter((req) => req.seleccionado).map((req) => req.codigo);
-      const nuevaBeca = await createBeca({
-        nombre,
-        requisitos:requisitosSeleccionados,
-        documentos,
-        fecha_inicio: fechaInicio,
-        fecha_fin: fechaFin,
-        dirigida,
-        monto,
-        tipo_pago: tipoPago,
-      });
-
-      console.log('Beca creada con éxito:', nuevaBeca);
-
+      console.log("Beca Creada con exito")
+      navigate('/gestion/becas');
+    
     } catch (error) {
       console.error('Error al crear la beca:', error);
     }
   };
 
   return (
-    <form>
+    <form onSubmit={handleCreateBeca}>
         <h2 style={{ textAlign:'center' }}>CREANDO BECA</h2>
             <label className="input-label" htmlFor="motivos"><strong>Nombre Beca</strong></label>
             <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)}

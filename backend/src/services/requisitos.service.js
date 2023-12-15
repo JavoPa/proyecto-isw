@@ -2,7 +2,7 @@
 const Requisito = require("../models/requisitos.model");
 const { handleError } = require("../utils/errorHandler");
 
-1/**
+/**
  * @returns {Promise}
  */
 async function getReq() {
@@ -16,12 +16,12 @@ async function getReq() {
   }
 
 /** 
- * @param {number} codigo
+ * @param {String} Id
  * @returns {Promise} 
  */
-async function getReqByCod(codigo) {
+async function getReqByCod(id) {
     try {
-      const requisito = await Requisito.findOne({ codigo });
+      const requisito = await Requisito.findById({ _id: id });
       if (!requisito) return [null, "El requisito no existe"];
       return [requisito, null];
     } catch (error) {
@@ -35,14 +35,13 @@ async function getReqByCod(codigo) {
  */
 async function CrearRequisito(requisitoData) {
     try {
-      const { descripcion, codigo } = requisitoData;  
-      const requisitoExistente = await Requisito.findOne({ codigo });
+      const { descripcion } = requisitoData;  
+      const requisitoExistente = await Requisito.findOne({ descripcion });
       if (requisitoExistente) {
         return [null, "El requisito ya existe"];
       }
         const newRequisito = new Requisito({
         descripcion,
-        codigo,
       });  
       await newRequisito.save();  
       return [newRequisito, null];
@@ -52,22 +51,21 @@ async function CrearRequisito(requisitoData) {
 }
 
 /**
- * @param {string} codigo
+ * @param {string} id
  * @param {Object} requisitoData
  * @returns {Promise} 
  */
-async function ActualizarRequisito(codigo, requisitoData) {
+async function ActualizarRequisito(id, requisitoData) {
     try {
       // Desestructura los datos del requisito desde requisitoData
       const { descripcion } = requisitoData;
   
       // Verifica si existe un requisito con el mismo código
-      const requisitoExistente = await Requisito.findOne({ codigo });
+      const requisitoExistente = await Requisito.findById(id);
   
       if (!requisitoExistente) {
         return [null, "El requisito no existe"];
-      }
-  
+      } 
       // Actualiza los campos del requisito existente
       requisitoExistente.descripcion = descripcion;
   
@@ -82,12 +80,12 @@ async function ActualizarRequisito(codigo, requisitoData) {
 
 
 /**
- * @param {number} codigo
+ * @param {number} id
  * @returns {Promise}
  */
-async function BorrarRequisito(codigo) {
+async function BorrarRequisito(id) {
     try {
-      return await Requisito.findOneAndDelete({codigo: codigo});
+      return await Requisito.findOneAndDelete({ _id: id});
     } catch (error) {
       handleError(error, "becas.service -> BorrarBeca");
     }
