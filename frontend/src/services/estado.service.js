@@ -24,6 +24,18 @@ export async function getPostulacionById(id) {
   }
 }
 
+export async function getPostulaciones(id) {
+  try {
+    const response = await axios.get(`/users/postulaciones/`);
+    const { status, data } = response;
+    if (status === 200) {
+      return data;
+    }
+  } catch (error) {
+    return error.response.data
+  }
+}
+
 export async function actualizarMotivos(id, body) {
   try {
     const response = await axios.post(`/users/postulacion/${id}/actualizarmotivos`, body);
