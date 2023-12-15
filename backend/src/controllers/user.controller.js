@@ -130,7 +130,8 @@ async function getInforme(req, res) {
       nombreBeca: item.beca.nombre,
       nombrePostulante: item.postulante.nombres,
       apellidosPostulante: item.postulante.apellidos,
-      puntaje: item.puntaje
+      puntaje: item.puntaje,
+      motivos: item.motivos
     }));
 
     //console.log(postulacionesDataAux);
@@ -148,7 +149,8 @@ async function getInforme(req, res) {
       datos[i] = {
         postulante: `${postulacionesDataAux[i].nombrePostulante} ${postulacionesDataAux[i].apellidosPostulante}`,
         beca: `${postulacionesDataAux[i].nombreBeca}`,
-        puntaje: postulacionesDataAux[i].puntaje
+        puntaje: postulacionesDataAux[i].puntaje,
+        motivo: `${postulacionesDataAux[i].motivos}`
       }
     }
     
@@ -166,6 +168,7 @@ async function getInforme(req, res) {
       {key: 'postulante', label: 'Postulante', align: 'center'},
       {key: 'beca', label: 'Beca', align: 'center'},
       {key: 'puntaje', label: 'Puntaje', align: 'center'},
+      {key: 'motivo', label: 'Motivo', align: 'center'}
     ], datos, {
       border: null,
       width: "fill_body",

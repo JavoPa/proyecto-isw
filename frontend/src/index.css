@@ -125,11 +125,20 @@ button:hover {
 
 .navbar-item {
   color: #fff;
+  padding: 5px 10px; /* Añade un poco de padding */
+}
+
+.navbar-item.active {
+  /* Estilos para el elemento li activo */
+  background-color: #1565C0; /* Cambia el color de fondo a un rojo oscuro */
+  color: #fff; /* Cambia el color del texto a blanco */
+  border-radius: 10px; /* Añade bordes redondeados */
 }
 
 .navbar-link {
   color: #fff;
   text-decoration: none;
+  transition: color 0.3s ease; /* Añade una transición suave al cambiar el color */
 }
 
 .navbar-link:hover {
