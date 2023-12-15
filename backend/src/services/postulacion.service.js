@@ -52,7 +52,7 @@ async function getEstado(id) {
       })
       .exec();
     if (!postulacion) return [null, "No hay postulacion"];
-
+    if(!postulacion.beca) return [null, "No hay beca asociada a la postulacion"];
     //Buscar la apelacion de la postulacion
     const apelacion = await Apela.findOne({ postulacion: postulacion._id })
       .select({
@@ -67,7 +67,6 @@ async function getEstado(id) {
         motivos: 1,
       })
       .exec();
-    //if (!apelacion) return [postulacion, null];
     //Creacion de fecha fin de apelacion
     const fechaInicioApelacion = new Date(postulacion.beca.fecha_fin).toLocaleDateString('es-ES', {
       day: '2-digit', 
