@@ -16,7 +16,14 @@ function LoginForm() {
   const onSubmit = (data) => {
     login(data).then((response) => {
       if(response.state === 'Success'){
-        navigate('/');
+        const user = JSON.parse(localStorage.getItem('user')) || '';
+        const firstRoleName = user.roles[0].name;
+        console.log(firstRoleName);
+        if(firstRoleName == "postulante"){
+          navigate('/');
+        }else if(firstRoleName == "encargado"){  
+          navigate('/gestion');
+        }
       }else{
         setErrorLogin(response.message);
       }

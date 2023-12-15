@@ -5,10 +5,12 @@ const Joi = require("joi");
 const postulaPuntajeSchema = Joi.object({
     puntaje: Joi.number()
       .integer()
+      .min(0)
       .required()
       //.pattern(/^[0-9]+$/)
       .messages({
         "string.base": "El puntaje debe ser de tipo int.",
+        "number.min": "El puntaje debe ser un valor positivo"
         //"string.pattern.base": "El puntaje proporcionado no es un numero",
       }),
   });
