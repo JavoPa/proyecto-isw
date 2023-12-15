@@ -14,7 +14,8 @@ async function getReq(req, res) {
       if (errorRequisitos) return respondError(req, res, 404, errorRequisitos); 
       const response = requisitos.map(requisito => ({
         descripcion: requisito.descripcion,
-        codigo: requisito.codigo
+        _id: requisito._id,
+        codigo: requisito.codigo,
       }));
   
       response.length === 0
@@ -33,7 +34,7 @@ async function getReq(req, res) {
   async function getReqByCod(req, res) {
     try {
       const { params } = req;
-      const [requisito, errorRequisito] = await RequisitoService.getReqByCod(params.codigo);
+      const [requisito, errorRequisito] = await RequisitoService.getReqByCod(params.id);
       if (errorRequisito) return respondError(req, res, 404, errorRequisito);
       respondSuccess(req, res, 200, requisito);
     } catch (error) {
@@ -75,7 +76,7 @@ async function getReq(req, res) {
       const { error: bodyError } = requisitoSchema.validate(body);
       if (bodyError) return respondError(req, res, 400, bodyError.message);
       
-      const [updatedRequisito, requisitoError] = await RequisitoService.ActualizarRequisito(params.codigo, body);
+      const [updatedRequisito, requisitoError] = await RequisitoService.ActualizarRequisito(params.id, body);
       if (requisitoError) return respondError(req, res, 400, requisitoError);
   
       respondSuccess(req, res, 200, updatedRequisito);
@@ -92,7 +93,7 @@ async function getReq(req, res) {
 async function BorrarRequisitoCodigo(req, res) {
     try {
       const { params } = req;
-      const requisito = await RequisitoService.BorrarRequisito(params.codigo);
+      const requisito = await RequisitoService.BorrarRequisito(params.id);
       !requisito
         ? respondError(
             req,
