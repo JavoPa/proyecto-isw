@@ -1,15 +1,37 @@
 // ListaBecas.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getBecas, deleteBeca} from '../../services/becas.service';
+import { getBecas} from '../../services/becas.service';
 
 const ListaBecas = () => {
   const [becas, setBecas] = useState([]);
   const navigate = useNavigate();
+  const [busqueda, setBusqueda] = useState('');
+  const [orden, setOrden] = useState(null);
 
   const cargarBecas = async () => {
     try {
-      const becasData = await getBecas();
+        let becasData = await getBecas();
+        if (busqueda) {
+          becasData = becasData.filter((beca) =>
+            beca.nombre.toLowerCase().includes(busqueda.toLowerCase())
+          );
+        }
+  
+        if (orden) {
+          becasData.sort((a, b) => {
+            if (orden === 'nombre') {
+              return a.nombre.localeCompare(b.nombre);
+            } else if (orden === 'inicio') {
+              return new Date(a.fecha_de_inicio) - new Date(b.fecha_de_inicio);
+            } else if (orden === 'fin') {
+              return new Date(a.fecha_de_fin) - new Date(b.fecha_de_fin);
+            }
+  
+            return 0;
+          });
+        }
+  ;
       setBecas(becasData);
     } catch (error) {
       console.error('Error al obtener las becas:', error);
@@ -20,14 +42,45 @@ const ListaBecas = () => {
     cargarBecas();
   }, []);
 
+  const handleBuscar = (e) => {
+    setBusqueda(e.target.value);
+  };
+
+  const handleOrdenar = (criterio) => {
+    setOrden(criterio);
+    cargarBecas();
+  };
 
   const handleVerBeca = (id) => {
     navigate(`/beca/${id}`);
   };
 
   return (
-    <div>
+    <form>
       <h1>Lista de Becas</h1>
+      <div className='filtro-container'>
+      <select value={orden} onChange={(e) => setOrden(e.target.value)}>
+          <option value="">Defecto</option>
+          <option value="nombre">Nombre</option>
+          <option value="inicio">Fecha de Inicio</option>
+          <option value="fin">Fecha de Fin</option>
+        </select>
+        <button type="button" onClick={handleOrdenar}>
+          Ordenar
+        </button>
+
+        <input
+          type="text"
+          id="busqueda"
+          value={busqueda}
+          onChange={handleBuscar}
+          placeholder='Buscar por Nombre'
+        />
+        <button type="button" onClick={cargarBecas}>
+          Buscar
+        </button>
+      </div>
+
       <table className="lista-apelaciones">
         <thead>
           <tr>
@@ -52,7 +105,7 @@ const ListaBecas = () => {
           ))}
         </tbody>
       </table>
-    </div>
+    </form>
   );
 };
 

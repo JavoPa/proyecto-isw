@@ -26,17 +26,46 @@ const DetallesBeca = () => {
     return <div>Cargando...</div>;
   }
   return (
-    <div>
+    <form>
       <h1>Detalles de la Beca</h1>
-      <p>Nombre: {beca.nombre}</p>
-      <p>Requisitos: {beca.requisitos.join(', ')}</p>
-      <p>Documentos: {beca.documentos.join(', ')}</p>
-      <p>Fecha de inicio: {beca.fecha_de_inicio}</p>
-      <p>Fecha de fin: {beca.fecha_de_fin}</p>
-      <p>Dirigida a: {beca.dirigida.join(', ')}</p>
-      <p>Monto: {beca.monto}</p>
-      <p>Pagos: {beca.tipo_pago}</p>
-    </div>
+      <table className="lista-apelaciones">
+        <tbody>
+          <tr className='item-apelacion'>
+            <td className='detalle-variable'>Nombre:</td>
+            <td>{beca.nombre}</td>
+          </tr>
+          <tr className='item-apelacion'>
+            <td className='detalle-variable'>Requisitos:</td>
+            <td>{beca.requisitos.join(', ')}</td>
+          </tr>
+          <tr className='item-apelacion'>
+            <td className='detalle-variable'>Documentos:</td>
+            <td>{beca.documentos.join(', ')}</td>
+          </tr>
+          <tr className='item-apelacion'>
+            <td className='detalle-variable'>Fecha de inicio:</td>
+            <td>{beca.fecha_de_inicio}</td>
+          </tr>
+          <tr className='item-apelacion'>
+            <td className='detalle-variable'>Fecha de fin:</td>
+            <td>{beca.fecha_de_fin}</td>
+          </tr>
+          <tr className='item-apelacion'>
+            <td className='detalle-variable'>Dirigida a:</td>
+            <td>{beca.dirigida.join(', ')}</td>
+          </tr>
+          <tr className='item-apelacion'>
+            <td className='detalle-variable'>Monto de Pago:</td>
+            <td>{beca.monto}</td>
+          </tr>
+          <tr className='item-apelacion'>
+            <td className='detalle-variable'>Fechas de Pago:</td>
+            <td>{beca.tipo_pago}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </form>
   );
 };
 

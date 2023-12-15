@@ -83,6 +83,12 @@ button:hover {
   transition: background-color 0.3s ease; /* Añade una transición al cambiar el color de fondo */
 }
 
+.detalle-variable {
+  background-color: #4CAF50; /* Verde */
+  color: white; /* Texto blanco para contrastar */
+  padding: 8px; /* Espaciado interior */
+  font-weight: bold; /* Texto en negrita */
+}
 
 /*Estado de postulacion*/
 .estado-container {
