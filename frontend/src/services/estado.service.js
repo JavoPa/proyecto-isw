@@ -38,6 +38,20 @@ export async function getDocumentsById(id, docnum) {
   }
 }
 
+export async function getInformeById(id) {
+  try {
+    const response = await axios.get(`/users/postulaciones/${id}/informe`, {
+      responseType: 'blob'
+    });
+    const { status, data } = response;
+    if (status === 200) {
+      return data;
+    }
+  } catch (error) {
+    return error.response.data
+  }
+}
+
 export const getPostulaciones = async () => {
   try {
     const response = await axios.get(`/users/postulaciones/`);

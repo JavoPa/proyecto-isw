@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { getDocumentsById, getPostulacionById } from '../../services/estado.service';
+import { getDocumentsById, getPostulacionById, getInformeById } from '../../services/estado.service';
 
 const DetallesPostulacion = () => {
   const { _id } = useParams();
   const [Postulacion, setPostulacion] = useState(null);
   const [Blobs, setBlobs] = useState([]);
+  const [Informe, setInforme] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,6 +43,20 @@ const DetallesPostulacion = () => {
     }
   }, [_id, Postulacion]);
 
+  useEffect(() => {
+    const getInforme = async () => {
+      try {
+        const Informe = await getInformeById(_id);
+        const InformeData = new Blob([Informe], {type: Informe.type});
+        setInforme(InformeData);
+      } catch (error) {
+        console.error('Error al obtener los detalles de la Postulacion:', error);
+      }
+    };
+
+    getInforme();
+  }, [_id]);
+
   const openFileInNewTab = (index, event) => {
     if (Blobs[index]) {
       event.preventDefault();
@@ -50,6 +65,15 @@ const DetallesPostulacion = () => {
       URL.revokeObjectURL(url);
     }
   };
+
+  const handleInforme = (event) => {
+    if (Informe) {
+      event.preventDefault();
+      const url = URL.createObjectURL(Informe);
+      window.open(url, '_blank');
+      URL.revokeObjectURL(url);
+    }
+  }
 
   if (!Postulacion) {
     return <div>Cargando...</div>;
@@ -109,7 +133,7 @@ const DetallesPostulacion = () => {
           <p>Esta postulación no tiene archivos</p>
         )}
       </div>
-
+      <button onClick={(event) => handleInforme(event)}>Descargar informe</button>
       <button onClick={() => handleModificar('modificarMotivo')}>Modificar motivo</button>
       <button onClick={() => handleModificar('modificarEstado')}>Modificar estado</button>
       <button onClick={() => handleModificar('modificarPuntaje')}>Modificar puntaje</button>
