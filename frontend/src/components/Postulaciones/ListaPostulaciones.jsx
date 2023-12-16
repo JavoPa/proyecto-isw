@@ -37,12 +37,16 @@ const ListaPostulaciones = () => {
 
     const handleInforme = (event) => {
         if (Informe) {
-            event.preventDefault();
-            const url = URL.createObjectURL(Informe);
-            window.open(url, '_blank');
-            URL.revokeObjectURL(url);
+          event.preventDefault();
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(Informe);
+          a.download = 'InformeGeneral.pdf';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(a.href);
         }
-    }
+      };
 
     const handleVerPostulacion = (id) => {
         navigate(`/gestion/postulacion/${id}`);
@@ -63,8 +67,16 @@ const ListaPostulaciones = () => {
         });
     }
 
+    const formatDate = (dateString) => {
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        const formattedDate = new Date(dateString).toLocaleDateString(undefined, options)
+          .split('/').join('-'); // Replace slashes with dashes
+        return formattedDate;
+      };
+
     return (
         <form>
+            
             <div>
                 <h1>Lista de Postulaciones</h1>
                 <table className="lista-apelaciones">
@@ -83,13 +95,13 @@ const ListaPostulaciones = () => {
                     <tbody>
                         {data.map((postulacion) => (
                             <tr key={postulacion._id} className='item-apelacion'>
-                                <td>{postulacion.fechaRecepcion}</td>
+                                <td>{formatDate(postulacion.fechaRecepcion)}</td>
                                 <td>{postulacion.estado}</td>
                                 <td>{postulacion.motivos}</td>
                                 <td>{postulacion.nombreBeca}</td>
                                 <td>{postulacion.nombrePostulante}</td>
                                 <td>{postulacion.puntaje}</td>
-                                <td>{postulacion.documentosFaltantes}</td>
+                                <td>{postulacion.documentosFaltantes.map((doc) => doc + " ")}</td>
                                 <td className="actions">
                                     <button className="ver-button" onClick={() => handleVerPostulacion(postulacion._id)}>
                                         <span role="img" aria-label="Eye Icon">👁️</span>

@@ -37,6 +37,7 @@ const DetallesPostulacion = () => {
           })
         );
         setBlobs(blobs);
+        console.log(Postulacion);
       } catch (error) {
         console.error('Error fetching files:', error);
       }
@@ -51,7 +52,7 @@ const DetallesPostulacion = () => {
     const getInforme = async () => {
       try {
         const Informe = await getInformeById(_id);
-        const InformeData = new Blob([Informe], {type: Informe.type});
+        const InformeData = new Blob([Informe], { type: Informe.type });
         setInforme(InformeData);
       } catch (error) {
         console.error('Error al obtener los detalles de la Postulacion:', error);
@@ -61,11 +62,22 @@ const DetallesPostulacion = () => {
     getInforme();
   }, [_id]);
 
-  const openFileInNewTab = (index, event) => {
+  const openFileForDownload = (index) => {
     if (Blobs[index]) {
-      event.preventDefault();
-      const url = URL.createObjectURL(Blobs[index]);
-      window.open(url, '_blank');
+      const blob = Blobs[index];
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+
+      const fileExtension = blob.type.split('/')[1];
+      a.download = `file_${index + 1}.${fileExtension || 'bin'}`;
+
+      document.body.appendChild(a);
+      a.click();
+
+      document.body.removeChild(a);
+
       URL.revokeObjectURL(url);
     }
   };
@@ -73,15 +85,26 @@ const DetallesPostulacion = () => {
   const handleInforme = (event) => {
     if (Informe) {
       event.preventDefault();
-      const url = URL.createObjectURL(Informe);
-      window.open(url, '_blank');
-      URL.revokeObjectURL(url);
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(Informe);
+      a.download = 'Informe.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
     }
-  }
+  };
 
   if (!Postulacion) {
     return <div>Cargando...</div>;
   }
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const formattedDate = new Date(dateString).toLocaleDateString(undefined, options)
+      .split('/').join('-'); // Replace slashes with dashes
+    return formattedDate;
+  };
 
   const handleModificarMotivo = (event) => {
     event.preventDefault(); //evitar que se comporte como un formulario y se cierre el modal
@@ -100,63 +123,63 @@ const DetallesPostulacion = () => {
 
   return (
     <>
-    <ActualizarMotivosModalForm id={Postulacion._id} showModal={showModalMotivos} setShowModal={setShowModalMotivos}/>
-    <ActualizarPuntajeModalForm id={Postulacion._id} showModal={showModalPuntaje} setShowModal={setShowModalPuntaje}/>
-    <ActualizarEstadoModalForm id={Postulacion._id} showModal={showModalEstado} setShowModal={setShowModalEstado}/>
-    <form>
-      <h1>Detalles de la Postulacion</h1>
-      <table className="lista-apelaciones">
-        <tbody>
-          <tr className='item-apelacion'>
-            <td className='detalle-variable'>Nombre beca:</td>
-            <td>{Postulacion.beca.nombre}</td>
-          </tr>
-          <tr className='item-apelacion'>
-            <td className='detalle-variable'>Postulante:</td>
-            <td>{Postulacion.postulante.nombres + ' ' + Postulacion.postulante.apellidos}</td>
-          </tr>
-          <tr className='item-apelacion'>
-            <td className='detalle-variable'>Fecha de recepción</td>
-            <td>{Postulacion.fecha_recepcion}</td>
-          </tr>
-          <tr className='item-apelacion'>
-            <td className='detalle-variable'>Estado</td>
-            <td>{Postulacion.estado}</td>
-          </tr>
-          <tr className='item-apelacion'>
-            <td className='detalle-variable'>Motivos</td>
-            <td>{Postulacion.motivos}</td>
-          </tr>
-          <tr className='item-apelacion'>
-            <td className='detalle-variable'>Puntaje</td>
-            <td>{Postulacion.puntaje}</td>
-          </tr>
-          <tr className='item-apelacion'>
-            <td className='detalle-variable'>Documentos faltantes:</td>
-            <td>{Postulacion.documentos_faltantes}</td>
-          </tr>
-        </tbody>
-      </table>
+      <ActualizarMotivosModalForm id={Postulacion._id} showModal={showModalMotivos} setShowModal={setShowModalMotivos} />
+      <ActualizarPuntajeModalForm id={Postulacion._id} showModal={showModalPuntaje} setShowModal={setShowModalPuntaje} />
+      <ActualizarEstadoModalForm id={Postulacion._id} showModal={showModalEstado} setShowModal={setShowModalEstado} />
+      <form>
+        <h1>Detalles de la Postulacion</h1>
+        <table className="lista-apelaciones">
+          <tbody>
+            <tr className='item-apelacion'>
+              <td className='detalle-variable'>Nombre beca:</td>
+              <td>{Postulacion.beca.nombre}</td>
+            </tr>
+            <tr className='item-apelacion'>
+              <td className='detalle-variable'>Postulante:</td>
+              <td>{Postulacion.postulante.nombres + ' ' + Postulacion.postulante.apellidos}</td>
+            </tr>
+            <tr className='item-apelacion'>
+              <td className='detalle-variable'>Fecha de recepción</td>
+              <td>{formatDate(Postulacion.fecha_recepcion)}</td>
+            </tr>
+            <tr className='item-apelacion'>
+              <td className='detalle-variable'>Estado</td>
+              <td>{Postulacion.estado}</td>
+            </tr>
+            <tr className='item-apelacion'>
+              <td className='detalle-variable'>Motivos</td>
+              <td>{Postulacion.motivos}</td>
+            </tr>
+            <tr className='item-apelacion'>
+              <td className='detalle-variable'>Puntaje</td>
+              <td>{Postulacion.puntaje}</td>
+            </tr>
+            <tr className='item-apelacion'>
+              <td className='detalle-variable'>Documentos faltantes:</td>
+              <td>{Postulacion.documentosFaltantes.map((doc) => doc + " ")}</td>
+            </tr>
+          </tbody>
+        </table>
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <h2 style={{ marginBottom: '10px' }}>Archivos de postulación</h2>
-        {Blobs?.length > 0 ? (
-          <div style={{ display: 'flex', gap: '10px' }}>
-            {Blobs.map((_, index) => (
-              <button key={index} onClick={(event) => openFileInNewTab(index, event)}>
-                📁 {index + 1}
-              </button>
-            ))}
-          </div>
-        ) : (
-          <p>Esta postulación no tiene archivos</p>
-        )}
-      </div>
-      <button onClick={(event) => handleInforme(event)}>Descargar informe</button>
-      <button onClick={(event) => handleModificarMotivo(event)}>Modificar motivo</button>
-      <button onClick={(event) => handleModificarEstado(event)}>Modificar estado</button>
-      <button onClick={(event) => handleModificarPuntaje(event)}>Modificar puntaje</button>
-    </form>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <h2 style={{ marginBottom: '10px' }}>Archivos de postulación</h2>
+          {Blobs?.length > 0 ? (
+            <div style={{ display: 'flex', gap: '10px' }}>
+              {Blobs.map((_, index) => (
+                <button key={index} onClick={() => openFileForDownload(index)}>
+                  📁 {index + 1}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <p>Esta postulación no tiene archivos</p>
+          )}
+        </div>
+        <button onClick={(event) => handleInforme(event)}>Descargar informe</button>
+        <button onClick={(event) => handleModificarMotivo(event)}>Modificar motivo</button>
+        <button onClick={(event) => handleModificarEstado(event)}>Modificar estado</button>
+        <button onClick={(event) => handleModificarPuntaje(event)}>Modificar puntaje</button>
+      </form>
     </>
   );
 };
