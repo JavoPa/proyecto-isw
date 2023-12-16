@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { getPostulacionById } from '../../services/estado.service';
+import { getDocumentsById, getPostulacionById } from '../../services/estado.service';
 
 const DetallesPostulacion = () => {
   const { _id } = useParams();
   const [Postulacion, setPostulacion] = useState(null);
+  const [Blobs, setBlobs] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const cargarDetallesPostulacion = async () => {
       try {
         const Postulacion = await getPostulacionById(_id);
-        const PostulacionData = Postulacion.data; // Accede a la propiedad "data"
-        setPostulacion(PostulacionData);
-        console.log('Datos de la Postulacion:', PostulacionData);
+        setPostulacion(Postulacion.data);
       } catch (error) {
         console.error('Error al obtener los detalles de la Postulacion:', error);
       }
@@ -23,20 +22,41 @@ const DetallesPostulacion = () => {
     cargarDetallesPostulacion();
   }, [_id]);
 
+  useEffect(() => {
+    const fetchFiles = async () => {
+      try {
+        const blobs = await Promise.all(
+          Array.from({ length: Postulacion?.documentosPDF.length || 0 }, async (_, i) => {
+            const response = await getDocumentsById(_id, i);
+            return new Blob([response], { type: response.type });
+          })
+        );
+        setBlobs(blobs);
+      } catch (error) {
+        console.error('Error fetching files:', error);
+      }
+    };
+
+    if (Postulacion) {
+      fetchFiles();
+    }
+  }, [_id, Postulacion]);
+
+  const openFileInNewTab = (index, event) => {
+    if (Blobs[index]) {
+      event.preventDefault();
+      const url = URL.createObjectURL(Blobs[index]);
+      window.open(url, '_blank');
+      URL.revokeObjectURL(url);
+    }
+  };
+
   if (!Postulacion) {
     return <div>Cargando...</div>;
   }
 
-  const handleModificarMotivo = () => {
-    navigate(`/gestion/modificarMotivo/${_id}`);
-  };
-
-  const handleModificarEstado = () => {
-    navigate(`/gestion/modificarEstado/${_id}`);
-  };
-
-  const handleModificarPuntaje = () => {
-    navigate(`/gestion/modificarPuntaje/${_id}`);
+  const handleModificar = (path) => {
+    navigate(`/gestion/${path}/${_id}`);
   };
 
   return (
@@ -73,11 +93,26 @@ const DetallesPostulacion = () => {
             <td>{Postulacion.documentos_faltantes}</td>
           </tr>
         </tbody>
-        <button>Descargar archivos</button>
       </table>
-      <button onClick={handleModificarMotivo}>Modificar motivo</button>
-      <button onClick={handleModificarEstado}>Modificar estado</button>
-      <button onClick={handleModificarPuntaje}>Modificar puntaje</button>
+
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <h2 style={{ marginBottom: '10px' }}>Archivos de postulación</h2>
+        {Blobs?.length > 0 ? (
+          <div style={{ display: 'flex', gap: '10px' }}>
+            {Blobs.map((_, index) => (
+              <button key={index} onClick={(event) => openFileInNewTab(index, event)}>
+                📁 {index + 1}
+              </button>
+            ))}
+          </div>
+        ) : (
+          <p>Esta postulación no tiene archivos</p>
+        )}
+      </div>
+
+      <button onClick={() => handleModificar('modificarMotivo')}>Modificar motivo</button>
+      <button onClick={() => handleModificar('modificarEstado')}>Modificar estado</button>
+      <button onClick={() => handleModificar('modificarPuntaje')}>Modificar puntaje</button>
     </form>
   );
 };
