@@ -24,7 +24,7 @@ export async function getPostulacionById(id) {
   }
 }
 
-export async function getPostulaciones(id) {
+export const getPostulaciones = async () => {
   try {
     const response = await axios.get(`/users/postulaciones/`);
     const { status, data } = response;

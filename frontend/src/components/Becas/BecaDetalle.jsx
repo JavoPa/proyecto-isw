@@ -42,11 +42,11 @@ const DetallesBeca = () => {
           </tr>
           <tr className='item-apelacion'>
             <td className='detalle-variable'>Requisitos:</td>
-            <td>{beca.requisitos.join(', ')}</td>
+            <td>{beca.requisitos}</td>
           </tr>
           <tr className='item-apelacion'>
             <td className='detalle-variable'>Documentos:</td>
-            <td>{beca.documentos.join(', ')}</td>
+            <td>{beca.documentos}</td>
           </tr>
           <tr className='item-apelacion'>
             <td className='detalle-variable'>Fecha de inicio:</td>
@@ -58,7 +58,7 @@ const DetallesBeca = () => {
           </tr>
           <tr className='item-apelacion'>
             <td className='detalle-variable'>Dirigida a:</td>
-            <td>{beca.dirigida.join(', ')}</td>
+            <td>{beca.dirigida}</td>
           </tr>
           <tr className='item-apelacion'>
             <td className='detalle-variable'>Monto de Pago:</td>

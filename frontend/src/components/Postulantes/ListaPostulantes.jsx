@@ -21,24 +21,26 @@ const ListaPostulantes = () => {
     }, []);
   
     const handleVerPostulante = (id) => {
-      navigate(`/gestion/postulantes/${id}`);
+      navigate(`/gestion/postulante/${id}`);
     };
 
     return (
+    <form>
       <div>
         <h1>Lista de Postulantes</h1>
-        <table className="lista-postulantes">
+        <table className="lista-apelaciones">
           <thead>
             <tr>
               <th>Nombres</th>
               <th>Apellidos</th>
               <th>RUT</th>
               <th>Email</th>
+              <th>Ver</th>
             </tr>
           </thead>
           <tbody>
             {Postulantes.map((postulante) => (
-              <tr key={postulante._id} className='item-postulantes'>
+              <tr key={postulante._id} className='item-apelacion'>
                 <td>{postulante.nombres}</td>
                 <td>{postulante.apellidos}</td>
                 <td>{postulante.rut}</td>
@@ -53,6 +55,7 @@ const ListaPostulantes = () => {
           </tbody>
         </table>
       </div>
+    </form>
     );
   };
   

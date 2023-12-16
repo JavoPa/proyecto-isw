@@ -15,7 +15,7 @@ const DetallesPostulante = () => {
         setPostulante(PostulanteData);
         console.log('Datos del Postulante:', PostulanteData);
       } catch (error) {
-        console.error('Error al obtener los detalles de la Postulante:', error);
+        console.error('Error al obtener los detalles del Postulante:', error);
       }
     };
 
@@ -27,13 +27,29 @@ const DetallesPostulante = () => {
   }
 
   return (
-    <div>
-      <h1>Detalles de la Postulante</h1>
-      <p>Nombres: {Postulante.nombres}</p>
-      <p>Apellidos: {Postulante.apellidos}</p>
-      <p>RUT: {Postulante.rut}</p>
-      <p>Email: {Postulante.email}</p>
-    </div>
+    <form>
+      <h1>Detalles del Postulante</h1>
+      <table className="lista-apelaciones">
+        <tbody>
+          <tr className='item-apelacion'>
+            <td className='detalle-variable'>Nombres:</td>
+            <td>{Postulante.nombres}</td>
+          </tr>
+          <tr className='item-apelacion'>
+            <td className='detalle-variable'>Apellidos:</td>
+            <td>{Postulante.apellidos}</td>
+          </tr>
+          <tr className='item-apelacion'>
+            <td className='detalle-variable'>RUT:</td>
+            <td>{Postulante.rut}</td>
+          </tr>
+          <tr className='item-apelacion'>
+            <td className='detalle-variable'>Email:</td>
+            <td>{Postulante.email}</td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
   );
 };
 
