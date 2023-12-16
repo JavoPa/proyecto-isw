@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { getPostulacionById } from '../../services/estado.service';
+import ActualizarMotivosModalForm from '../ActualizarMotivosModalForm.jsx';
 
 const DetallesPostulacion = () => {
   const { _id } = useParams();
   const [Postulacion, setPostulacion] = useState(null);
   const navigate = useNavigate();
+  const [showModalMotivos, setShowModalMotivos] = useState(false);
 
   useEffect(() => {
     const cargarDetallesPostulacion = async () => {
@@ -27,8 +29,9 @@ const DetallesPostulacion = () => {
     return <div>Cargando...</div>;
   }
 
-  const handleModificarMotivo = () => {
-    navigate(`/gestion/modificarMotivo/${_id}`);
+  const handleModificarMotivo = (event) => {
+    event.preventDefault(); //evitar que se comporte como un formulario y se cierre el modal
+    setShowModalMotivos(true);
   };
 
   const handleModificarEstado = () => {
@@ -40,6 +43,8 @@ const DetallesPostulacion = () => {
   };
 
   return (
+    <>
+    <ActualizarMotivosModalForm id={Postulacion._id} showModal={showModalMotivos} setShowModal={setShowModalMotivos}/>
     <form>
       <h1>Detalles de la Postulacion</h1>
       <table className="lista-apelaciones">
@@ -75,10 +80,11 @@ const DetallesPostulacion = () => {
         </tbody>
         <button>Descargar archivos</button>
       </table>
-      <button onClick={handleModificarMotivo}>Modificar motivo</button>
+      <button onClick={(event) => handleModificarMotivo(event)}>Modificar motivo</button>
       <button onClick={handleModificarEstado}>Modificar estado</button>
       <button onClick={handleModificarPuntaje}>Modificar puntaje</button>
     </form>
+    </>
   );
 };
 
