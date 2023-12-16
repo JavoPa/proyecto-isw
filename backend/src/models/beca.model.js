@@ -16,6 +16,7 @@ const becaSchema = new mongoose.Schema(
     }],
     documentos: {
       type: [String],
+      required: true,
     },
     fecha_inicio: {
       type: Date,
@@ -27,6 +28,7 @@ const becaSchema = new mongoose.Schema(
     },
     dirigida:{
       type:[String],
+      required: true,
     },
     monto: {
       type: mongoose.Schema.Types.Mixed,
