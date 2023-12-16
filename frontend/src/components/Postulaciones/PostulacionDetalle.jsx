@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { getDocumentsById, getPostulacionById, getInformeById } from '../../services/estado.service';
+import ActualizarMotivosModalForm from '../ActualizarMotivosModalForm.jsx';
 
 const DetallesPostulacion = () => {
   const { _id } = useParams();
@@ -9,6 +10,7 @@ const DetallesPostulacion = () => {
   const [Blobs, setBlobs] = useState([]);
   const [Informe, setInforme] = useState(null);
   const navigate = useNavigate();
+  const [showModalMotivos, setShowModalMotivos] = useState(false);
 
   useEffect(() => {
     const cargarDetallesPostulacion = async () => {
@@ -21,7 +23,7 @@ const DetallesPostulacion = () => {
     };
 
     cargarDetallesPostulacion();
-  }, [_id]);
+  }, [_id, showModalMotivos]);
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -79,11 +81,22 @@ const DetallesPostulacion = () => {
     return <div>Cargando...</div>;
   }
 
-  const handleModificar = (path) => {
-    navigate(`/gestion/${path}/${_id}`);
+  const handleModificarMotivo = (event) => {
+    event.preventDefault(); //evitar que se comporte como un formulario y se cierre el modal
+    setShowModalMotivos(true);
+  };
+
+  const handleModificarEstado = () => {
+    navigate(`/gestion/modificarEstado/${_id}`);
+  };
+
+  const handleModificarPuntaje = () => {
+    navigate(`/gestion/modificarPuntaje/${_id}`);
   };
 
   return (
+    <>
+    <ActualizarMotivosModalForm id={Postulacion._id} showModal={showModalMotivos} setShowModal={setShowModalMotivos}/>
     <form>
       <h1>Detalles de la Postulacion</h1>
       <table className="lista-apelaciones">
@@ -124,7 +137,7 @@ const DetallesPostulacion = () => {
         {Blobs?.length > 0 ? (
           <div style={{ display: 'flex', gap: '10px' }}>
             {Blobs.map((_, index) => (
-              <button key={index} onClick={(event) => openFileInNewTab(index, event)}>
+              <button key={index} onClick={(event) => (event) => openFileInNewTab(index, event)}>
                 📁 {index + 1}
               </button>
             ))}
@@ -134,10 +147,11 @@ const DetallesPostulacion = () => {
         )}
       </div>
       <button onClick={(event) => handleInforme(event)}>Descargar informe</button>
-      <button onClick={() => handleModificar('modificarMotivo')}>Modificar motivo</button>
+      <button onClick={(event) => handleModificarMotivo(event)}>Modificar motivo</button>
       <button onClick={() => handleModificar('modificarEstado')}>Modificar estado</button>
       <button onClick={() => handleModificar('modificarPuntaje')}>Modificar puntaje</button>
     </form>
+    </>
   );
 };
 

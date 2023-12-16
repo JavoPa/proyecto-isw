@@ -4,14 +4,10 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { getPostulacionById, actualizarMotivos } from '../services/estado.service';
 
-function ActualizarMotivosModalForm({id, ShowModal}) {
+function ActualizarMotivosModalForm({id, showModal, setShowModal}) {
     const [documentosFaltantes, setDocumentosFaltantes] = useState(['']);
     const [errorUpdate, setErrorUpdate] = useState(null);
-    const [showModal, setShowModal] = useState(false);
     const [successMessage, setSuccessMessage] = useState(null);
-    useEffect(() => {
-      setShowModal(ShowModal);
-    }, [ShowModal]);
 
     const handleAddCampo = () => {
         setDocumentosFaltantes([...documentosFaltantes, '']);
@@ -66,12 +62,13 @@ function ActualizarMotivosModalForm({id, ShowModal}) {
     }, []);
 
     return (
-        <div>
+          <>
             {/* Muestra form de la postulacion seleccionada */}
             {errorUpdate && <div className="error-banner">{errorUpdate}</div>}
             {successMessage && <div className="success-banner">{successMessage}</div>}
                 {showModal && postulacion ? (
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="modal-background">
+                <form className="modal" onSubmit={handleSubmit(onSubmit)}>
                 <h2>Actualizar Motivos y Documentos Faltantes</h2>
                     <label className="input-label" htmlFor="motivos"><strong>Motivo del estado</strong></label>
                     <input
@@ -91,18 +88,21 @@ function ActualizarMotivosModalForm({id, ShowModal}) {
                         value={documento}
                         onChange={event => handleInputChange(index, event)}
                         style={{ marginRight: '10px' }}
+                        {...register(`documento-${index}`, { required: true })}
                         />
                         <button type="button" onClick={() => handleRemoveCampo(index)}>Eliminar</button>
+                        {errors[`documento-${index}`] && <span className='campo-obligatorio'>*Por favor, ingresa el documento faltante</span>}
                     </div>
                     ))}
                     <div><button type="button" onClick={handleAddCampo}>Agregar documento</button></div>
                 <input type="submit" />
-                <div><button onClick={() => setShowModal(false)}>Cerrar</button></div>
+                <div><button type="button" onClick={() => setShowModal(false)}>Cerrar</button></div>
                 </form>
+                </div>
                 ) : (
                 <div>{errorPostulacion && <div className="error-banner">{errorPostulacion}</div>}</div>
                 )}
-        </div>
+            </>
     );
 }
 
