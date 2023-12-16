@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 import { getDocumentsById, getPostulacionById, getInformeById } from '../../services/estado.service';
 import ActualizarMotivosModalForm from '../ActualizarMotivosModalForm.jsx';
+import ActualizarPuntajeModalForm from '../ActualizarPuntajeModalform.jsx';
+import ActualizarEstadoModalForm from '../ActualizarEstadoModalForm.jsx';
 
 const DetallesPostulacion = () => {
   const { _id } = useParams();
   const [Postulacion, setPostulacion] = useState(null);
   const [Blobs, setBlobs] = useState([]);
   const [Informe, setInforme] = useState(null);
-  const navigate = useNavigate();
   const [showModalMotivos, setShowModalMotivos] = useState(false);
+  const [showModalPuntaje, setShowModalPuntaje] = useState(false);
+  const [showModalEstado, setShowModalEstado] = useState(false);
 
   useEffect(() => {
     const cargarDetallesPostulacion = async () => {
@@ -23,7 +25,7 @@ const DetallesPostulacion = () => {
     };
 
     cargarDetallesPostulacion();
-  }, [_id, showModalMotivos]);
+  }, [_id]);
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -86,17 +88,21 @@ const DetallesPostulacion = () => {
     setShowModalMotivos(true);
   };
 
-  const handleModificarEstado = () => {
-    navigate(`/gestion/modificarEstado/${_id}`);
+  const handleModificarEstado = (event) => {
+    event.preventDefault();
+    setShowModalEstado(true);
   };
 
-  const handleModificarPuntaje = () => {
-    navigate(`/gestion/modificarPuntaje/${_id}`);
+  const handleModificarPuntaje = (event) => {
+    event.preventDefault();
+    setShowModalPuntaje(true);
   };
 
   return (
     <>
     <ActualizarMotivosModalForm id={Postulacion._id} showModal={showModalMotivos} setShowModal={setShowModalMotivos}/>
+    <ActualizarPuntajeModalForm id={Postulacion._id} showModal={showModalPuntaje} setShowModal={setShowModalPuntaje}/>
+    <ActualizarEstadoModalForm id={Postulacion._id} showModal={showModalEstado} setShowModal={setShowModalEstado}/>
     <form>
       <h1>Detalles de la Postulacion</h1>
       <table className="lista-apelaciones">
@@ -137,7 +143,7 @@ const DetallesPostulacion = () => {
         {Blobs?.length > 0 ? (
           <div style={{ display: 'flex', gap: '10px' }}>
             {Blobs.map((_, index) => (
-              <button key={index} onClick={(event) => (event) => openFileInNewTab(index, event)}>
+              <button key={index} onClick={(event) => openFileInNewTab(index, event)}>
                 📁 {index + 1}
               </button>
             ))}
@@ -148,8 +154,8 @@ const DetallesPostulacion = () => {
       </div>
       <button onClick={(event) => handleInforme(event)}>Descargar informe</button>
       <button onClick={(event) => handleModificarMotivo(event)}>Modificar motivo</button>
-      <button onClick={() => handleModificar('modificarEstado')}>Modificar estado</button>
-      <button onClick={() => handleModificar('modificarPuntaje')}>Modificar puntaje</button>
+      <button onClick={(event) => handleModificarEstado(event)}>Modificar estado</button>
+      <button onClick={(event) => handleModificarPuntaje(event)}>Modificar puntaje</button>
     </form>
     </>
   );
