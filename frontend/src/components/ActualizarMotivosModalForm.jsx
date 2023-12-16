@@ -88,8 +88,10 @@ function ActualizarMotivosModalForm({id, showModal, setShowModal}) {
                         value={documento}
                         onChange={event => handleInputChange(index, event)}
                         style={{ marginRight: '10px' }}
+                        {...register(`documento-${index}`, { required: true })}
                         />
                         <button type="button" onClick={() => handleRemoveCampo(index)}>Eliminar</button>
+                        {errors[`documento-${index}`] && <span className='campo-obligatorio'>*Por favor, ingresa el documento faltante</span>}
                     </div>
                     ))}
                     <div><button type="button" onClick={handleAddCampo}>Agregar documento</button></div>

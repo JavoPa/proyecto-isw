@@ -23,7 +23,7 @@ const DetallesPostulacion = () => {
     };
 
     cargarDetallesPostulacion();
-  }, [_id]);
+  }, [_id, showModalMotivos]);
 
   if (!Postulacion) {
     return <div>Cargando...</div>;
