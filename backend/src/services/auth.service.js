@@ -63,7 +63,7 @@ function calculateRutDV(rutNumber) {
 
 async function register(user) {
   try {
-    const { nombres, apellidos, rut, password, email } = user;
+    const { nombres, apellidos, rut, password, email, direccion, telefono, fecha_nacimiento, sexo, discapacidad, cuenta_bancaria } = user;
 
     const rutExistente = await User.findOne({ rut: rut }).exec();
     if (rutExistente) return [null, "rut ya está registrado"];
@@ -86,6 +86,12 @@ async function register(user) {
       password: await User.encryptPassword(password),
       email: email,
       roles: rol,
+      direccion: direccion,
+      telefono: telefono,
+      fecha_nacimiento: fecha_nacimiento,
+      sexo: sexo,
+      discapacidad: discapacidad,
+      cuenta_bancaria: cuenta_bancaria,
     });
 
     await newUser.save();
