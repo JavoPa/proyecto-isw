@@ -5,6 +5,7 @@ import { getBecaById, updateBeca, getRequisitos } from '../../services/becas.ser
 const ModificarBeca = () => {
   const { _id } = useParams();
   const [beca, setBeca] = useState(null);
+  const [ErrorBecas, setErrorBecas] = useState(null);
   const [nuevosDatos, setNuevosDatos] = useState({
     nombre: '',
     requisitos: [],
@@ -100,7 +101,8 @@ const ModificarBeca = () => {
     navigate('/gestion/becas'); // Redirige a la lista de becas después de la modificación
 
   } catch (error) {
-    console.error('Error al modificar la beca:', error);
+    console.error('Error al crear la beca:', error.response.data.message);
+    setErrorBecas(error.response.data.message);
   }
 };
 
@@ -109,7 +111,8 @@ const ModificarBeca = () => {
   }
 
   return (
-    <form onSubmit={handleFormSubmit}>
+    <>
+      <form onSubmit={handleFormSubmit}>
         <h2 style={{ textAlign:'center' }}>MODIFICANDO  BECA</h2>        
         <label className="input-label" htmlFor="motivos"><strong>Nombre Beca</strong></label>
         <input
@@ -181,8 +184,10 @@ const ModificarBeca = () => {
         />
 
         <div></div>
-      <button type="submit">Guardar Cambios</button>
-    </form>
+        <button type="submit">Guardar Cambios</button>
+      </form>
+    {ErrorBecas && <div className="error-banner">{ErrorBecas}</div>}
+    </>    
   );
 };
   export default ModificarBeca;
