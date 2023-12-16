@@ -78,7 +78,12 @@ async function register(user) {
    
 
     const rol = await Role.findOne({ name: "postulante"}).exec();
-      
+
+    // Split the date by '-'
+    const parts = fecha_nacimiento.split('-');
+    
+    // Rearrange the parts to the desired format YYYY-MM-DD
+    const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
     const newUser = new User({
       nombres: nombres,
       apellidos: apellidos,
@@ -88,7 +93,7 @@ async function register(user) {
       roles: rol,
       direccion: direccion,
       telefono: telefono,
-      fecha_nacimiento: fecha_nacimiento,
+      fecha_nacimiento: formattedDate,
       sexo: sexo,
       discapacidad: discapacidad,
       cuenta_bancaria: cuenta_bancaria,

@@ -15,6 +15,12 @@ async function register(req, res) {
       rut: req.body.rut,
       password: req.body.password,
       email: req.body.email,
+      direccion: req.body.direccion,
+      telefono: req.body.telefono,
+      fecha_nacimiento: req.body.fecha_nacimiento,
+      sexo: req.body.sexo,
+      discapacidad: req.body.discapacidad,
+      cuenta_bancaria: req.body.cuenta_bancaria,
     };
 
     const [user, errorUser] = await AuthServices.register(body);
