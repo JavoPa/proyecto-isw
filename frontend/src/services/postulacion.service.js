@@ -25,15 +25,10 @@ export async function getMyUser() {
   }
 }
 
-export async function createPostulacion(comentario, files) {
+export async function createPostulacion(data) {
   try {
-    const formData = new FormData();
-    formData.append('comentario', comentario);
-    const filesArray = Array.from(files);
-    filesArray.forEach((file, index) => {
-      formData.append(`file${index}`, file);
-    });
-    const response = await axios.post(`/postulacion/postular`, formData, {
+    
+    const response = await axios.post(`/postulacion/postular`, data, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
