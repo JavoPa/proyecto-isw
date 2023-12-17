@@ -94,21 +94,19 @@ const ModificarBeca = () => {
     const documentosArray = Array.isArray(nuevosDatos.documentos) ? nuevosDatos.documentos : nuevosDatos.documentos.split(', ');
     const dirigidaArray = Array.isArray(nuevosDatos.dirigida) ? nuevosDatos.dirigida : nuevosDatos.dirigida.split(', ');
 
-    console.log('Datos a enviar:', {
+    const {state, data} = await updateBeca(_id, {
       ...nuevosDatos,
       requisitos: requisitosArray,
       documentos: documentosArray,
       dirigida: dirigidaArray,
     });
 
-    await updateBeca(_id, {
-      ...nuevosDatos,
-      requisitos: requisitosArray,
-      documentos: documentosArray,
-      dirigida: dirigidaArray,
-    });
-    navigate('/gestion/becas'); // Redirige a la lista de becas después de la modificación
+    console.log(state);
+    console.log(data);
 
+    if (state === 'Success') {
+      navigate('/gestion/becas', { state: { modifySuccess: true } });
+    } // Redirige a la lista de becas después de la modificación
   } catch (error) {
     console.error('Error al crear la beca:', error.response.data.message);
     setErrorBecas(error.response.data.message);

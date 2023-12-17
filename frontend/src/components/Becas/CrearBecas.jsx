@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createBeca, getRequisitos } from '../../services/becas.service'; // Asegúrate de importar tu función de servicio adecuada
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,} from 'react-router-dom';
 
 const CrearBecas = () => {
   const [nombre, setNombre] = useState('');
@@ -55,7 +55,7 @@ const CrearBecas = () => {
       const FechaInicioF= formatDate(fechaInicio) 
       const FechaFinalF= formatDate(fechaFin)
 
-      await createBeca({
+      const {state, data} = await createBeca({
         nombre,
         requisitos:requisitosSeleccionados,
         documentos,
@@ -65,7 +65,13 @@ const CrearBecas = () => {
         monto,
         tipo_pago: tipoPago,
       });
-      navigate("/gestion/becas")
+
+      console.log("Beca creada con exito");
+      console.log(data);
+      if (state === 'Success') {
+        navigate('/gestion/becas', { state: { success: true } });
+      }
+
     } catch (error) {
       console.error('Error al crear la beca:', error.response.data.message);
       setErrorBecas(error.response.data.message);
