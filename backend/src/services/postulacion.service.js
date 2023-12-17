@@ -224,7 +224,7 @@ async function actualizarMotivos(id, body) {
     let updateObject = { $set: { motivos: body.motivos } };
 
     if (body.documentosFaltantes) {
-      updateObject.$push = { documentosFaltantes: { $each: body.documentosFaltantes } };
+      updateObject.$set = { ...updateObject.$set, documentosFaltantes: body.documentosFaltantes };
     }
 
     const postulacionUpdated = await Postula.findByIdAndUpdate(

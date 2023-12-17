@@ -14,6 +14,7 @@ function Apelaciones() {
   const [filtroApellido, setFiltroApellido] = useState('');
   const [filtroEstado, setFiltroEstado] = useState('');
   const [filtroRut, setFiltroRut] = useState('');
+  const [orden, setOrden] = useState('antiguo');
 
   const fetchApelaciones = () => {
     getApelaciones().then((response) => {
@@ -27,7 +28,9 @@ function Apelaciones() {
   
   useEffect(() => {
     fetchApelaciones();
-  }, []);
+    setErrorEstado(null);
+    setMotivos('');
+  }, [showModal]);
   
   const handleClick = (id) => {
     getApelacionById(id).then((response) => {
@@ -48,7 +51,6 @@ function Apelaciones() {
         setSelectedApelacion(null);
         setErrorEstado(null);
         setSuccessMessage('Apelación aprobada correctamente');
-        fetchApelaciones();
         setTimeout(() => {
           setSuccessMessage(null);
         }, 5000);
@@ -64,7 +66,6 @@ function Apelaciones() {
         setSelectedApelacion(null);
         setErrorEstado(null);
         setSuccessMessage('Apelación rechazada correctamente');
-        fetchApelaciones();
         setTimeout(() => {
           setSuccessMessage(null);
         }, 5000);
@@ -89,6 +90,15 @@ function Apelaciones() {
           <input type="text" value={filtroRut} onChange={e => setFiltroRut(e.target.value)} placeholder="Filtrar por RUT" />
           <input type="text" value={filtroNombre} onChange={e => setFiltro(e.target.value)} placeholder="Filtrar por nombres" />
           <input type="text" value={filtroApellido} onChange={e => setFiltroApellido(e.target.value)} placeholder="Filtrar por apellidos" />
+          <label htmlFor="orden">Ordenar por:</label>
+          <select id="orden" value={orden} onChange={e => setOrden(e.target.value)}>
+            <option value="antiguo">Mas antiguo</option>
+            <option value="nuevo">Mas nuevo</option>
+            <option value="nombre">Nombres</option>
+            <option value="apellido">Apellidos</option>
+            <option value="beca">Beca</option>
+            <option value="estado">Estado</option>
+          </select>
         </div>
         {apelaciones ? (
           <table className="lista-apelaciones">
@@ -104,7 +114,22 @@ function Apelaciones() {
             </thead>
             <tbody>
               {apelaciones
-              .sort((a, b) => new Date(a.fecha_apelacion) - new Date(b.fecha_apelacion))
+              .sort((a, b) => {
+                switch (orden) {
+                  case 'nombre':
+                    return a.postulacion.postulante.nombres.localeCompare(b.postulacion.postulante.nombres);
+                  case 'apellido':
+                    return a.postulacion.postulante.apellidos.localeCompare(b.postulacion.postulante.apellidos);
+                  case 'beca':
+                    return a.postulacion.beca.nombre.localeCompare(b.postulacion.beca.nombre);
+                  case 'estado':
+                    return a.estado.localeCompare(b.estado);
+                  case 'nuevo':
+                    return new Date(b.fecha_apelacion) - new Date(a.fecha_apelacion);
+                  default: // 'Mas antiguo'
+                    return new Date(a.fecha_apelacion) - new Date(b.fecha_apelacion);
+                }
+              })
               .filter(apelacion => 
                 apelacion.postulacion.postulante.nombres.toLowerCase().includes(filtroNombre.toLowerCase()) &&
                 apelacion.postulacion.postulante.apellidos.toLowerCase().includes(filtroApellido.toLowerCase()) &&

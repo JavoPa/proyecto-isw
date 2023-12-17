@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { getPostulacionById, actualizarMotivos } from '../services/estado.service';
 
-function ActualizarMotivosModalForm({id, showModal, setShowModal}) {
+function ActualizarMotivosModalForm({id, showModal, setShowModal, docs, motivos}) {
     const [documentosFaltantes, setDocumentosFaltantes] = useState(['']);
     const [errorUpdate, setErrorUpdate] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
+    const [motivosEstado, setMotivosEstado] = useState("");
 
     const handleAddCampo = () => {
         setDocumentosFaltantes([...documentosFaltantes, '']);
@@ -59,6 +60,8 @@ function ActualizarMotivosModalForm({id, showModal, setShowModal}) {
           setErrorPostulacion(response.message);
         }
       });
+      setDocumentosFaltantes(docs);
+      setMotivosEstado(motivos);
     }, []);
 
     return (
@@ -76,6 +79,8 @@ function ActualizarMotivosModalForm({id, showModal, setShowModal}) {
                         name="motivos"
                         type="text"
                         {...register('motivos', { required: true })}
+                        value={motivosEstado}
+                        onChange={event => setMotivosEstado(event.target.value)}
                     />
                     {errors.motivos && <span className='campo-obligatorio'>*Por favor, ingresa el motivo</span>}
                     {documentosFaltantes.map((documento, index) => (
@@ -88,7 +93,7 @@ function ActualizarMotivosModalForm({id, showModal, setShowModal}) {
                         value={documento}
                         onChange={event => handleInputChange(index, event)}
                         style={{ marginRight: '10px' }}
-                        {...register(`documento-${index}`, { required: true })}
+                        required
                         />
                         <button type="button" onClick={() => handleRemoveCampo(index)}>Eliminar</button>
                         {errors[`documento-${index}`] && <span className='campo-obligatorio'>*Por favor, ingresa el documento faltante</span>}

@@ -13,9 +13,6 @@ function App() {
         <Link className='home-button' to="/becas">Ver becas disponibles</Link>
         <Link className='home-button' to="/postular">Postular a una beca</Link>
       </main>
-      <footer>
-        <p>© 2023 - Municipalidad</p>
-      </footer>
     </div>
   );
 }

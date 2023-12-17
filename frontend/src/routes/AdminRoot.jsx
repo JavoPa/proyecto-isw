@@ -26,7 +26,8 @@ function PageRoot() {
     <div>
       <AdminNavBar />
       <div className="user-info">
-        <p>Estas logeado como: {user.email}</p>
+        <p>Has iniciado como:<br /> <strong>{user.email}</strong></p>
+        <button onClick={() => navigate('/gestion')}>Gestionar</button>
         <button onClick={handleLogout}>Cerrar sesion</button>
       </div>
       <Outlet />
