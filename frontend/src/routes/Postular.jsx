@@ -1,11 +1,11 @@
 import React from 'react';
 import PostularForm from '../components/PostularForm';
-import { useParams } from 'react-router-dom';
 
 const Postular = () => {
-  const { becaId } = useParams();
+  const selectedBecaId = sessionStorage.getItem('selectedBecaId');
 
-  return <PostularForm becaId={becaId} />;
+
+  return <PostularForm becaId={selectedBecaId} />;
 };
 
 export default Postular;

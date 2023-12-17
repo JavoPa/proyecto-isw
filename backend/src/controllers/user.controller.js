@@ -389,6 +389,30 @@ async function getMyUser(req, res) {
   }
 }
 
+async function updateMyUser(req, res) {
+  try {
+    const { body } = req;
+    // Suponiendo que userBodySchema es un esquema Joi para validar el cuerpo de la solicitud
+    const { error: bodyError } = userBodySchema.validate(body);
+
+    if (bodyError) {
+      return respondError(req, res, 400, bodyError.message);
+    }
+
+    // Suponiendo que UserService.updateUser es un método válido para actualizar un usuario
+    const [user, userError] = await UserService.updateUser(req._id, body);
+
+    if (userError) {
+      return respondError(req, res, 400, userError);
+    }
+
+    return respondSuccess(req, res, 200, user);
+  } catch (error) {
+    handleError(error, "user.controller -> updateMyUser");
+    return respondError(req, res, 500, "No se pudo actualizar el usuario");
+  }
+}
+
 /**
  * Actualiza un usuario por su id
  * @param {Object} req - Objeto de petición
@@ -456,5 +480,6 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
-  getMyUser
+  getMyUser,
+  updateMyUser
 };

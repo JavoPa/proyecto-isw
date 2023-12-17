@@ -61,6 +61,8 @@ async function subirSingle(req, res, next) {
  * @param {Function} next - Función para continuar con la siguiente función
  */
 async function subirMultiples(req, res, next) {
+  console.log("A");
+  console.log(req.body.archivoPDF);
   try {
     upload.any('archivoPDF')(req, res, function (err) {
       if (err) {
@@ -103,9 +105,9 @@ async function subirMultiples(req, res, next) {
  * @param {Function} next - Función para continuar con la siguiente función
  */
 async function subirArray(req, res, next) {
+  console.log(req);
   try {
     upload.array('archivoPDF',5)(req, res, function (err) {
-
       if (err) {
         if (err.code === 'LIMIT_UNEXPECTED_FILE') {
           return respondError(

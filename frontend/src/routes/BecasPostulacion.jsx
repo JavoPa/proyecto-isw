@@ -19,8 +19,11 @@ const BecasPostulacion = () => {
 
   const handlePostularClick = () => {
     if (selectedBecaId !== null) {
-      // Redirect to another link passing the selected scholarship ID as a query parameter
-      navigate(`/postulacion/postular/${selectedBecaId}`);
+      // Guardar el ID de la beca en el sessionStorage
+      sessionStorage.setItem('selectedBecaId', selectedBecaId);
+      
+      // Redirigir a la página de postulación
+      navigate(`/postulacion/postular`);
     } else {
       // Handle case when no scholarship is selected
       console.log('Please select a scholarship before postular.');
@@ -28,7 +31,7 @@ const BecasPostulacion = () => {
   };
 
   return (
-    <>
+    <><div className="lista-contenedor">
       <h1>Lista de becas</h1>
       <ul>
         {becas.length > 0 &&
@@ -46,6 +49,7 @@ const BecasPostulacion = () => {
       <button type="button" onClick={handlePostularClick}>
         Postular
       </button>
+      </div>
     </>
   );
 };

@@ -22,6 +22,7 @@ import ListaPostulantes from './components/Postulantes/ListaPostulantes.jsx';
 import PostulanteDetalle from './components/Postulantes/PostulanteDetalle.jsx';
 import ListaPostulaciones from './components/Postulaciones/ListaPostulaciones.jsx';
 import PostulacionDetalle from './components/Postulaciones/PostulacionDetalle.jsx';
+import Perfil from './routes/Perfil.jsx';
 
 const router = createBrowserRouter([
   { // Rutas publicas
@@ -43,7 +44,12 @@ const router = createBrowserRouter([
       },
     ],
   },
-
+  {
+    //ruta de perfil
+    path: '/users/perfil',
+    element: <Perfil />,
+    errorElement: <ErrorPage />,
+  },
   { // Rutas privadas de postulacion por parte del postulante
     path: '/postulacion',
     element: <Root />,
@@ -62,7 +68,7 @@ const router = createBrowserRouter([
         element: <BecasPostulacion />,
       },
       {
-        path: 'postular/:becaId', 
+        path: 'postular', 
         element: <Postular />,
       }
     ],
@@ -113,6 +119,7 @@ const router = createBrowserRouter([
   { // Ruta de login
     path: '/auth',
     element: <Login />,
+
   },
 ]);
 

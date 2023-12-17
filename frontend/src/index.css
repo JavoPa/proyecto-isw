@@ -57,7 +57,7 @@ button:hover {
   width: 60%;
   margin: 20px auto;
   padding: 20px;
-  background-color: #CCCCCC;
+  background-color: #9E9E9E;
   border-radius: 5px; /* Bordes redondeados */
   color: #333333;
 }
@@ -479,6 +479,15 @@ footer {
   width: 200px;
 }
 
+
+.centrado {
+  text-align: center;
+}
+
+.vacio {
+  width: 200px;
+  height: 50px;
+}
 
 /*Usados para postular a una beca, si van a modificarlo avisen*/
 

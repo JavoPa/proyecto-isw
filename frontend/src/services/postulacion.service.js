@@ -25,21 +25,33 @@ export async function getMyUser() {
   }
 }
 
-export async function createPostulacion(data) {
+
+import axios from 'axios';
+
+export async function createPostulacion(comentario, beca_id, files) {
   try {
-    
-    const response = await axios.post(`/postulacion/postular`, data, {
+    const formData = new FormData();
+    formData.append('comentario', comentario);
+    formData.append('beca_id', beca_id);
+
+    files.forEach((file, index) => {
+      formData.append(`archivoPDF[${index}]`, file);
+    });
+
+    const response = await axios.post(`/postulacion/postular`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
 
-    const { status, data } = response;
-    if (status === 201) {
-      return data;
-    }
+    return response.data; // Simply return the entire response data
+
   } catch (error) {
-    // Devuelve el mensaje de error
-    return error.response.data;
+    // Return the error message
+    if (error.response && error.response.data) {
+      return error.response.data;
+    } else {
+      return { error: 'An error occurred during the request.' };
+    }
   }
 }

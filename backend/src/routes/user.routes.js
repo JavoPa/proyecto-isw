@@ -41,6 +41,10 @@ router.delete(
 router.get('/perfil', (req, res) => {
   usuarioController.getMyUser(req, res);
 });
+router.put('/perfil/:id', (req, res) => {
+  const userId = req.params.id;
+  usuarioController.updateMyUser(req, res, userId);
+});
 
 // Rutas para requerimiento de seleccion
 router.get('/postulantes', authorizationMiddleware.isAdmin, usuarioController.getPostulantes); // Obtiene a todos los postulantes
