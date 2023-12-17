@@ -19,18 +19,20 @@ const postulaPuntajeSchema = Joi.object({
     estado: Joi.string()
       .valid('Enviada', 'Rechazada', 'Apelada', 'Aprobada')
       .required()
-      //.pattern(/^[0-9]+$/)
       .messages({
         "string.base": "El estado debe ser de tipo string.",
-        //"string.pattern.base": "El puntaje proporcionado no es un numero",
-      }),
-      motivos: Joi.string()
-      .required()
-      .messages({
-        "string.empty": "El motivo no puede estar vacio.",
-        "any.required": "El motivo es obligatorio.",
-        "string.base": "El motivo debe ser de tipo string.",
-      }),
+        "any.only": "El estado debe ser Enviada, Rechazada, Apelada o Aprobada"
+      })
+  });
+
+  const postulaMotivosSchema = Joi.object({
+    motivos: Joi.string()
+    .required()
+    .messages({
+      "string.empty": "El motivo no puede estar vacio.",
+      "any.required": "El motivo es obligatorio.",
+      "string.base": "El motivo debe ser de tipo string.",
+    })
   });
 
   const actualizaMotivo = Joi.object({
@@ -101,4 +103,4 @@ const postulacionSchema = Joi.object({
 });
 
 
-module.exports = { postulacionSchema, postulaPuntajeSchema, postulaEstadoSchema, actualizaMotivo };
+module.exports = { postulacionSchema, postulaPuntajeSchema, postulaEstadoSchema, postulaMotivosSchema, actualizaMotivo };

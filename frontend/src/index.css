@@ -50,6 +50,18 @@ button:hover {
 }
 
 /*Lista de apelaciones*/
+.lista-contenedor {
+  display: flex;
+  flex-direction: column; /* Apilamos los elementos verticalmente */
+  gap: 20px; /* Espacio entre los elementos */
+  width: 60%;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #CCCCCC;
+  border-radius: 5px; /* Bordes redondeados */
+  color: #333333;
+}
+
 .lista-apelaciones {
   width: 100%;
   border-collapse: collapse;
@@ -295,13 +307,13 @@ form input[type="submit"]:hover {
   width: 80%;
   max-height: 80vh; /* 90% de la altura de la ventana */
   overflow-y: auto; /* permite el desplazamiento si el contenido es demasiado grande */
-  max-width: 60vh;
+  max-width: 70vh;
   padding: 20px;
-  background-color: #4CAF50; /* Color de fondo de la lista de apelaciones */
+  background-color: #9E9E9E; /* Color de fondo de la lista de apelaciones */
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  color: #ffffff; /* Color de texto de los items de la lista de apelaciones */
+  color: #333333; /* Color de texto de los items de la lista de apelaciones */
 }
 
 /* Estilo de los botones centrados */
@@ -419,4 +431,43 @@ form input[type="submit"]:hover {
 .node.pendiente p {
   font-weight: bold;
   color: rgb(128, 119, 0);
+}
+
+.App {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  background-color: #f8f9fa;
+  padding: 20px;
+}
+
+main {
+  margin: 20px;
+}
+
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #f8f9fa;
+  color: #6c757d;
+  text-align: center;
+  padding: 10px;
+}
+
+.home-button {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.home-button:hover {
+  background-color: #0056b3;
 }

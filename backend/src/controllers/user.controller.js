@@ -268,10 +268,25 @@ async function getDocuments(req, res) {
     if (params.docnum < 0) return respondError(req, res, 404, "No existe ese slot: valor negativo")
 
     //console.log(documents.documentosPDF[0].contenido);
+    const fileExtension = documents.documentosPDF[params.docnum].nombre.slice(-4).toLowerCase();
+
+    let contentType;
+    switch (fileExtension) {
+      case '.pdf':
+        contentType = 'application/pdf';
+        break;
+      case '.png':
+        contentType = 'image/png';
+        break;
+      case '.jpg':
+      case 'jpeg':
+        contentType = 'image/jpeg';
+        break;
+    }
     
     const filename = `documento-${params.docnum}-${Date.now()}`;
     res.writeHead(200, {
-      'Content-Type': 'application/pdf',
+      'Content-Type': contentType,
       'Content-disposition': `attachment;filename=${filename}`
     });
     //res.write(documents.documentosPDF[params.docnum].contenido, 'binary');

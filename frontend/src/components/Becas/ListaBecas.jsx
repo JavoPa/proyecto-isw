@@ -46,7 +46,7 @@ const ListaBecas = () => {
       console.error('Error al obtener las becas:', error);
     }
   };
-
+  
   useEffect(() => {
     cargarBecas();
   }, []);
