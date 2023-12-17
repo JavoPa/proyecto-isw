@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 
 // Define el esquema de validación para el modelo Beca
 const becaSchema = Joi.object({
-  nombre: Joi.string().required().min(5).pattern(/^[a-zA-Z0-9\s]+$/).messages({
+  nombre: Joi.string().required().min(5).pattern(/^[a-zA-Z0-9ñÑ\s]+$/).messages({
     "string.empty": "El nombre no puede estar vacío.",
     "any.required": "El nombre es obligatorio.",
     "string.base": "El nombre debe ser de tipo string.",
@@ -14,7 +14,7 @@ const becaSchema = Joi.object({
   }),
   
   requisitos: Joi.array().items(Joi.string()
-  .pattern(/^[a-zA-Z0-9\s]+$/)
+  .pattern(/^[a-zA-Z0-9ñÑ\s]+$/)
   .min(24)
   .messages({
     "string.empty": "El requisito no puede estar vacio.",
@@ -28,7 +28,7 @@ const becaSchema = Joi.object({
 
 
   documentos: Joi.array().items(Joi.string()
-  .pattern(/^[a-zA-Z\s]*$/, 'letters and spaces')
+  .pattern(/^[a-zA-ZñÑ\s]*$/, 'letters and spaces')
   .min(4)
   .messages({
     "string.empty": "El nombre del documento no puede estar vacio.",
@@ -56,7 +56,7 @@ const becaSchema = Joi.object({
     "any.required": "La fecha es obligatoria.",
   }),
   dirigida: Joi.array().items(Joi.string()
-  .pattern(/^[a-zA-Z0-9\s]+$/)
+  .pattern(/^[a-zA-Z0-9ñÑ\s]+$/)
   .messages({
     "string.empty": "Debe ir dirigida a alguien .",
     "string.base": "A quien va dirigida debe ser de tipo string.",
@@ -77,10 +77,9 @@ const becaSchema = Joi.object({
     "any.required": "El monto es obligatorio.",
   }),
 
-  tipo_pago: Joi.string().required().min(5).pattern(/^[a-zA-Z0-9\s]+$/).messages({
+  tipo_pago: Joi.string().required().pattern(/^[a-zA-Z0-9ñÑ\s]+$/).messages({
     "string.empty": "El tipo de pago no puede estar vacío.",
     "string.base": "El tipo de pago debe ser de tipo string.",
-    "string.min": "El tipo de pago debe tener al menos 5 caracteres.",
     "string.pattern.base": "El tipo de pago no puede contener símbolos ni caracteres especiales.",
   }),
 }).messages({
