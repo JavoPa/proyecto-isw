@@ -20,6 +20,7 @@ import ListaPostulantes from './components/Postulantes/ListaPostulantes.jsx';
 import PostulanteDetalle from './components/Postulantes/PostulanteDetalle.jsx';
 import ListaPostulaciones from './components/Postulaciones/ListaPostulaciones.jsx';
 import PostulacionDetalle from './components/Postulaciones/PostulacionDetalle.jsx';
+import AppAdmin from './routes/AppAdmin.jsx';
 
 const router = createBrowserRouter([
   { // Rutas publicas
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
     element: <AdminRoot />,
     errorElement: <ErrorPage />,
     children: [
+      {
+        path: '',
+        element: <AppAdmin />,
+      },
       {
         path: 'apelaciones',
         element: <Apelaciones />,
