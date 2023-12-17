@@ -56,9 +56,30 @@ export const deleteBeca = async (becaId) => {
     }
   };
 
-  export const updateBeca = async (becaId, becaData) => {
+  export async function updateBeca(becaId, becaData) {
     try {
       const response = await axios.put(`/becas/${becaId}`, becaData);
+      
+      if (response.status === 200) {
+        return {
+          state: 'Success',
+          data: response.data
+        };
+      } else {
+        return {
+          state: 'Error',
+          data: null  
+        };
+      }
+    } catch (error) {
+      console.error('Error al actualizar la beca:', error);
+      throw error;
+    }
+  }
+
+  export async function deleteRequisito(requisitoId) {
+    try {
+      const response = await axios.delete(`/requisitos/${requisitoId}`);
       const { status, data } = response;
       if (status === 200) {
         return data.data;
@@ -67,4 +88,17 @@ export const deleteBeca = async (becaId) => {
       console.log(error);
       throw error;
     }
-  };
+  }
+  
+  export async function createRequisito(requisitoData) {
+    try {
+      const response = await axios.post('/requisitos', requisitoData);
+      const { status, data } = response;
+      if (status === 201) {
+        return data.data;
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
