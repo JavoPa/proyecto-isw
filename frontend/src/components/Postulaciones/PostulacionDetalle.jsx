@@ -123,7 +123,7 @@ const DetallesPostulacion = () => {
 
   return (
     <>
-      <ActualizarMotivosModalForm id={Postulacion._id} showModal={showModalMotivos} setShowModal={setShowModalMotivos} />
+      <ActualizarMotivosModalForm id={Postulacion._id} showModal={showModalMotivos} setShowModal={setShowModalMotivos} docs={Postulacion.documentosFaltantes} motivos={Postulacion.motivos}/>
       <ActualizarPuntajeModalForm id={Postulacion._id} showModal={showModalPuntaje} setShowModal={setShowModalPuntaje} />
       <ActualizarEstadoModalForm id={Postulacion._id} showModal={showModalEstado} setShowModal={setShowModalEstado} />
       <form>
