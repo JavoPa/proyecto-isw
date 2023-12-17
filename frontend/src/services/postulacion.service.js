@@ -25,15 +25,26 @@ export async function getMyUser() {
   }
 }
 
-export async function createPostulacion(data, idBeca, comentario) {
+export async function createPostulacion(comentario, files) {
   try {
-    console.log(data.archivos);
-    const response = await axios.post('/postulacion/postular', data, idBeca, comentario);
-    if (response.status === 201) {
-      return response.data.data;
+    const formData = new FormData();
+    formData.append('comentario', comentario);
+    const filesArray = Array.from(files);
+    filesArray.forEach((file, index) => {
+      formData.append(`file${index}`, file);
+    });
+    const response = await axios.post(`/postulacion/postular`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    const { status, data } = response;
+    if (status === 201) {
+      return data;
     }
-    return [];
   } catch (error) {
-    return error.response.data
+    // Devuelve el mensaje de error
+    return error.response.data;
   }
 }
