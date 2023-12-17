@@ -80,6 +80,7 @@ function ActualizarMotivosModalForm({id, showModal, setShowModal, docs, motivos}
                         type="text"
                         {...register('motivos', { required: true })}
                         value={motivosEstado}
+                        onChange={event => setMotivosEstado(event.target.value)}
                     />
                     {errors.motivos && <span className='campo-obligatorio'>*Por favor, ingresa el motivo</span>}
                     {documentosFaltantes.map((documento, index) => (

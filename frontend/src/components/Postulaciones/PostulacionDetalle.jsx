@@ -25,7 +25,7 @@ const DetallesPostulacion = () => {
     };
 
     cargarDetallesPostulacion();
-  }, [_id]);
+  }, [_id, showModalMotivos]);
 
   useEffect(() => {
     const fetchFiles = async () => {
