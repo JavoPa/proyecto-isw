@@ -10,6 +10,9 @@ function AdminNavBar() {
         <li className={`navbar-item ${location.pathname === '/gestion/postulaciones' ? 'active' : ''}`}>
           <Link to="/gestion/postulaciones" className="navbar-link">Postulaciones</Link>
         </li>
+        <li className={`navbar-item ${location.pathname === '/gestion/postulantes' ? 'active' : ''}`}>
+          <Link to="/gestion/postulantes" className="navbar-link">Postulantes</Link>
+        </li>
         <li className={`navbar-item ${location.pathname === '/gestion/becas' ? 'active' : ''}`}>
           <Link to="/gestion/becas" className="navbar-link">Becas</Link>
         </li>

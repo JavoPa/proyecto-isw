@@ -26,9 +26,12 @@ function PageRoot() {
     <div>
       <NavBar />
       <div className="user-info">
-        <p>Estas logeado como: {user.email}</p>
+        <p>Has iniciado como:<br /> <strong>{user.email}</strong></p>
         <button onClick={handleLogout}>Cerrar sesion</button>
       </div>
+      <footer>
+        <p>© 2023 - Municipalidad</p>
+      </footer>
       <Outlet />
     </div>
   );

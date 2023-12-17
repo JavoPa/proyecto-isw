@@ -18,6 +18,10 @@ import ModificarBeca from './components/Becas/ModificarBeca.jsx';
 import ListaBecasP from './components/Becas/ListaBecasP.jsx';
 import BecaDetalleP from './components/Becas/BecaDetalleP.jsx';
 import AdminRoot from './routes/AdminRoot.jsx';
+import ListaPostulantes from './components/Postulantes/ListaPostulantes.jsx';
+import PostulanteDetalle from './components/Postulantes/PostulanteDetalle.jsx';
+import ListaPostulaciones from './components/Postulaciones/ListaPostulaciones.jsx';
+import PostulacionDetalle from './components/Postulaciones/PostulacionDetalle.jsx';
 
 const router = createBrowserRouter([
   { // Rutas publicas
@@ -75,6 +79,22 @@ const router = createBrowserRouter([
       {
         path: 'becas',
         element: <ListaBecas />,
+      },
+      {
+        path: 'postulaciones',
+        element: <ListaPostulaciones />
+      },
+      {
+        path: 'postulacion/:_id',
+        element: <PostulacionDetalle />
+      },
+      {
+        path: 'postulantes',
+        element: <ListaPostulantes />
+      },
+      {
+        path: "postulante/:_id",
+        element: <PostulanteDetalle />
       },
       {
         path:"beca/:_id", 
