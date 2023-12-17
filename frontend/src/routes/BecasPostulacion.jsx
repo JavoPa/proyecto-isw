@@ -21,7 +21,6 @@ const BecasPostulacion = () => {
     if (selectedBecaId !== null) {
       // Guardar el ID de la beca en el sessionStorage
       sessionStorage.setItem('selectedBecaId', selectedBecaId);
-      
       // Redirigir a la página de postulación
       navigate(`/postulacion/postular`);
     } else {
