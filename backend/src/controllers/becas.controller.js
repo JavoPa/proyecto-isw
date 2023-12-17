@@ -1,7 +1,8 @@
 "use strict";
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const BecaService = require("../services/becas.service");
-const becaSchema = require("../schema/becas.schema");
+const {becaSchema} = require("../schema/becas.schema");
+const {userIdSchema} = require("../schema/user.schema");
 const RequisitoService = require("../services/requisitos.service")
 const { handleError } = require("../utils/errorHandler");
 const moment = require("moment");
@@ -29,6 +30,13 @@ async function getBecas(req, res) {
 async function getBecasid(req, res) {
     try {
       const { params } = req;
+      const { error } = userIdSchema.validate({ id: params.id });
+
+      if (error) {
+        // Si hay un error de validación, responde con un error 400 Bad Request
+        return respondError(req, res, 400, error.message);
+      }
+
       const [beca, errorBeca] = await BecaService.getBecasid(params.id);
       if (errorBeca) return respondError(req, res, 404, errorBeca);
 
@@ -87,15 +95,20 @@ async function createBeca(req, res) {
 async function updateBeca(req, res) {
     try {
       const { params, body } = req;
+      const { error } = userIdSchema.validate({ id: params.id });
+      if (error) {
+        // Si hay un error de validación, responde con un error 400 Bad Request
+        return respondError(req, res, 404, error.message);
+      }
       const { error: bodyError } = becaSchema.validate(body);
-      if (bodyError) return respondError(req, res, 400, bodyError.message);
+      if (bodyError) return respondError(req, res, 404, bodyError.message);
 
       //convertir fecha a formato date de mongo
       body.fecha_inicio = moment(body.fecha_inicio, "DD-MM-YYYY").toDate();
       body.fecha_fin = moment(body.fecha_fin, "DD-MM-YYYY").toDate();
 
       const [bec, becaError] = await BecaService.updateBeca(params.id, body);
-      if (becaError) return respondError(req, res, 400, becaError);
+      if (becaError) return respondError(req, res, 404, becaError);
       
       respondSuccess(req, res, 200, bec);
     } catch (error) {
@@ -111,6 +124,12 @@ async function updateBeca(req, res) {
 async function BorrarBeca(req, res) {
     try {
       const { params } = req;
+      const { error } = userIdSchema.validate({ id: params.id });
+
+      if (error) {
+        // Si hay un error de validación, responde con un error 400 Bad Request
+        return respondError(req, res, 400, error.message);
+      }
       const bec = await BecaService.BorrarBeca(params.id);
       !bec
         ? respondError(
