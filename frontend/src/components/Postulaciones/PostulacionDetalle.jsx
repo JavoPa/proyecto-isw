@@ -44,7 +44,7 @@ const DetallesPostulacion = () => {
 
   return (
     <>
-    <ActualizarMotivosModalForm id={Postulacion._id} showModal={showModalMotivos} setShowModal={setShowModalMotivos}/>
+    <ActualizarMotivosModalForm id={Postulacion._id} showModal={showModalMotivos} setShowModal={setShowModalMotivos} docs={Postulacion.documentosFaltantes} motivos={Postulacion.motivos}/>
     <form>
       <h1>Detalles de la Postulacion</h1>
       <table className="lista-apelaciones">
