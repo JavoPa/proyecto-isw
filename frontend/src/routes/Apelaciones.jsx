@@ -28,7 +28,9 @@ function Apelaciones() {
   
   useEffect(() => {
     fetchApelaciones();
-  }, []);
+    setErrorEstado(null);
+    setMotivos('');
+  }, [showModal]);
   
   const handleClick = (id) => {
     getApelacionById(id).then((response) => {
@@ -49,7 +51,6 @@ function Apelaciones() {
         setSelectedApelacion(null);
         setErrorEstado(null);
         setSuccessMessage('Apelación aprobada correctamente');
-        fetchApelaciones();
         setTimeout(() => {
           setSuccessMessage(null);
         }, 5000);
@@ -65,7 +66,6 @@ function Apelaciones() {
         setSelectedApelacion(null);
         setErrorEstado(null);
         setSuccessMessage('Apelación rechazada correctamente');
-        fetchApelaciones();
         setTimeout(() => {
           setSuccessMessage(null);
         }, 5000);
