@@ -232,6 +232,20 @@ async function deleteUser(id) {
   }
 }
 
+async function getMyUser(id) {
+  try {
+    const user = await User.findById({ _id: id })
+      .select("nombres apellidos rut email direccion telefono fecha_nacimiento sexo discapacidad cuenta_bancaria")
+      .exec();
+
+    if (!user) return [null, "El usuario no existe"];
+
+    return [user, null];
+  } catch (error) {
+    handleError(error, "user.service -> getUserById");
+  }
+}
+
 module.exports = {
   getUsers,
   getPostulantes,
@@ -242,4 +256,5 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
+  getMyUser
 };

@@ -420,3 +420,35 @@ form input[type="submit"]:hover {
   font-weight: bold;
   color: rgb(128, 119, 0);
 }
+.box {
+  border: 1px solid #000;
+  padding: 10px;
+  margin: 5px;
+  display: inline-block;
+  width: 200px;
+}
+
+
+/*Usados para postular a una beca, si van a modificarlo avisen*/
+
+.flex-container {
+  display: flex;
+  /* Set flex-direction to row to place the divs horizontally */
+  flex-direction: row;
+  /* Add any additional styles as needed */
+}
+
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+ }
+
+.form-group label {
+  margin-right: 130px; 
+}
+
+.form-group input[type="text"] {
+  margin-right: 20px; 
+}

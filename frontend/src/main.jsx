@@ -9,6 +9,8 @@ import Apelaciones from './routes/Apelaciones.jsx';
 import Estado from './routes/Estado.jsx';
 import PublicRoot from './routes/PublicRoot.jsx';
 import Apelar from './routes/Apelar.jsx';
+import BecasPostulacion from './routes/BecasPostulacion.jsx';
+import Postular from './routes/Postular.jsx';
 import ListaBecas from './components/Becas/ListaBecas.jsx';
 import BecaDetalle from './components/Becas/BecaDetalle.jsx';
 import CrearBecas from './components/Becas/CrearBecas.jsx';
@@ -51,6 +53,14 @@ const router = createBrowserRouter([
         path: 'apelar',
         element: <Apelar />,
       },
+      {
+        path: 'becas',
+        element: <BecasPostulacion />,
+      },
+      {
+        path: 'postular/:becaId', 
+        element: <Postular />,
+      }
     ],
   },
   { // Rutas privadas de gestion por parte del encargado

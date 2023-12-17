@@ -375,6 +375,20 @@ async function getUserById(req, res) {
   }
 }
 
+async function getMyUser(req, res) {
+  try {
+
+    const [userData, errorUser] = await UserService.getMyUser(req._id);
+
+    if (errorUser) return respondError(req, res, 404, errorUser);
+
+    respondSuccess(req, res, 200, userData);
+  } catch (error) {
+    handleError(error, "user.controller -> getMyUser");
+    respondError(req, res, 500, "No se pudo obtener el usuario");
+  }
+}
+
 /**
  * Actualiza un usuario por su id
  * @param {Object} req - Objeto de petición
@@ -442,4 +456,5 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
+  getMyUser
 };
