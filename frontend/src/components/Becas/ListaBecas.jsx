@@ -9,9 +9,15 @@ const ListaBecas = () => {
   const [busqueda, setBusqueda] = useState('');
   const [orden, setOrden] = useState(null);
 
+  const convertirFormatoFecha = (fecha) => {
+    const [day, month, year] = fecha.split('-');
+    return `${year}-${month}-${day}`;
+  };
+
   const cargarBecas = async () => {
     try {
       let becasData = await getBecas();
+      
       if (busqueda) {
         becasData = becasData.filter((beca) =>
           beca.nombre.toLowerCase().includes(busqueda.toLowerCase())
@@ -22,12 +28,15 @@ const ListaBecas = () => {
         becasData.sort((a, b) => {
           if (orden === 'nombre') {
             return a.nombre.localeCompare(b.nombre);
-          } else if (orden === 'inicio') {
-            return new Date(a.fecha_de_inicio) - new Date(b.fecha_de_inicio);
-          } else if (orden === 'fin') {
-            return new Date(a.fecha_de_fin) - new Date(b.fecha_de_fin);
+          }else if (orden === 'inicio') {
+              const dateA = convertirFormatoFecha(a.fecha_de_inicio);
+              const dateB = convertirFormatoFecha(b.fecha_de_inicio);
+              return dateA.localeCompare(dateB);
+          }else if (orden === 'fin') {
+              const dateA = convertirFormatoFecha(a.fecha_de_fin);
+              const dateB = convertirFormatoFecha(b.fecha_de_fin);
+              return dateA.localeCompare(dateB);
           }
-
           return 0;
         });
       }

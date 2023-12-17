@@ -52,12 +52,15 @@ const CrearBecas = () => {
   const handleCreateBeca = async () => {
     try {
       const requisitosSeleccionados = requisitosOptions.filter((req) => req.seleccionado).map((req) => req._id);
+      const FechaInicioF= formatDate(fechaInicio) 
+      const FechaFinalF= formatDate(fechaFin)
+
       await createBeca({
         nombre,
         requisitos:requisitosSeleccionados,
         documentos,
-        fecha_inicio: fechaInicio,
-        fecha_fin: fechaFin,
+        fecha_inicio: FechaInicioF,
+        fecha_fin: FechaFinalF,
         dirigida,
         monto,
         tipo_pago: tipoPago,
@@ -68,6 +71,11 @@ const CrearBecas = () => {
       setErrorBecas(error.response.data.message);
     }
   };
+  
+  const formatDate = (dateString) => {
+  const [year, month, day] = dateString.split('-');
+  return `${day}-${month}-${year}`;
+};
 
   return (
     <>
@@ -95,11 +103,11 @@ const CrearBecas = () => {
               placeholder=" Ingresa los documentos separados por comas: Carnet, Certificado " /> 
 
               <label className="input-label" htmlFor="motivos"><strong>Fecha de Inicio</strong></label>
-              <input type="text" value={fechaInicio} onChange={(e) => setFechaInicio(e.target.value)} 
+              <input type="date" value={fechaInicio} onChange={(e) => setFechaInicio(e.target.value)} 
               placeholder=" Ejemplo: 01-01-2024 "/>
 
               <label className="input-label" htmlFor="motivos"><strong>Fecha de Fin</strong></label>
-              <input type="text" value={fechaFin} onChange={(e) => setFechaFin(e.target.value)}
+              <input type="date" value={fechaFin} onChange={(e) => setFechaFin(e.target.value)}
               placeholder=" Ejemplo: 01-02-2024 " />
 
               <label className="input-label" htmlFor="motivos"><strong>Dirigida</strong></label>

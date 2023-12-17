@@ -56,6 +56,11 @@ const ModificarBeca = () => {
     fetchRequisitos();
   }, [_id]);
 
+  const formatDate = (dateString) => {
+    const [year, month, day] = dateString.split('-');
+    return `${day}-${month}-${year}`;
+  }
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNuevosDatos((prevDatos) => ({
@@ -75,6 +80,10 @@ const ModificarBeca = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault(); 
+    nuevosDatos.fecha_inicio = formatDate(nuevosDatos.fecha_inicio);
+    nuevosDatos.fecha_fin = formatDate(nuevosDatos.fecha_fin);
+    console.log(nuevosDatos.fecha_fin);
+    console.log(nuevosDatos.fecha_inicio);
     handleModificarBeca();
   };
 
@@ -145,7 +154,7 @@ const ModificarBeca = () => {
 
         <label className="input-label" htmlFor="motivos"><strong>Fecha de Inicio</strong></label>
         <input
-          type="text"
+          type="date"
           name="fecha_inicio"
           value={nuevosDatos.fecha_inicio}
           onChange={handleInputChange}
@@ -153,7 +162,7 @@ const ModificarBeca = () => {
 
         <label className="input-label" htmlFor="motivos"><strong>Fecha de Fin</strong></label>
         <input
-          type="text"
+          type="date"
           name="fecha_fin"
           value={nuevosDatos.fecha_fin}
           onChange={handleInputChange}
