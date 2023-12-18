@@ -41,3 +41,15 @@ export const test = async () => {
     console.log(error);
   }
 };
+
+export const register = async (data) => {
+  try {
+    const response = await axios.post('/auth/register', data);
+    const { status, data } = response;
+    if (status === 201) {
+      return data;
+    }
+  } catch (error) {
+    return error.response.data;
+  }
+}

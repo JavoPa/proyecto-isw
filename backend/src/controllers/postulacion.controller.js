@@ -29,17 +29,16 @@ async function getBecasPostulacion(req, res) {
  * @param {Object} req - Objeto de petición
  * @param {Object} res - Objeto de respuesta
  */
-async function createPostulacion(req, res) {
-  try {
-    //obtener los archivos dentro de la peticion
-    const body = []
-    for (const archivo of req.files) {
-      body.push({
-        nombre: archivo.originalname,
-        contenido: archivo.buffer,
-      })
-    ;
-    }
+  async function createPostulacion(req, res) {
+    try {
+      const body = [];
+      for (const key of Object.keys(req.files)) {
+        const archivo = req.files[key];
+        body.push({
+          nombre: archivo.name,
+          contenido: archivo.data, // Ensure 'data' holds the file content
+        });
+      }
     // obtener el id de la beca dentro de la peticion
     const beca_id = req.body.beca_id;
 
