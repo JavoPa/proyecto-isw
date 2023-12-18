@@ -38,7 +38,9 @@ function Register() {
       </label>
       <label>
         RUT:
-        <input name="rut" {...register('rut', { required: true })} />
+        <input name="rut" placeholder='123456789'{...register('rut', { required: true })} />
+        <br />
+        (sin puntos ni guión. Si es -k reemplace por 0)
       </label>
       <label>
         Contraseña:
@@ -53,7 +55,7 @@ function Register() {
         <input name="direccion" {...register('direccion', { required: true })} />
       </label>
       <label>
-        Teléfono:
+        Teléfono: +56
         <input name="telefono" {...register('telefono', { required: true })} />
       </label>
       <label>

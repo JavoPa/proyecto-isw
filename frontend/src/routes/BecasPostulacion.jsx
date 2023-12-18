@@ -1,11 +1,15 @@
 import { getBecasPostulacion } from "../services/postulacion.service";
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
 
 const BecasPostulacion = () => {
   const [becas, setBecas] = useState([]);
   const [selectedBecaId, setSelectedBecaId] = useState(null); // State to store selected scholarship ID
   const navigate = useNavigate();
+  const location = useLocation();
+  const successData = location.state && location.state.success;
 
   useEffect(() => {
     getBecasPostulacion().then((response) => {
@@ -32,6 +36,13 @@ const BecasPostulacion = () => {
 
   return (
     <>
+    <div>
+    {successData && (
+        <div className="success-banner">
+          <p>Postulacion enviada con exito</p>
+        </div>
+      )}
+    </div>
       <div className="lista-contenedor">
         <h1>Lista de becas</h1>
         <ul>
