@@ -44,7 +44,7 @@ export const test = async () => {
 
 export const registerUser = async (data) => {
   try {
-    const response = await axios.post('/auth/register', data);
+    const response = await axios.post('/register', data);
     const { status, data } = response;
     if (status === 201) {
       return data;
