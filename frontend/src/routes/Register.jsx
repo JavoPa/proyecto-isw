@@ -64,8 +64,8 @@ function Register() {
         Sexo:
         <select name="sexo" {...register('sexo', { required: true })}>
           <option value="">Select...</option>
-          <option value="masculino">Male</option>
-          <option value="femenino">Female</option>
+          <option value="masculino">masculino</option>
+          <option value="femenino">femenino</option>
         </select>
       </label>
       <label>
