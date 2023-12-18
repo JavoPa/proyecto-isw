@@ -99,93 +99,6 @@ async function createUsers() {
   }
 }
 
-/**
- * Crea las becas por defecto en la base de datos.
- * @async
- * @function createBecas
- * @returns {Promise<void>}
- */
-async function createBecas() {
-  try {
-    const count = await Beca.estimatedDocumentCount();
-    if (count > 0) return;
-    await Promise.all([
-      new Beca({
-        nombre: "Beca excelencia estudiantil colegio",
-        requisitos: ["657cb9c1654c5678344db1af", "657cb9c1654c5678344db1ae"],
-        documentos: ["Fotocopia de cedula de identidad (ambos lados)","Certificado de alumno regular", "Certificado de notas año anterior"],
-        fecha_inicio: moment("14-12-2023", "DD-MM-YYYY").toDate(),
-        fecha_fin: moment("28-12-2023", "DD-MM-YYYY").toDate(),
-        dirigida:["Estudiantes de enseñanza basica"],
-        monto: 50000,
-        tipo_pago: "2 pagos al año (cada semestre)",
-      }).save(),
-      new Beca({
-        nombre: "Beca excelencia estudiantil liceo",
-        requisitos: ["657cb9c1654c5678344db1af", "657cb9c1654c5678344db1ae"],
-        documentos: ["Fotocopia de cedula de identidad (ambos lados)", "Certificado de alumno regular", "Certificado de notas año anterior"],
-        fecha_inicio: moment("01-12-2023", "DD-MM-YYYY").toDate(),
-        fecha_fin: moment("15-12-2023", "DD-MM-YYYY").toDate(),
-        dirigida:["Estudiantes de enseñanza media"],
-        monto: 100000,
-        tipo_pago: "2 pagos al año (cada semestre)",
-      }).save(),
-      new Beca({
-        nombre: "Beca excelencia estudiantil universidad",
-        requisitos: ["657cb9c1654c5678344db1af", "657cb9c1654c5678344db1ae"],
-        documentos: ["Fotocopia de cedula de identidad (ambos lados)", "Certificado de alumno regular", "Certificado de notas año anterior"],
-        fecha_inicio: moment("01-12-2023", "DD-MM-YYYY").toDate(),
-        fecha_fin: moment("15-12-2023", "DD-MM-YYYY").toDate(),
-        dirigida:["Estudiantes universitarios"],
-        monto: 150000,
-        tipo_pago: "2 pagos al año (cada semestre)",
-      }).save(),
-      new Beca({
-        nombre: "Beca discapacidad",
-        requisitos: ["657cb9c1654c5678344db1b0"],
-        documentos: ["Fotocopia de cedula de identidad (ambos lados)", "Certificado de discapacidad"],
-        fecha_inicio: moment("01-12-2023", "DD-MM-YYYY").toDate(),
-        fecha_fin: moment("15-12-2023", "DD-MM-YYYY").toDate(),
-        dirigida:["Personas con alguna discapacidad"],
-        monto: 250000,
-        tipo_pago: "Cada 4 meses",
-      }).save(),
-      new Beca({
-        nombre: "Beca de residencia",
-        requisitos: ["657cb9c1654c5678344db1b2", "657cb9c1654c5678344db1b3"],
-        documentos: ["Fotocopia de cedula de identidad (ambos lados)", "Certificado de residencia","Contrato de arriendo", "Certificado de alumno regular"],
-        fecha_inicio: moment("01-12-2023", "DD-MM-YYYY").toDate(),
-        fecha_fin: moment("14-12-2023", "DD-MM-YYYY").toDate(),
-        dirigida:["Estudiantes con arriendo"],
-        monto: 100000,
-        tipo_pago: "Pago mensual durante 10 meses",
-      }).save(),
-      new Beca({
-        nombre: "Beca subsidio pagos basicos",
-        requisitos: ["657cb9c1654c5678344db1b2", "657cb9c1654c5678344db1b1"],
-        documentos: ["Fotocopia de cedula de identidad (ambos lados) del jefe de hogar", "Ficha social de hogares","liquidacion de sueldo (ultimos 3 meses)"],
-        fecha_inicio: moment("14-12-2023", "DD-MM-YYYY").toDate(),
-        fecha_fin: moment("28-12-2023", "DD-MM-YYYY").toDate(),
-        dirigida:["Personas pertenecientes al 60% mas vulnerable del pais"],
-        monto: 0,
-        tipo_pago: "Pago mensual",
-      }).save(),
-      new Beca({
-        nombre: "Beca ayuda adulto mayor",
-        requisitos: ["657cb9c1654c5678344db1b5"],
-        documentos: ["Fotocopia de cedula de identidad (ambos lados)"],
-        fecha_inicio: moment("18-01-2023", "DD-MM-YYYY").toDate(),
-        fecha_fin: moment("01-01-2024", "DD-MM-YYYY").toDate(),
-        dirigida:["Personas pertenecientes al 60% mas vulnerable del pais"],
-        monto: 150000,
-        tipo_pago: "Pago mensual",
-      }).save(),
-    ]);
-    console.log("* => Becas creadas exitosamente");
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 async function createRequisitos() {
   try {
@@ -222,6 +135,104 @@ async function createRequisitos() {
     console.error(error);
   }
 }
+
+/**
+ * Crea las becas por defecto en la base de datos.
+ * @async
+ * @function createBecas
+ * @returns {Promise<void>}
+ */
+async function createBecas() {
+  try {
+    const requisito1 = await Requisito.findOne({ descripcion: "Ser estudiante regular" }).select("_id").exec();
+    const requisito2 = await Requisito.findOne({ descripcion: "Tener promedio de notas igual o mayor a 6" }).select("_id").exec();
+    const requisito3 = await Requisito.findOne({ descripcion: "Presentar alguna discapacidad" }).select("_id").exec();
+    const requisito4 = await Requisito.findOne({ descripcion: "Ser estudiante que su hogar familiar se encuentre fuera de la ciudad de estudio" }).select("_id").exec();
+    const requisito5 = await Requisito.findOne({ descripcion: "Poseer contrato de arriendo" }).select("_id").exec();
+    const requisito6 = await Requisito.findOne({ descripcion: "Estar registrado en el Registro social de hogares" }).select("_id").exec();
+    const requisito7 = await Requisito.findOne({ descripcion: "Pertenecer al 60% más vulnerable del país" }).select("_id").exec();
+    const requisito8 = await Requisito.findOne({ descripcion: "Tener 65 años o más" }).select("_id").exec();
+
+    const count = await Beca.estimatedDocumentCount();
+    if (count > 0) return;
+    await Promise.all([
+      new Beca({
+        nombre: "Beca excelencia estudiantil colegio",
+        requisitos: [requisito1._id.toString(), requisito2._id.toString()],
+        documentos: ["Fotocopia de cedula de identidad (ambos lados)","Certificado de alumno regular", "Certificado de notas año anterior"],
+        fecha_inicio: moment("14-12-2023", "DD-MM-YYYY").toDate(),
+        fecha_fin: moment("28-12-2023", "DD-MM-YYYY").toDate(),
+        dirigida:["Estudiantes de enseñanza basica"],
+        monto: 50000,
+        tipo_pago: "2 pagos al año (cada semestre)",
+      }).save(),
+      new Beca({
+        nombre: "Beca excelencia estudiantil liceo",
+        requisitos: [requisito1._id.toString(), requisito2._id.toString()],
+        documentos: ["Fotocopia de cedula de identidad (ambos lados)", "Certificado de alumno regular", "Certificado de notas año anterior"],
+        fecha_inicio: moment("01-12-2023", "DD-MM-YYYY").toDate(),
+        fecha_fin: moment("15-12-2023", "DD-MM-YYYY").toDate(),
+        dirigida:["Estudiantes de enseñanza media"],
+        monto: 100000,
+        tipo_pago: "2 pagos al año (cada semestre)",
+      }).save(),
+      new Beca({
+        nombre: "Beca excelencia estudiantil universidad",
+        requisitos: [requisito1._id.toString(), requisito2._id.toString()],
+        documentos: ["Fotocopia de cedula de identidad (ambos lados)", "Certificado de alumno regular", "Certificado de notas año anterior"],
+        fecha_inicio: moment("01-12-2023", "DD-MM-YYYY").toDate(),
+        fecha_fin: moment("15-12-2023", "DD-MM-YYYY").toDate(),
+        dirigida:["Estudiantes universitarios"],
+        monto: 150000,
+        tipo_pago: "2 pagos al año (cada semestre)",
+      }).save(),
+      new Beca({
+        nombre: "Beca discapacidad",
+        requisitos: [requisito3._id.toString()],
+        documentos: ["Fotocopia de cedula de identidad (ambos lados)", "Certificado de discapacidad"],
+        fecha_inicio: moment("01-12-2023", "DD-MM-YYYY").toDate(),
+        fecha_fin: moment("15-12-2023", "DD-MM-YYYY").toDate(),
+        dirigida:["Personas con alguna discapacidad"],
+        monto: 250000,
+        tipo_pago: "Cada 4 meses",
+      }).save(),
+      new Beca({
+        nombre: "Beca de residencia",
+        requisitos: [requisito4._id.toString(), requisito5._id.toString()],
+        documentos: ["Fotocopia de cedula de identidad (ambos lados)", "Certificado de residencia","Contrato de arriendo", "Certificado de alumno regular"],
+        fecha_inicio: moment("01-12-2023", "DD-MM-YYYY").toDate(),
+        fecha_fin: moment("14-12-2023", "DD-MM-YYYY").toDate(),
+        dirigida:["Estudiantes con arriendo"],
+        monto: 100000,
+        tipo_pago: "Pago mensual durante 10 meses",
+      }).save(),
+      new Beca({
+        nombre: "Beca subsidio pagos basicos",
+        requisitos: [requisito5._id.toString(), requisito6._id.toString(), requisito7._id.toString()],
+        documentos: ["Fotocopia de cedula de identidad (ambos lados) del jefe de hogar", "Ficha social de hogares","liquidacion de sueldo (ultimos 3 meses)"],
+        fecha_inicio: moment("14-12-2023", "DD-MM-YYYY").toDate(),
+        fecha_fin: moment("28-12-2023", "DD-MM-YYYY").toDate(),
+        dirigida:["Personas pertenecientes al 60% mas vulnerable del pais"],
+        monto: 0,
+        tipo_pago: "Pago mensual",
+      }).save(),
+      new Beca({
+        nombre: "Beca ayuda adulto mayor",
+        requisitos: [requisito8._id.toString()],
+        documentos: ["Fotocopia de cedula de identidad (ambos lados)"],
+        fecha_inicio: moment("18-01-2023", "DD-MM-YYYY").toDate(),
+        fecha_fin: moment("01-01-2024", "DD-MM-YYYY").toDate(),
+        dirigida:["Personas pertenecientes al 60% mas vulnerable del pais"],
+        monto: 150000,
+        tipo_pago: "Pago mensual",
+      }).save(),
+    ]);
+    console.log("* => Becas creadas exitosamente");
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 
 /**
  * Crea las postulaciones por defecto en la base de datos.

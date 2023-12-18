@@ -61,10 +61,10 @@ async function setupAPI() {
     await createRoles();
     // Inicia la creación del usuario admin y user
     await createUsers();
+     // Inicia la creación de las Requisitos
+    await createRequisitos();
     // Inicia la creación de las becas
     await createBecas();
-    // Inicia la creación de las Requisitos
-    await createRequisitos();
     // Inicia la creación de las postulaciones
     await createPostulaciones();
   } catch (err) {
