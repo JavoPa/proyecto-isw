@@ -121,7 +121,7 @@ async function createRequisitos() {
         descripcion: "Poseer contrato de arriendo",
       }).save(),
       new Requisito({
-        descripcion: " Estar registrado en el Registro social de hogares",
+        descripcion: "Estar registrado en el Registro social de hogares",
       }).save(),
       new Requisito({
         descripcion: "Pertenecer al 60% más vulnerable del país",
