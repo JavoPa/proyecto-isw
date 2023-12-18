@@ -304,6 +304,8 @@ function PostularForm({ selectedBecaId, becaDocumentos }) {
                                                     name={`archivoPDF${index}`}
                                                     type="file"
                                                     className="input-file"
+                                                    accept=".pdf,.jpg,.jpeg,.png" // Define accepted file types if necessary
+
                                                     {...register(`archivoPDF${index}`, { required: true })}
                                                 />
                                             </label>

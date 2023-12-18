@@ -11,7 +11,7 @@ function App() {
         <h2>Bienvenido al portal de postulación a becas municipales</h2>
         <p>Aquí puedes encontrar y postular a las becas disponibles en tu municipio.</p>
         <Link className='home-button' to="/becas">Ver becas disponibles</Link>
-        <Link className='home-button' to="/postular">Postular a una beca</Link>
+        <Link className='home-button' to="/postulacion/becas">Postular a una beca</Link>
       </main>
     </div>
   );
