@@ -130,11 +130,11 @@ const router = createBrowserRouter([
     ],
   },
   { // Ruta de login
-    path: '/auth',
+    path: '/auth/',
     element: <Login />,
   },
   { // Ruta de registro
-  path: '/register',
+  path: '/register/',
     element: <Register />,
   },
 ]);
