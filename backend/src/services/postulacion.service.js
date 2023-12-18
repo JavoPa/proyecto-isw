@@ -14,8 +14,7 @@ const Requisito = require("../models/requisitos.model.js");
 async function getBecasPostulacion() {
   try {
     const becas = await Beca.find()
-      .select("nombre requisitos _id")
-      .populate('requisitos', 'descripcion'); // Carga los detalles de los requisitos
+      .select("nombre documentos _id")
 
     if (!becas || becas.length === 0) return [null, "No hay Becas"];
     

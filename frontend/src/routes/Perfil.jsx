@@ -7,14 +7,19 @@ const Perfil = () => {
  const [editableUser, setEditableUser] = useState({});
 
  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getMyUser();
-      setUser(data);
-      setEditableUser(data);
-    };
+  const fetchData = async () => {
+    const response = await getMyUser();
+    console.log(response); // Verifica los datos devueltos
+    if (response.state === 'Success') {
+      setUser(response.data);
+      setEditableUser(response.data);
+    } else {
+      console.error('Error fetching user data:', response);
+    }
+  };
 
-    fetchData();
- }, []);
+  fetchData();
+}, []);
 
  const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -26,9 +31,9 @@ const Perfil = () => {
  };
 
  const handleUpdateUser = async () => {
-    const response = await updateMyUser(editableUser);
+    const response = await updateMyUser(editableUser, user._id);
     if (response) {
-      setUser(response);
+      setUser(response.data);
       toggleEditing();
     }
  };
@@ -43,44 +48,44 @@ const Perfil = () => {
       <table>
         <tbody>
           <tr>
-            <td>Nombres:</td>
-            <td>{isEditing ? <input name="nombres" value={editableUser.data.nombres} onChange={handleInputChange} /> : user.nombres}</td>
+            <td>Nombres: </td>
+            <td>{isEditing ? <input name="nombres" value={editableUser.nombres} onChange={handleInputChange} /> : user.nombres}</td>
           </tr>
           <tr>
             <td>Apellidos:</td>
-            <td>{isEditing ? <input name="apellidos" value={editableUser.data.apellidos} onChange={handleInputChange} /> : user.apellidos}</td>
+            <td>{isEditing ? <input name="apellidos" value={editableUser.apellidos} onChange={handleInputChange} /> : user.apellidos}</td>
           </tr>
           <tr>
             <td>Rut:</td>
-            <td>{isEditing ? <input name="rut" value={editableUser.data.rut} onChange={handleInputChange} /> : user.rut}</td>
+            <td>{isEditing ? <input name="rut" value={editableUser.rut} onChange={handleInputChange} /> : user.rut}</td>
           </tr>
           <tr>
             <td>Email:</td>
-            <td>{isEditing ? <input name="email" value={editableUser.data.email} onChange={handleInputChange} /> : user.email}</td>
+            <td>{isEditing ? <input name="email" value={editableUser.email} onChange={handleInputChange} /> : user.email}</td>
           </tr>
           <tr>
             <td>Dirección:</td>
-            <td>{isEditing ? <input name="direccion" value={editableUser.data.direccion} onChange={handleInputChange} /> : user.direccion}</td>
+            <td>{isEditing ? <input name="direccion" value={editableUser.direccion} onChange={handleInputChange} /> : user.direccion}</td>
           </tr>
           <tr>
             <td>Teléfono:</td>
-            <td>{isEditing ? <input name="telefono" value={editableUser.data.telefono} onChange={handleInputChange} /> : user.telefono}</td>
+            <td>{isEditing ? <input name="telefono" value={editableUser.telefono} onChange={handleInputChange} /> : user.telefono}</td>
           </tr>
           <tr>
             <td>Fecha de nacimiento:</td>
-            <td>{isEditing ? <input name="fecha_nacimiento" value={editableUser.data.fecha_nacimiento} onChange={handleInputChange} /> : user.fecha_nacimiento}</td>
+            <td>{isEditing ? <input name="fecha_nacimiento" value={editableUser.fecha_nacimiento} onChange={handleInputChange} /> : user.fecha_nacimiento}</td>
           </tr>
           <tr>
             <td>Sexo:</td>
-            <td>{isEditing ? <input name="sexo" value={editableUser.data.sexo} onChange={handleInputChange} /> : user.sexo}</td>
+            <td>{isEditing ? <input name="sexo" value={editableUser.sexo} onChange={handleInputChange} /> : user.sexo}</td>
           </tr>
           <tr>
             <td>Discapacidad:</td>
-            <td>{isEditing ? <input name="discapacidad" value={editableUser.data.discapacidad} onChange={handleInputChange} /> : user.discapacidad}</td>
+            <td>{isEditing ? <input name="discapacidad" value={editableUser.discapacidad} onChange={handleInputChange} /> : user.discapacidad}</td>
           </tr>
           <tr>
             <td>Cuenta bancaria:</td>
-            <td>{isEditing ? <input name="cuenta_bancaria" value={editableUser.data.cuenta_bancaria} onChange={handleInputChange} /> : user.cuenta_bancaria}</td>
+            <td>{isEditing ? <input name="cuenta_bancaria" value={editableUser.cuenta_bancaria} onChange={handleInputChange} /> : user.cuenta_bancaria}</td>
           </tr>
         </tbody>
       </table>
