@@ -21,6 +21,8 @@ import PostulanteDetalle from './components/Postulantes/PostulanteDetalle.jsx';
 import ListaPostulaciones from './components/Postulaciones/ListaPostulaciones.jsx';
 import PostulacionDetalle from './components/Postulaciones/PostulacionDetalle.jsx';
 import AppAdmin from './routes/AppAdmin.jsx';
+import BecasPostulacion from './routes/BecasPostulacion.jsx';
+import Postular from './routes/Postular.jsx';
 
 const router = createBrowserRouter([
   { // Rutas publicas
@@ -55,6 +57,14 @@ const router = createBrowserRouter([
       {
         path: 'apelar',
         element: <Apelar />,
+      },
+      {
+        path: 'becas',
+        element: <BecasPostulacion />,
+      },
+      {
+        path:"postular", 
+        element:<Postular/>,
       },
     ],
   },

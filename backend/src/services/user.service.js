@@ -232,6 +232,43 @@ async function deleteUser(id) {
   }
 }
 
+async function getMyUser(id) {
+  try {
+    const user = await User.findById({ _id: id })
+      .select("nombres apellidos rut email direccion telefono fecha_nacimiento sexo discapacidad cuenta_bancaria")
+      .exec();
+
+    if (!user) return [null, "El usuario no existe"];
+
+    return [user, null];
+  } catch (error) {
+    handleError(error, "user.service -> getUserById");
+  }
+}
+
+async function updateMyUser(id, user) {
+  try {
+    if (!userFound) return [null, "El usuario no existe"];
+
+    nombres, apellidos, rut, email, direccion, telefono, fecha_nacimiento, sexo, discapacidad, cuenta_bancaria = user;
+
+
+    const userUpdated = await User.findByIdAndUpdate(
+      id,
+      {
+        nombres, apellidos, rut, email, direccion, telefono, fecha_nacimiento, sexo, discapacidad, cuenta_bancaria,
+        
+      },
+      { new: true },
+    );
+
+    return [userUpdated, null];
+  } catch (error) {
+    handleError(error, "user.service -> updateUser");
+  }
+}
+
+
 module.exports = {
   getUsers,
   getPostulantes,
@@ -242,4 +279,6 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
+  getMyUser,
+  updateMyUser,
 };

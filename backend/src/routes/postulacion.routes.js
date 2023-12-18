@@ -25,7 +25,7 @@ router.use(authenticationMiddleware);
 router.get('/becas', postulacionController.getBecasPostulacion);
 
 //Ruta para postular a una beca
-router.post('/postular', archivoMiddleware.subirArray, postulacionController.createPostulacion);
+router.post('/postular', archivoMiddleware.subirMultiples, postulacionController.createPostulacion);
 
 //Ruta para ver el estado de postulacion de un postulante
 router.get('/estado', postulacionController.getEstado);

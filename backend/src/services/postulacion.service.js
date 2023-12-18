@@ -5,7 +5,7 @@ const Beca = require("../models/beca.model.js");
 const User = require("../models/user.model.js");
 const { handleError } = require("../utils/errorHandler");
 const Apela = require("../models/apela.model.js");
-
+const Requisito = require("../models/requisitos.model.js");
 
 /**
  * Obtiene todas las becas disponibles
@@ -13,8 +13,12 @@ const Apela = require("../models/apela.model.js");
  */
 async function getBecasPostulacion() {
   try {
-    const becas = await Beca.find().select("nombre requisitos -_id");
-    if (!becas) return [null, "No hay Becas"];
+    const becas = await Beca.find()
+      .select("nombre requisitos _id")
+      .populate('requisitos', 'descripcion'); // Carga los detalles de los requisitos
+
+    if (!becas || becas.length === 0) return [null, "No hay Becas"];
+    
     return [[becas], null];
   } catch (error) {
     handleError(error, "becas.service -> getBecas");
