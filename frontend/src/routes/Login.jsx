@@ -20,7 +20,7 @@ function Login() {
       <button onClick={() => navigate("/")}>Volver a home</button>
       <div className="centrado">
         <h2>No tienes una cuenta? Regístrate!</h2>
-        <button onClick={() => navigate("/auth/register")}>Registrarse</button>
+        <button onClick={() => navigate("/register")}>Registrarse</button>
       </div>
     </div>
   );
