@@ -51,3 +51,14 @@ export async function createPostulacion(comentario, beca_id, files) {
   }
 }
 
+export const registerUser = async (datas) => {
+  try {
+    const response = await axios.post('/auth/register', datas);
+    const { status, data } = response;
+    if (status === 201) {
+      return data;
+    }
+  } catch (error) {
+    return error.response.data;
+  }
+}

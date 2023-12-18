@@ -31,12 +31,11 @@ async function getBecasPostulacion(req, res) {
  */
   async function createPostulacion(req, res) {
     try {
-      const body = [];
-      for (const key of Object.keys(req.files)) {
-        const archivo = req.files[key];
-        body.push({
-          nombre: archivo.name,
-          contenido: archivo.data, // Ensure 'data' holds the file content
+      const archivos = []
+      for (const archivo of req.files) {
+        archivos.push({
+          nombre: archivo.originalname,
+          contenido: archivo.buffer,
         });
       }
     // obtener el id de la beca dentro de la peticion
@@ -44,7 +43,7 @@ async function getBecasPostulacion(req, res) {
 
     const comentario = req.body.comentario;
     //llamar al servicio para crear la postulacion
-    const [postulacion, errorPostulacion] = await PostulacionService.createPostulacion(body, req._id, beca_id, comentario);
+    const [postulacion, errorPostulacion] = await PostulacionService.createPostulacion(archivos, req._id, beca_id, comentario);
 
     if (errorPostulacion) return respondError(req, res, 400, errorPostulacion);
     if (!postulacion) {
