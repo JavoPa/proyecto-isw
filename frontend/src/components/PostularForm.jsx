@@ -63,7 +63,7 @@ function PostularForm({ selectedBecaId, becaDocumentos }) {
 
   return (
     <>
-    {errorPostulacion && <div className="error-banner">{errorPostulacion}</div>}
+    
       <div>
         {userData ? (
         <div className="postulacionDatos" style={{ display: "flex" }}>
@@ -289,7 +289,8 @@ function PostularForm({ selectedBecaId, becaDocumentos }) {
                                     id="comentario"
                                     name="comentario"
                                     type="text"
-                                    {...register("comentario", { required: true })}
+                                    placeholder="Si lo desea, puede agregar un comentario"
+                                    {...register("comentario", { required: false })}
                                 />
                                 <label>
                                     <strong>Subir documentos</strong>
@@ -309,12 +310,15 @@ function PostularForm({ selectedBecaId, becaDocumentos }) {
                                                     {...register(`archivoPDF${index}`, { required: true })}
                                                 />
                                             </label>
+                                            {errors[`archivoPDF${index}`] && <span className='campo-obligatorio'>*Por favor, sube tus documentos</span>}
+
                                         
                                         </div>
                                     ))
                                 ) : (
                                     <p>No hay documentos para subir</p>
                                 )}
+                                {errorPostulacion && <div className="error-banner">{errorPostulacion}</div>}
                                 <button type="submit">Enviar Postulacion</button>
                                 <div className="vacio"></div>
                             </form>
