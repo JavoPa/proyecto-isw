@@ -26,6 +26,7 @@ function PostularForm({ selectedBecaId, becaDocumentos }) {
         setUserData(user);
       } catch (error) {
         console.error("Error fetching user data:", error);
+        setErrorPostulacion(error.message);
       }
     };
 
@@ -52,7 +53,7 @@ function PostularForm({ selectedBecaId, becaDocumentos }) {
       }
     });
   };
-
+  
   //Obtencion de documentosFaltantes
   const [postulacion, setPostulacion] = useState(null);
   const [apelacion, setApelacion] = useState(null);
@@ -62,9 +63,10 @@ function PostularForm({ selectedBecaId, becaDocumentos }) {
 
   return (
     <>
+    {errorPostulacion && <div className="error-banner">{errorPostulacion}</div>}
       <div>
         {userData ? (
-        <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex" }}>
+        <div className="postulacionDatos" style={{ display: "flex" }}>
           <div className="container flex-container">
             <div className="form-group">
               <div
@@ -217,104 +219,105 @@ function PostularForm({ selectedBecaId, becaDocumentos }) {
                   marginBottom: "10px",
                 }}
               >
-                <label>Telefono</label>
-                <input
-                  type="text"
-                  style={{
-                    display: "flex",
-                    marginBottom: "10px",
-                    backgroundColor: "#9E9E9E",
-                  }}
-                  className="form-control"
-                  value={userData.data.telefono}
-                  disabled
-                />
-              </div>
-              <div
-                style={{
-                  justifyContent: "space-between",
-                  marginBottom: "10px",
-                }}
-              >
-                <label>Correo electronico</label>
-                <input
-                  type="text"
-                  style={{
-                    display: "flex",
-                    marginBottom: "10px",
-                    backgroundColor: "#9E9E9E",
-                  }}
-                  className="form-control"
-                  value={userData.data.email}
-                  disabled
-                />
-              </div>
-              <div
-                style={{
-                  justifyContent: "space-between",
-                  marginBottom: "10px",
-                }}
-              >
-                <label>Cuenta bancaria</label>
-                <input
-                  type="text"
-                  style={{
-                    display: "flex",
-                    marginBottom: "10px",
-                    backgroundColor: "#9E9E9E",
-                  }}
-                  className="form-control"
-                  value={userData.data.cuenta_bancaria}
-                  disabled
-                />
-              </div>
-            </div>
-          </div>
-          </form>
-        ) : (
-          <p></p>
-          
-        )}
-        
-      </div>
+                                                <label>Telefono</label>
+                                                <input
+                                                    type="text"
+                                                    style={{
+                                                        display: "flex",
+                                                        marginBottom: "10px",
+                                                        backgroundColor: "#9E9E9E",
+                                                    }}
+                                                    className="form-control"
+                                                    value={userData.data.telefono}
+                                                    disabled
+                                                />
+                                            </div>
+                                            <div
+                                                style={{
+                                                    justifyContent: "space-between",
+                                                    marginBottom: "10px",
+                                                }}
+                                            >
+                                                <label>Correo electronico</label>
+                                                <input
+                                                    type="text"
+                                                    style={{
+                                                        display: "flex",
+                                                        marginBottom: "10px",
+                                                        backgroundColor: "#9E9E9E",
+                                                    }}
+                                                    className="form-control"
+                                                    value={userData.data.email}
+                                                    disabled
+                                                />
+                                            </div>
+                                            <div
+                                                style={{
+                                                    justifyContent: "space-between",
+                                                    marginBottom: "10px",
+                                                }}
+                                            >
+                                                <label>Cuenta bancaria</label>
+                                                <input
+                                                    type="text"
+                                                    style={{
+                                                        display: "flex",
+                                                        marginBottom: "10px",
+                                                        backgroundColor: "#9E9E9E",
+                                                    }}
+                                                    className="form-control"
+                                                    value={userData.data.cuenta_bancaria}
+                                                    disabled
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                ) : (
+                                    <p></p>
+                                    
+                                )}
+                                
+                            </div>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <h2>Formulario de Postulacion</h2>
-        <label className="input-label" htmlFor="comentario">
-          <strong>comentario de la postulacion</strong>
-        </label>
-        <input
-          id="comentario"
-          name="comentario"
-          type="text"
-          {...register("comentario", { required: true })}
-        />
-        <label>
-          <strong>Subir documentos</strong>
-        </label>
-        {becaDocumentos && becaDocumentos.length > 0 ? (
-          becaDocumentos.map((documento, index) => (
-            <div key={index}>
-              <label className="label-file" htmlFor={`archivoPDF${index}`}>
-                {documento}
-                <input
-                  id={`archivoPDF${index}`}
-                  name={`archivoPDF${index}`}
-                  type="file"
-                  className="input-file"
-                  {...register(`archivoPDF${index}`, { required: true })}
-                />
-              </label>
-            
-            </div>
-          ))
-        ) : (
-          <p>No hay documentos para subir</p>
-        )}
-        <input type="submit" />
-      </form>
-    </>
-  );
-}
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                                <h2>Formulario de Postulacion</h2>
+                                <label className="input-label" htmlFor="comentario">
+                                    <strong>comentario de la postulacion</strong>
+                                </label>
+                                <input
+                                    id="comentario"
+                                    name="comentario"
+                                    type="text"
+                                    {...register("comentario", { required: true })}
+                                />
+                                <label>
+                                    <strong>Subir documentos</strong>
+                                </label>
+                                {becaDocumentos && becaDocumentos.length > 0 ? (
+                                    becaDocumentos.map((documento, index) => (
+                                        <div key={index}>
+                                            <label className="label-file" htmlFor={`archivoPDF${index}`}>
+                                                {documento}
+                                                <input
+                                                    id={`archivoPDF${index}`}
+                                                    name={`archivoPDF${index}`}
+                                                    type="file"
+                                                    className="input-file"
+                                                    {...register(`archivoPDF${index}`, { required: true })}
+                                                />
+                                            </label>
+                                        
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No hay documentos para subir</p>
+                                )}
+                                <button type="submit">Enviar Postulacion</button>
+                                <div className="vacio"></div>
+                            </form>
+                        </>
+                    );
+                }
 
 export default PostularForm;

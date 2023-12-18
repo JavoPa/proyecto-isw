@@ -520,3 +520,15 @@ footer {
 .form-group input[type="text"] {
   margin-right: 20px; 
 }
+
+.postulacionDatos{
+  display: flex;
+  flex-direction: column; /* Apilamos los elementos verticalmente */
+  gap: 20px; /* Espacio entre los elementos */
+  width: 60%;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #CCCCCC;
+  border-radius: 5px; /* Bordes redondeados */
+  color: #333333;
+}
