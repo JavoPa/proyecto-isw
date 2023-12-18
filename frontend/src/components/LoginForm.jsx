@@ -18,6 +18,7 @@ function LoginForm() {
       if(response.state === 'Success'){
         const user = JSON.parse(localStorage.getItem('user')) || '';
         const firstRoleName = user.roles[0].name;
+        console.log("rol:");
         console.log(firstRoleName);
         if(firstRoleName == "postulante"){
           navigate('/');
