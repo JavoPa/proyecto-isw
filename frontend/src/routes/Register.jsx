@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { registerUser } from '../services/auth.service';
 import { useState } from 'react';
 
-function LoginForm() {
+function Register() {
   const navigate = useNavigate();
   const [errorLogin, setErrorLogin] = useState(null);
 
@@ -86,4 +86,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default Register;

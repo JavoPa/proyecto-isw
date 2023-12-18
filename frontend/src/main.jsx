@@ -24,6 +24,7 @@ import AppAdmin from './routes/AppAdmin.jsx';
 import BecasPostulacion from './routes/BecasPostulacion.jsx';
 import Postular from './routes/Postular.jsx';
 import Pefil from './routes/Perfil.jsx';
+import Register from './routes/Register.jsx';
 
 const router = createBrowserRouter([
   { // Rutas publicas
