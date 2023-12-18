@@ -3,15 +3,9 @@ import PostularForm from '../components/PostularForm';
 
 const Postular = () => {
   const selectedBecaId = sessionStorage.getItem('selectedBecaId');
-  
-  let becaDocumentos = 
-  [
-  "Fotocopia de cedula de identidad (ambos lados)",
-  "Certificado de alumno regular",
-  "Certificado de notas año anterior",
-  ];
-  console.log(becaDocumentos);
-  console.log("ace");
+  const becaDocumentosString = sessionStorage.getItem('selectedBecaDocumentos');
+  const becaDocumentos = becaDocumentosString.split(','); 
+  console.log(becaDocumentos[0]);
   console.log(selectedBecaId);
   return <PostularForm selectedBecaId={selectedBecaId} becaDocumentos={becaDocumentos} />;
 };

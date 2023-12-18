@@ -489,6 +489,12 @@ footer {
   height: 50px;
 }
 
+.beca.box{
+  background-color: #4CAF50;
+  color: white;
+  margin-bottom: 20px;
+}
+
 /*Usados para postular a una beca, si van a modificarlo avisen*/
 
 .flex-container {
@@ -496,6 +502,7 @@ footer {
   /* Set flex-direction to row to place the divs horizontally */
   flex-direction: row;
   /* Add any additional styles as needed */
+  
 }
 
 
@@ -503,6 +510,7 @@ footer {
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
+  border: #000000;
  }
 
 .form-group label {

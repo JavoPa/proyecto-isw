@@ -496,5 +496,4 @@ module.exports = {
   updateUser,
   deleteUser,
   getMyUser,
-  updateMyUser
 };
