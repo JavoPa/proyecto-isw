@@ -26,6 +26,7 @@ function Register() {
   };
 
   return (
+    <>
     <form onSubmit={handleSubmit(onSubmit)}>
       {errorLogin && <div className="error-banner">{errorLogin}</div>}
       <label>
@@ -82,9 +83,13 @@ function Register() {
         Cuenta Bancaria:
         <input name="cuenta_bancaria" {...register('cuenta_bancaria', { required: true })} />
       </label>
-      {errors.exampleRequired && <span>This field is required</span>}
+      {errors.exampleRequired && <span>Este campo es obligatorio</span>}
       <input type="submit" />
     </form>
+    <div className="centrado">
+        <button onClick={() => navigate("/auth")}>Regresar</button>
+      </div>
+    </>
   );
 }
 
