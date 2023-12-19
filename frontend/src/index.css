@@ -206,7 +206,7 @@ form {
   width: 60%;
   margin: 20px auto;
   padding: 20px;
-  background-color: #CCCCCC;
+  background-color: #9E9E9E;
   border-radius: 5px; /* Bordes redondeados */
   color: #333333;
 }
@@ -528,7 +528,25 @@ footer {
   width: 60%;
   margin: 20px auto;
   padding: 20px;
-  background-color: #CCCCCC;
+  background-color: #9E9E9E;
   border-radius: 5px; /* Bordes redondeados */
   color: #333333;
+}
+
+.postulacion-tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.postulacion-tabla td {
+  border: 1px solid #000; 
+  padding: 10px; 
+}
+
+.primera-celda{
+  background-color: #4CAF50;
+}
+
+.segunda-celda{
+  background-color: #FFFFFF;
 }

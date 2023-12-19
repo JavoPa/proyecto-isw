@@ -172,21 +172,19 @@ const Perfil = () => {
             </td>
           </tr>
           <tr>
-  <td>Discapacidad:</td>
-  <td>
-    {isEditing ? (
-      <input
-        name="discapacidad"
-        value={editableUser.discapacidad}
-        onChange={handleInputChange}
-      />
-    ) : (
-      <>
-        {user.discapacidad ? "Si presenta" : "No presenta"}
-      </>
-    )}
-  </td>
-</tr>
+            <td>Discapacidad:</td>
+            <td>
+              {isEditing ? (
+                <input
+                  name="discapacidad"
+                  value={editableUser.discapacidad}
+                  onChange={handleInputChange}
+                />
+              ) : (
+                <>{user.discapacidad ? "Si presenta" : "No presenta"}</>
+              )}
+            </td>
+          </tr>
           <tr>
             <td>Cuenta bancaria:</td>
             <td>
