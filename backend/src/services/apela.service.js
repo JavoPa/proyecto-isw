@@ -126,8 +126,7 @@ async function getApelaciones() {
             },
           ]
         })
-
-      if (!apelaciones) return [null, "No hay apelaciones"];
+      if (apelaciones.length===0) return [null, "No hay apelaciones"];
   
       return [apelaciones, null];
     } catch (error) {

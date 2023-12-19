@@ -100,7 +100,7 @@ function Apelaciones() {
             <option value="estado">Estado</option>
           </select>
         </div>
-        {apelaciones ? (
+        {apelaciones.length > 0 ? (
           <table className="lista-apelaciones">
             <thead>
               <tr>

@@ -2,7 +2,7 @@
 
 # Descripción
 
-- Software para facilitar y optimizar el proceso de solicitud, revisión, y asignación de becas a estudiantes, garantizando una gestión eficiente y transparente de las becas municipale
+- Software para facilitar y optimizar el proceso de solicitud, revisión, y asignación de becas a estudiantes, garantizando una gestión eficiente y transparente de las becas municipales
 
 # Requisitos funcionales
 

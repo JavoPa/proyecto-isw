@@ -43,7 +43,7 @@ const Perfil = () => {
  }
 
  return (
-    <div>
+    <div className='modal'>
       <h1>Perfil</h1>
       <table>
         <tbody>
